@@ -24,6 +24,16 @@ tasks:
     enabled: true
     trigger: periodic:30d
 
+  - task: ideate
+    skill: douyin-ideate
+    enabled: true
+    trigger: periodic:2d
+
+  - task: backlog-gardener
+    skill: backlog-gardener
+    enabled: true
+    trigger: periodic:7d
+
   # ── 以下 TODO（disabled）。任务卡即接入规格：接入 = 按卡写执行 skill + 翻 enabled ──
   - task: retro-debt-collector
     enabled: false
@@ -38,11 +48,6 @@ tasks:
     enabled: false
     trigger: weighted-pool
     weight: 10
-
-  - task: backlog-gardener
-    enabled: false
-    trigger: weighted-pool
-    weight: 8
 
   - task: stale-fact-auditor
     enabled: false
@@ -79,6 +84,21 @@ tasks:
 - **产物与记账**：报告 + 变更提议，人审后才改 benchmarks.md；index.jsonl 记 `applied:false`。
 - **人审关注点**：判「失效」是否只凭单一来源；「建议新增」的对标是否贴账号定位（技术深度为主）。
 
+### ideate（选题调研与入池）✅ 启用（2026-07-08 自生产线迁入）
+- **为什么**：选题池是生产线的原料**库存资产**，只入不出会烂（实证一：6-14 后 24 天没补水，9 条全过期）；耦合在 daily-run 上，生产一换模式保鲜就停摆（实证二：清系列期+空跑期共三周零调研）。类比 coze 的 add-tests：生成型维护，给生产补库存，没人催、断供才痛。
+- **目标怎么选**：AI 圈信源全量扫 + 现存池过期清扫。到点判据**以 `content/_research/` 最新报告日期为准**（调研可能被人工或生产线兜底触发，不止 index.jsonl 有记录），距今 ≥2 天才跑。
+- **干什么**：agent-reach 抓料 → 双赛道 6 维打分 → 30 天去重 → 过期清扫（Step 2.0）→ 候选全部入池 `status: idea` + 调研报告。步骤住 `douyin-ideate` skill（manual 模式），阶段契约见 `pipeline/1-ideate.md`。
+- **产物与记账**：`research-<日期>.md` + backlog 入池/清扫翻 expired + dashboard 选题池小节；index.jsonl 记账。入池与规则化清扫**视同状态记账可自动**（清扫规则已人审钉死）；promote 不归本任务，那是生产线取题的事。
+- **人审关注点**：manual 模式本身停在人挑题（这就是闸）；打分偏差靠复盘反哺校准，不在本任务内修。
+- **跳过**：距最新报告 <2 天；突发热点不等周期 tick，走人工触发或 `next_up` 钦点，与本任务并行无冲突（≥2 天判断幂等，谁先跑谁更新报告日期）。
+
+### backlog-gardener（理池：撞题与重复）✅ 启用（2026-07-08）
+- **为什么**：过期清扫在 ideate Step 2.0 顺手做，但**撞题**（池内互撞、与已发布重复）没人管；池子越大，重复题越浪费人挑题的注意力。
+- **目标怎么选**：backlog `status: idea` 全池两两 + 对已发布条目 tags 比对。trigger 用 `periodic:7d` 不用加权池：池子就一个、量小，周期跑比随机抽可预测（weighted-pool 仍预留给 link-rot 这类海量 per-item 债）。
+- **干什么**：tags 归一化判同题，产合并/剔除提议（默认留分高者、并 tags）。步骤住 `backlog-gardener` skill。
+- **产物与记账**：提议清单落 `logs/<date>-backlog-gardener.md`；**不翻状态**——合并/剔除是判断性变更，人审后才应用（能自动翻状态的只有 ideate 规则化清扫和人挑题）。
+- **人审关注点**：合并方向留哪条；防误判"看似同题、实则不同角度"。
+
 ### retro-debt-collector 📋 TODO（建议最先接入）
 - **为什么**：retro 是窗口触发，错过即永久欠账、无人兜底，反哺断供——**当前实况：EP05 之后 7d 窗口欠了一串，大环断在这里**。这是把「发布→复盘→大脑」重新接上的任务。
 - **目标怎么选**：扫 `content/*/meta.yaml`，`published` 超 7 天仍非 `retro_done` 的条目，全量。欠没欠机器可判，全客观。
@@ -99,13 +119,6 @@ tasks:
 - **干什么（规格）**：核对三件事：引用路径还在不在、状态机字段名一致不一致、指的 skill/参数还存不存在。
 - **产物与记账**：偏差清单分两级：机械错误（路径不存在、字段改名）标「低风险可直改」；语义偏差（规则意图变了）标「需人裁」。
 - **人审关注点**：语义级偏差的裁决；防止把「有意的简化」误报成脱节。机械层全客观，权重 10。
-
-### backlog-gardener 📋 TODO
-- **为什么**：过期清扫已并入 ideate Step 2.0，但**撞题**（池内互撞、与已发布重复）没人管；池子越大，重复题越浪费人挑题的注意力。
-- **目标怎么选**：`backlog.yaml` 中 `status: idea` 条目两两比对 + 对已发布条目 tags 比对，每轮全池。
-- **干什么（规格）**：按 tags 归一化判同题，产合并/剔除提议（默认留分高者、并 tags）。
-- **产物与记账**：提议清单；**不直接翻状态**——翻状态是 ideate 清扫和人挑题的事，本任务只提议。
-- **人审关注点**：合并方向留哪条；防误判「看似同题、实则不同角度」（半客观，权重 8）。
 
 ### stale-fact-auditor 📋 TODO
 - **为什么**：已发布视频里的技术结论会被新模型/新版本推翻，旧视频仍被推荐 = 持续传播过时信息，砸「技术结论可溯源」的账号信用。

@@ -16,5 +16,7 @@
 - promote（manual 模式人挑 / auto 模式自动 Top-N）：`idea → picked` + 回填 `content_path` + 建 `content/<日期>/<slug>/` 写 `1-brief.md`（meta status=`ideated`）→ 移交阶段 2
 - 取题优先级由 `daily-run.md` 定义（`next_up` 指针 → 按 score）
 
-## 节奏
-每 2 天一轮（daily-run 依 `_research/` 最新报告日期判断是否先跑）；manual 为当前默认模式。
+## 节奏与归属（2026-07-08 起）
+- **调研+入池+清扫归治理线**：`harness/tasks.md` 的 ideate 任务驱动，periodic:2d（到点判据 = `_research/` 最新报告日期）。过渡期 daily-run 保留兜底（见 `daily-run.md` 当前模式节）。
+- **promote 取题归生产线**：daily-run 执行（`next_up` 指针 → 按 score）。
+- manual 为当前默认模式（人挑题即人闸）。

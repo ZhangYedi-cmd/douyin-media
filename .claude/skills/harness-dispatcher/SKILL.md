@@ -35,8 +35,7 @@ description: 熵增治理线的调度器(框架层)。定时或手动触发时,�
 - **加权随机不滥用**:只有 `weighted-pool` 任务才随机;事件/周期任务严格按条件,不随机延迟(否则错过复盘窗口)。
 
 ## 触发方式
-- 现在:**手动** `/harness-dispatcher`(跑一轮"该做哪些治理")。
-- 后续:挂 Claude Code `schedule`/cron 定时(如每日一次),入口就是本 skill。定时 cron 待验稳后加(见 harness/README.md 触发节)。
+定时(人在 Claude Code 客户端配)或手动 `/harness-dispatcher`,细则以 `harness/README.md` 触发节为准。
 
 ## 配套(框架层,后续)
 - `account-audit`(元层,待建):读 `logs/index.jsonl` 统计成功率 → 回调 `tasks.md` 的 `weight`/启停。dispatcher 跑出的 index.jsonl 就是它的输入。
