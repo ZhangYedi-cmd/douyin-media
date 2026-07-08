@@ -41,7 +41,7 @@ topics:
       - "Claude Code dynamic workflows 实测：攻大规模问题它强在哪"
     track: depth
     format: kouban
-    status: idea
+    status: expired        # 2026-07-08 过期清扫(人审通过): today超2天+timeliness4超7天；内核常青，可由 ideate 以「工作流实战」角度重新入池
     score: 4.25
     tier: S
     scores: {practical: 5, social: 4, emotion: 3, hook: 4, timeliness: 4, trigger: 5}
@@ -57,7 +57,7 @@ topics:
       - "99 元的 Kimi code-plan 真能替代 Opus 4.8 吗：一手实测"
     track: traffic
     format: tuwen
-    status: idea
+    status: expired        # 2026-07-08 过期清扫(人审通过): 对打热点时效窗已关
     score: 4.25
     tier: S
     scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 3}
@@ -107,7 +107,7 @@ topics:
       - "笔记本级多模态：Gemma 4 12B 实测能不能替代云端"
     track: traffic
     format: kouban
-    status: idea
+    status: expired        # 2026-07-08 过期清扫(人审通过): 新模型鲜度已过
     score: 3.95
     tier: A
     scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
@@ -126,8 +126,8 @@ topics:
     status: idea
     score: 3.75
     tier: A
-    scores: {practical: 5, social: 3, emotion: 3, hook: 3, timeliness: 4, trigger: 4}
-    urgency: queue
+    scores: {practical: 5, social: 3, emotion: 3, hook: 3, timeliness: 2, trigger: 4}
+    urgency: queue        # 2026-07-08 清扫例外保留(人拍板)：Opus4.8仍现旗舰，时效重标4→2，总分未重算
     reason: "省钱即实用，落地角度差异化"
     links:
       - "https://www.anthropic.com/news/claude-opus-4-8"
@@ -171,7 +171,7 @@ topics:
       - "Ideogram 4 开源实测：文字排版图为什么它最强"
     track: traffic
     format: tuwen
-    status: idea
+    status: expired        # 2026-07-08 过期清扫(人审通过): today+时效4，score最低档
     score: 3.50
     tier: A
     scores: {practical: 3, social: 3, emotion: 4, hook: 3, timeliness: 4, trigger: 2}
