@@ -1,0 +1,23 @@
+# 飞书应用配置
+#
+# 设置步骤：
+# 1. https://open.feishu.cn/app → 创建企业自建应用（或复用现有应用）
+# 2. 「凭证与基础信息」拿 App ID / App Secret
+# 3. 「应用能力」→ 开启「机器人」，发布应用，把机器人拉进目标群
+# 4. 「事件与回调」→「回调配置」订阅方式选「长连接」，订阅 card.action.trigger
+# 5. 「加密策略」不加密；记录 Verification Token
+# 6. 复制本文件为 config.yaml，填入真实值
+#
+# 注意：若多个项目复用同一应用 + 同一群，必须用不同的 ns 隔离，
+#      且各自的 server 都要按 ns 过滤回调，否则一次点击会被多个 server 误吃。
+
+app_id: "cli_xxxxxxxxxxxxxxxx"
+app_secret: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+verification_token: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+chat_id: "oc_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# 本项目命名空间（卡片 value 带 ns，server 只认自己的 ns）
+ns: "douyin"
+
+# 触发 Claude Code / sau 时的工作目录
+project_root: "/Users/yedi/douyin-media"

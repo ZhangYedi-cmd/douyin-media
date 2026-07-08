@@ -1,0 +1,69 @@
+# 内容条目元数据 / 状态机
+slug: ep06-concurrent-tools
+title: "10 个工具同时跑，为什么不会把你的文件写坏"
+type: kouban
+pillar: depth
+status: published                   # 生产线: ideated→drafting→review→approved→scheduled→published | rejected（第1次重做：精简发布简介后重新出审）；2026-06-20 21:40 飞书授权后 sau 直发成功（account=main，立即发布）
+# 2026-06-20 出审：成片终检闸 A–G 全过（A–F 均在最终 mp4 上验，非组件截图）。
+#   A 声画一致：audio-segments==narrations（extract 派生，dubbing-reviewer R1 已核）；最终 mp4 抽帧 4 点
+#     (钩子多工具并行/上限10/失败隔离Bash卡片/CTA) 字幕==画面==口播逐字一致；
+#   B 音频自然度：depause 1 轮(cap0.25/minact0.45) 后内部死气 >0.45s = 0（复扫为空）；
+#   C 钩子冷开：第一句「AI 同时读五个文件、跑三条命令、还在改一个文件。按理说，早该数据打架了」自成立、不依赖上文；
+#   D 事实合规：六大机制全溯源 source_repo（见 fact_check），据实收窄 plan 两处过泛断言（读写二分→isConcurrencySafe默认false；
+#     失败隔离→只有Bash取消兄弟）；无违禁/绝对化/导流；
+#   E 封面：baoyu-image-gen 9:16 竖版(1536x2752)、复用 EP01 方块吉祥物本体（交通调度员：拦写车队单车道排队/放读车多车道并行）；
+#   F 音画同步：mux 去拉伸 factor≈1.0023，抽帧画音对齐，crop 1920x1080 无黑边；
+#   G 发布物料 4-publish.md 已产、5 字段经 feishu-bot/meta.py 解析器(_FIELD_RE)验证全部命中、无可解析「建议发布时段」。
+#   dubbing-reviewer R1 PASS（六检查点全过；语速离群均为统计假象，无返工）。
+source: 2026-06-10-006         # backlog id（系列 EP06，claude-code-source-series s2e6）
+
+# 系列信息
+series: {slug: claude-code-source-series, season: 2, episode: 6}
+plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep06-concurrent-tools.md"
+# 源码溯源仓（plan frontmatter 路径已过期/不存在，实际在此，与 EP02-05 同仓）
+source_repo: /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main
+fact_check: |
+  全核于 source_repo（2026-06-20 逐条定位，Explore agent 精读 + 主回话复核）：
+  - 工具自声明并发安全 ← src/Tool.ts:423 `isConcurrencySafe(input): boolean`；
+    默认值保守失败闭合 = false ← src/Tool.ts:780 `isConcurrencySafe: (_input?) => false`。
+    BashTool: isConcurrencySafe = isReadOnly ?? false（packages/builtin-tools/.../BashTool.tsx:570），
+    cd 切目录 → 非只读 → 判不安全；WebFetch isConcurrencySafe()=true（只读网络 I/O）。
+  - 读写分组（贪心分批）← src/services/tools/toolOrchestration.ts:106-131 `partitionToolCalls`：
+    连续 isConcurrencySafe 工具合并一批并行；不安全工具单独成批串行。
+    注释 :48 "Run read-only batch concurrently" / :78 "serially" / :101-105 partition 文档。
+  - 并发上限默认 10、env 可调 ← toolOrchestration.ts:9-13 getMaxToolUseConcurrency
+    `parseInt(CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY) || 10`；runToolsConcurrently 传入上限(:169-196)。
+  - Promise.race 公平调度（谁先完成谁补位）← src/utils/generators.ts:34-74 `all()`：
+    Set<Promise> 占满 cap，await Promise.race，done 即从 waiting 取下一个补入。
+  - 流式即执行 ← src/services/tools/StreamingToolExecutor.ts:36-42 类注释（边流入边执行）、
+    addTool(:88-151)→processQueue、canExecuteTool(:156-162)；query.ts:1086 流式吐出即 addTool。
+  - 失败隔离（只有 Bash 取消兄弟）← StreamingToolExecutor.ts:381-391：
+    `if (tool.block.name === BASH_TOOL_NAME) { hasErrored=true; siblingAbortController.abort('sibling_error') }`
+    注释明写 "Bash commands often have implicit dependency chains (mkdir fails → subsequent pointless).
+    Read/WebFetch are independent — one failure shouldn't nuke the rest"；
+    被取消工具收合成错误消息 createSyntheticErrorMessage(:180-232)「Cancelled: parallel tool call errored」
+    （结构化 tool_result is_error=true，让模型有序收尾，非粗暴掐断）。
+  ★ 据实校准（plan 大纲 vs 源码）：
+    1）plan 写「读文件安全、写文件不安全」是口语化归纳；源码真实机制是工具按 input 动态调 isConcurrencySafe()，
+       默认 false（保守）。脚本表述为「读的随便抢，写的排队来」并补一句「自己声明 + 默认不安全」，不夸大成简单读写二分。
+    2）plan 写「一个工具崩了给其他发合成错误」过泛；源码只有 Bash 失败才取消兄弟（读类独立不连坐），脚本据实收窄。
+    3）结尾承接钩对齐实际下一集 EP07（上下文压缩/失忆），与 plan 结尾钩一致。
+  - 合规：无臆造数据；「十个」「四条规则」是对源码默认上限与多机制的口语化归纳；无违禁词/绝对化营销/口播导流。
+
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-10
+  drafting: 2026-06-20
+  review: 2026-06-20        # 出审，等飞书人审
+  approved: 2026-06-20 21:36
+  published: 2026-06-20 21:40
+  scheduled_submit:
+  retro_done: 2026-06-28        # 治理线首跑·7d窗口；见 5-retro.md（主漏点：中后段流失/完播垫底）
+
+# 成片物料（交审）
+deliverables:
+  video: assets/ep06-concurrent-tools.mp4   # 1920x1080, 173.7s, ~13.3MB, 已混音+烧字幕+去停顿
+  cover: assets/cover.png                    # 9:16 竖版(1536x2752)，仿 EP01 吉祥物本体（baoyu-image-gen）
+  srt:   assets/ep06.srt                      # 22 cues
+  script: 2-script.md                        # 口播稿唯一真相源（含逐条溯源）

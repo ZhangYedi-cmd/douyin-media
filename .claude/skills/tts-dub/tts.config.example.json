@@ -1,0 +1,28 @@
+{
+  "_README": "复制为工程根的 tts.config.json 并填写。voice_id 跑 list-voices 后填。",
+  "provider": "minimax",
+  "outDir": "public/audio",
+
+  "voice_id": "",
+  "speed": 1.1,
+  "pitch": 0,
+
+  "_normalize": "念法规整：全局文本替换，只改配音输入、不改字幕源（字幕保留原文更好看）。",
+  "normalize": [
+    ["query.ts", "query 点 ts"],
+    ["2043", "两千零四十三"],
+    ["17MB", "十七兆"]
+  ],
+
+  "_pronunciation": "全局多音字注音(MiniMax tone)。同字多音并存时留空(否则全局替换会误伤)，改用 overrides 逐段。",
+  "pronunciation": [],
+
+  "_overrides": "逐段覆盖 speed/pitch/pronunciation/voice_id。键=segment id(如 chapter/step)。",
+  "_overrides_example": "「执行 xíng」vs「2043 行 háng」→ 只给行数段加 行/(hang2)，执行段不加，自然读 xíng。",
+  "overrides": {
+    "real-source/2": { "pronunciation": ["行/(hang2)"] },
+    "real-source/3": { "pronunciation": ["行/(hang2)"] },
+    "real-source/5": { "pronunciation": ["重/(chong2)"] },
+    "skeleton/1": { "speed": 1.2 }
+  }
+}

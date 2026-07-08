@@ -1,0 +1,17 @@
+Vertical 9:16 short-video cover image for a tech series. The FIRST reference image is EP01's cover — treat its mascot as the SAME established series character and reuse its identity. Match EP01's visual style EXACTLY: same warm dark near-black background, same SINGLE hot-orange accent color (no other bright colors), same faint low-opacity monospace source-code filling the background, same FLAT PIXEL-ART (blocky, low-res, square-pixel) mascot rendering, same hand-drawn orange spark/burst accents, same bold confident layout and typography weight.
+
+CENTER (main visual anchor) — IDENTITY LOCK: reuse the EXACT SAME mascot from EP01's cover (the reference image): a SQUARE / BLOCKY flat pixel-art orange creature with a rectangular box-shaped body, two simple solid-black rectangular pixel eyes, and short stubby blocky legs. Do NOT redesign it, do NOT make it round/fluffy/animal-like, do NOT create a new similar-looking character (NO hamster, NO cat, NO robot). Keep the same blocky proportions, same eye style, same flat pixel rendering as EP01. ONLY change the scene/pose.
+
+CORE IDEA (must read instantly): "JavaScript punches straight down through the layers into the operating-system floor." Render THREE stacked horizontal FLOOR / STRATA layers like a cutaway cross-section, each a flat blocky pixel-art slab, labelled in small flat pixel text:
+  - TOP slab: "网页 WEB" (lightest)
+  - MIDDLE slab: "运行时 RUNTIME"
+  - BOTTOM slab: "系统底层 OS" (darkest, the deepest floor)
+The ONE mascot is at the top, leaning down and PUNCHING / DRILLING its blocky orange arm/fist STRAIGHT DOWN, smashing a glowing hot-orange hole clean through all three slabs, reaching all the way into the BOTTOM "系统底层 OS" layer. Down in that bottom layer, its fist is grabbing a single glowing hot-orange blocky KEY CAP labelled "⇧ Shift" (a keyboard Shift key). Hand-drawn orange impact spark/burst lines radiate from where the fist breaks through each slab. The visual should instantly read as: "this little AI reaches right down past the web layer, past the runtime, into the system floor, and reads a physical key." Everything flat, blocky, charming pixel-art — NOT realistic, NOT 3D, NOT round.
+
+TOP: a rounded pill-shaped badge with a thin hot-orange outline stroke (transparent fill), centered, containing the text:  Claude Code 源码解读 · EP12
+
+BOTTOM: large BOLD sans-serif title, two lines, very high contrast, crisp and perfectly legible (render all characters accurately):
+  Line 1 (pure white):  为了检测你按没按 Shift
+  Line 2:  它直接调了系统底层   ← render the whole line in the hot-orange accent color, extra bold
+
+Composition: generous breathing room; the three stacked OS-strata slabs centered in the middle with the punched-through orange hole tunnel; the mascot at the top driving its fist down; the glowing "⇧ Shift" key caught in its fist at the bottom slab; title anchored at the bottom; badge at top. Very dark warm-black canvas with faint blurred monospace source code (await import("bun:ffi") / dlopen("/System/Library/Frameworks/Carbon.framework/Carbon") / CGEventSourceFlagsState / FLAG_SHIFT / currentFlags & flag / SendInput / xdotool) behind everything at low opacity. NO realistic humans. Cinematic, editorial, developer aesthetic. All text (Latin code/labels + Chinese title) must be spelled and rendered correctly and sharply. Series consistency with EP01 is the top priority: same character, same palette, same mood.

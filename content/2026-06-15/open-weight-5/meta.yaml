@@ -1,0 +1,19 @@
+# 内容条目元数据 / 状态机
+slug: open-weight-5
+title: "一周砸下25个开源模型，工程师真正该装的就这5个"
+type: tuwen                # kouban(口播) | tuwen(图文)
+pillar: traffic            # depth(技术深度) | traffic(流量型)
+status: scheduled            # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+source: "mer.vin 开源模型周报 2026-06-08（backlog 2026-06-14-003）"
+
+schedule: 2026-06-15 20:00 # 计划发布时间（sau 定时，已提交）
+publish_url:               # 作品链接：sau 未返回，发布后去抖音作品管理人工补
+
+timestamps:
+  ideated: 2026-06-14
+  drafting: 2026-06-15
+  review: 2026-06-15
+  approved: 2026-06-15 00:32
+  scheduled: 2026-06-15 00:34   # 定时任务已提交，预定 20:00 公开
+  published:
+  retro_done:

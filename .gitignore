@@ -1,0 +1,18 @@
+# 重资产工作区：Vite项目/node_modules/录屏产物，按集重建，不入库
+node_modules/
+content/*/*/build/
+content/*/*/demo/
+*.mp4
+*.mp3
+
+# 第三方发布工具（295M，外置/submodule 管理）
+tools/social-auto-upload/
+
+# Python 虚拟环境与缓存
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store

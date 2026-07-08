@@ -1,0 +1,74 @@
+# 内容条目元数据 / 状态机
+slug: ep10-sub-agent-orchestration
+title: "Claude Code 里的子 Agent，就是 AI 给 AI 打工"
+type: kouban
+pillar: depth
+status: published                        # 生产线: ideated→drafting→review→approved→scheduled→published | rejected；2026-06-24 21:33:55 真发成功（首次 21:03 因 UI 浮层挡「选择封面」EXIT=1；人清浮层后重跑同命令一次过，账号 main）
+# 2026-06-24 出审：成片终检闸 A–G 全过（A–F 均在最终 mp4 上验，非组件截图）。
+#   A 声画一致：audio-segments==narrations（source-sync 12/12 PASS）；最终 mp4 抽 6 帧
+#     (5.05s 钩子/25.75s 解法标题EP10徽章/34.41s Agent工具/111.07s 协调者/125.27s 升华/139.36s EP11钩)
+#     字幕==画面==口播逐字一致；
+#   B 音频自然度：depause 1 轮(cap0.25/thresh-30/minact0.45)+coldopen2·details1 二压(cap0.22/minact0.40)，
+#     段内死气 >0.45s = 0（dubbing-check check-silence ✓）；
+#   C 钩子冷开：第一句「一个 AI 当老板，给手下几个 AI 员工分头派活，干完各自汇报，老板把结果一汇总」自成立、不依赖上文；
+#   D 事实合规：runAgent(async generator)/独立AbortController隔离/filterParentToolsForFork裁剪/ALL_AGENT_DISALLOWED_TOOLS黑名单/
+#     回传extractTextContent/协调者getCoordinatorSystemPrompt 全溯源 source_repo（见 fact_check）；
+#     ★ 据实校正 plan：自指开场不声称「本系列用4个子agent完成」(无法核实，按红线不编造)，改工程师视角自指；
+#       「只读不给写」校正为 agent 定义层(availableTools)非黑名单功能；「四个员工」不写死(源码无此常量)；无违禁/绝对化/导流；
+#   E 封面：baoyu-image-gen 9:16 竖版(1536x2752)、复用 EP01 方块吉祥物本体（顶部「老板」AI 派活+底下3个同款小吉祥物「员工」各进房间各抱橙报告回传，组织图）；
+#   F 音画同步：mux 去拉伸 factor≈0.9571，抽帧画音对齐，crop 1920x1080 无黑边；
+#   G 发布物料 4-publish.md 已产、5 字段经 feishu-bot/meta.py read_publish_material 解析全部命中(标题/正文/话题x5/封面/媒体)、无可解析「建议发布时段」。
+#   dubbing-check 内联裁决 PASS（R1）：2.4真相源同步✓ 2.1完整性12/12✓ 2.3死气0✓ 1.2多音字(候选行/调/中/分/角/传均主导读音高频词、无全局字典误伤)✓
+#     3.1音画一致(组件硬编码为narration条目化派生、非冲突整句)✓ 2.2语速(唯一绝对>6.5离群 layers/3=6.83→override speed1.0重合成降至5.34；
+#     残留 layers/2=6.38·details/1=6.27 均<6.5上限属相对统计假象不返工)。
+#   ★ 偏差记录：本环境 subagent 模型配置不可用(MiniMax-M2.7/M3[1M] 报错)，dubbing-reviewer 闸口改由主回话内联跑 dubbing-check 全检查点替代(只判+自修，逻辑等价)。
+source: 2026-06-10-010             # backlog id（系列 EP10，claude-code-source-series s2e10）
+
+# 系列信息
+series: {slug: claude-code-source-series, season: 2, episode: 10}
+plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep10-sub-agent-orchestration.md"
+# 源码溯源仓（plan frontmatter 路径 /Users/yedi/yedi-study/claude-code-main 不存在，实际在此，与 EP02-09 同仓）
+source_repo: /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main
+fact_check: |
+  全核于 source_repo（2026-06-24 主回话 Grep/Read 精读关键行号；行号会漂移，以锚点为准）：
+  - 子 Agent = async generator ← packages/builtin-tools/src/tools/AgentTool/runAgent.ts:257 `export async function* runAgent({...})`。
+  - 独立隔离 ← runAgent.ts:533-537 注释「Async agents get a new unlinked controller (runs independently)」，
+    `isAsync ? new AbortController() : toolUseContext.abortController`；:707-708「Async agents are fully isolated」；
+    createSubagentContext 给独立 messages/readFileState/abortController；身份隔离 AsyncLocalStorage(runWithAgentContext :933)。
+    脚本「独立对话记录/中断开关/文件视图，互不串台」属实。
+  - 并行派多个 ← prompt.ts:162「Launch multiple agents concurrently … use a single message with multiple tool uses」；
+    :184「run agents 'in parallel' … MUST send a single message with multiple Agent tool use content blocks」。
+    ★「几个/好几个」属实(机制支持并发)，不写死「4 个」(源码无常量，plan「四个员工」是举例)。
+  - 裁剪-防递归套娃 ← src/utils/agentToolFilter.ts `filterParentToolsForFork = parentTools.filter(t => !ALL_AGENT_DISALLOWED_TOOLS.has(t.name))`；
+    黑名单 src/constants/tools.ts:44 含 AGENT_TOOL_NAME(非 ant 用户排除 Agent 工具自身)；
+    AgentTool.tsx:419-429「Recursive fork guard」+ throw 'Fork is not available inside a forked worker.'。「分叉的不准再分叉」属实。
+  - 裁剪-敏感不下放 ← 黑名单同含 LOCAL_MEMORY_RECALL_TOOL_NAME(跨会话用户笔记 keep main thread only)、
+    VAULT_HTTP_FETCH_TOOL_NAME(用户密钥 keep main thread only)。「私人记忆/密钥只留主线」属实。
+  - 裁剪-按角色配工具(只读不给写) ← ★校正：非 filterParentToolsForFork(黑名单不含 FileWrite/Edit)，
+    由 agent 定义自带工具集决定(runAgent.ts:270-272 availableTools/allowedTools + agentDefinition；调研型如 Explore 不配 Edit/Write)。脚本「每种员工按角色配工具」对应此，未夸大成黑名单功能。
+  - 回传 ← AgentTool.tsx:1133 `extractTextContent(agentResult.content, '\n')` 把子 agent 最终内容当工具结果回交；
+    prompt.ts:171「it will return a single message back to you … not visible to the user」；中间过程进 sidechain transcript(recordSidechainTranscript)，不回灌主对话。属实。
+  - 协调者模式 ← src/coordinator/coordinatorMode.ts:111 getCoordinatorSystemPrompt，:116「orchestrates … across multiple workers」，
+    :120「You are a **coordinator** … Direct workers to research, implement and verify」；持续往返 :131 SendMessage「Continue an existing worker」；
+    结果以 <task-notification> user 消息回来含 <result>。「第一句就写你是协调者、能持续往返」属实。
+  - 结尾钩对齐 EP11：日更按 episode 升序，下一集 EP11「claude --version 0 毫秒」(codebase-map：src/entrypoints/cli.tsx 30+ 快速路径、--version 零模块加载)。
+  - 合规：源码仓为社区反编译/重建版(措辞已注意未称官方原始仓)；无臆造数据；「AI 给 AI 打工/公司管理学」类比是工程点评非营销承诺；无违禁/绝对化/口播导流。
+  - 自指开场：用「扒源码我自己爱开几个子 Agent 分头啃」工程师视角(站得住)，★不声称「本系列就是用 4 个子 agent 完成」(无法核实，按红线不编造)。
+
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-10
+  drafting: 2026-06-24
+  review: 2026-06-24        # 出审，等飞书人审
+  approved: 2026-06-24 21:00
+  published: 2026-06-24 21:33:55
+  scheduled_submit:
+  retro_done: 2026-06-28        # 治理线首跑·72h窗口；见 5-retro.md（主漏点：前5秒劝退，但留存转化全系列最强）
+
+# 成片物料（交审）
+deliverables:
+  video: assets/ep10-sub-agent-orchestration.mp4   # 1920x1080，146.8s，~12.3MB，已混音+烧字幕+去停顿+去拉伸
+  cover: assets/cover.png                          # 9:16 竖版(1536x2752)，仿 EP01 吉祥物本体当「AI 老板派 AI 员工」组织图（baoyu-image-gen）
+  script: 2-script.md                              # 口播稿唯一真相源（含逐条溯源）
+  publish: 4-publish.md                            # 发布物料（5 字段经解析器验证）

@@ -1,0 +1,42 @@
+# 内容条目元数据 / 状态机
+slug: ep04-esc-abort-chain
+title: "你按下 Esc 的那 0.1 秒，Claude Code 内部发生了什么"
+type: kouban
+pillar: depth
+status: scheduled             # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+# 2026-06-18 20:54 飞书「确认发布」授权 → /douyin-publish --publish → sau upload-video 定时提交成功(scheduled 2026-06-19 20:00)；账号 main，sau 输出无作品链接需后续抖音作品管理人工补。
+# 2026-06-18 出审：成片终检闸 A–F 全过（均在最终 mp4 上验）。
+#   A 声画一致：抽帧 5 点(钩子/剪树/cancel-block/WeakRef/EP05钩) 字幕==画面==口播一致；
+#   B 音频自然度：depause 后内部死气 >0.45s = 0；
+#   C 钩子冷开：第一句「你按一下 Esc…文件一个都没被写坏」自成立、不依赖上文；
+#   D 事实合规：三机制全溯源 source_repo（见 fact_check），纠正了 plan「读文件cancel/写文件block」的非源码说法；无违禁/绝对化/导流（「第一层/最服气」为口语非营销词）；
+#   E 封面：baoyu-image-gen 9:16 竖版、复用 EP01 方块吉祥物本体；
+#   F 音画同步：mux 去拉伸 factor≈1.008，抽帧画音对齐。
+#   dubbing-reviewer R1 PASS（6 检查点全过）；唯一 NON-BLOCKING(tree/5 略快)已采纳，重合成 speed0.97。
+source: 2026-06-10-004      # backlog id（系列 EP04，claude-code-source-series s1e4）
+
+# 系列信息
+series: {slug: claude-code-source-series, season: 1, episode: 4}
+plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep04-esc-abort-chain.md"
+# 源码溯源仓（plan frontmatter 路径已过期，实际在此，与 EP02/EP03 同仓）
+source_repo: /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main
+fact_check: "全核于 source_repo：abortController.ts(createChildAbortController 父→子单向传播+reason 下传:67-99 / WeakRef 双向弱引用:84-85 / 子 abort 自动摘监听器{once:true}:88-97 / DEFAULT_MAX_LISTENERS=50:6,18) / Tool.ts:437 interruptBehavior():'cancel'|'block',默认 block:435 / StreamingToolExecutor.ts getAbortReason:237-255(reason==='interrupt' 时只砍 cancel 工具,block 工具不动)+getToolInterruptBehavior 默认 block:260-266 / SleepTool.ts:78 唯一声明 interruptBehavior()=>'cancel' / handlePromptSubmit.ts:330,341 软打断 abort('interrupt') 注释'e.g. SleepTool' / useCancelRequest.ts handleCancel Priority1 硬 Esc(chat:cancel,source 'escape')砍当前任务。★纠偏:plan 写的'读文件 cancel/写文件 block'非源码事实——默认 block,仅 SleepTool opt-in cancel,且 cancel/block 只作用于软打断;脚本据实改写。"
+
+schedule: 2026-06-19 20:00   # 人审打回(重做1)指定：明天晚8点定时发布（sau --schedule 格式 %Y-%m-%d %H:%M）
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-10
+  drafting: 2026-06-18
+  review: 2026-06-18          # 出审，等飞书人审
+  approved: 2026-06-18 20:52
+  published:                 # 定时发布，到点(2026-06-19 20:00)后由抖音自动发布
+  scheduled_submit: 2026-06-18 20:54
+  retro_done:
+
+# 成片物料（交审）
+deliverables:
+  video: assets/ep04-esc-abort-chain.mp4   # 1920x1080, 211.2s, ~17.9MB, 已混音+烧字幕+去停顿
+  cover: assets/cover.png                  # 9:16 竖版(1536x2752)，仿 EP01 吉祥物本体（baoyu-image-gen）
+  srt: assets/ep04.srt                     # 24 cues
+  script: 2-script.md                      # 口播稿唯一真相源（含逐条溯源）

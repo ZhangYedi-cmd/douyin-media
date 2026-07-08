@@ -1,0 +1,83 @@
+# 内容条目元数据 / 状态机
+slug: ep15-200-lines-mini-agent
+title: "200 行代码，手写一个迷你 Claude Code（完结篇）"
+type: kouban
+pillar: depth
+status: published                                # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+# ★ 2026-06-29 出审：系列完结篇成片已录出，终检闸 A–G 全过（A/B/F 均在最终 mp4 上验）。TTS 余额充足（配音前单段探测通过），无 1008。
+#   A 声画一致：audio-segments==narrations 文本层全等(脚本校验 15/15 ✓)；最终 mp4 抽 5 帧
+#     (5.85s 钩子[两百行代码·能读文件/跑命令/自己决定下一步·手写迷你 Claude Code]/
+#      31.5s build1[第一步 while 循环·把话发给模型·只说话就结束·要工具就执行回灌]/
+#      74.62s build4[工具描述打包给模型·模型主动选哪个传什么参数]/
+#      142.21s build10[真机运行终端:read_file→a.ts导出常量→权限 y→run_command 写 report.txt→3 数字对得上]/
+#      187.34s ending3[完整代码+全系列导读·评论区扣「200」]) 字幕==画面==口播逐字一致；
+#   B 音频自然度：depause 压 >0.45s 内部死气全清，段内 mid-sentence 死气=0(成片复扫 15 处 >0.45 全在段边界 gap+段首尾静音、非段内)；
+#   C 钩子冷开：首句「两百行代码，能读你的文件、能跑命令、还能自己决定下一步」对成品能力直陈、自成立、不依赖上一集；系列收官承接放结尾 [15]；
+#   D 事实合规：核于 source_repo + demo 真机产物(见 fact_check)；mini-agent.ts 197 行真跑通(run-transcript.txt 真实输出)；
+#     未给「二十万行」等无法核实硬数字、只作「厚厚一层工程外壳」定性；无违禁/绝对化；变现走评论区扣「两百」、非站外导流口播；
+#   E 封面：baoyu-image-gen 9:16 竖版(1536×2752)、复用 EP01 方块吉祥物本体(当工匠·手搓一个迷你版自己·握扳手)，
+#     发光「200」芯片块上立着迷你 agent，四块building block 循环/工具/权限/流式 snap 进迷你 agent；
+#     暗底单热橙、徽章「Claude Code 源码解读·EP15·完结篇」、标题白「两百行代码」+橙「手写一个迷你 Claude Code」承担钩子，背景虚化真实 mini-agent 源码；
+#   F 音画同步：mux 去拉伸(factor=webm/wall=197.05/201.80=0.9768)、crop 1920×1080:80:100、trimSec 3.711，
+#     成片 194.216s==master.wav(194.216s)对齐(diff≈0.0001s)；record-manual 15 步自适应校验推进 0 漂移；
+#   G 发布物料 4-publish.md 已产、5 字段键名匹配解析器(标题/正文简介/话题x5/封面/媒体)；无可解析「建议发布时段」(默认立即发布)。
+#   dubbing-reviewer 闸口 R1 FAIL→R2 PASS（subagent 正常派单，2 轮收敛）：
+#     R1 唯一 BLOCKING = build/4「各十几行」的「行」因 toneFor 正则要求数词紧贴而被「几」隔开漏注(会读 xíng)；
+#     修法 = minimax-t2a.mjs toneFor 数词类补「几」(/[\d…多几]\s*行/)、rm build/4.mp3 用真相源文本重合成；
+#     R2 复核：build/4 注上 háng、全片 11 个「行」段逐处复核补「几」零误伤、死气/完整性/真相源同步硬门槛全过 → PASS。
+#     额外打磨(NON-BLOCKING)：ending/2 收官升华句 6.77 音节/秒偏快，按建议给 rec/segment-overrides.json {ending/2:{speed:1.0}} 重合成降速。
+#   （NON-BLOCKING：reviewer 与本 run 无听觉通道、本机无 whisper，英文词(while/query/Node/agent/report/Claude Code)实读
+#     与 coldopen/1 开头语速 未经人耳抽听，已诚实标注、留待人审听一遍；若英文词读糊，改法：minimax-t2a.mjs normalize 加规则后 rm 该段 mp3 重合成重录）。
+source: 2026-06-10-015             # backlog id（系列 EP15，claude-code-source-series s3e15，完结篇）
+
+# 系列信息
+series: {slug: claude-code-source-series, season: 3, episode: 15}
+plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep15-200-lines-mini-agent.md"
+# 源码溯源仓（plan frontmatter 路径 /Users/yedi/yedi-study/claude-code-main 不存在，实际在此，与 EP02-14 同仓）
+source_repo: /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main
+fact_check: |
+  本集是「手写实战」型，事实分两块核：① mini-agent 真机能力核于 demo 产物；② 满血版对照核于 source_repo。
+  - [demo] demo/mini-agent.ts = 197 行单文件、零第三方依赖（仅 node:readline/promises、node:fs/promises、
+    node:child_process、内置 fetch），node --experimental-strip-types 直跑。真机跑通见 demo/run-transcript.txt：
+    任务「先读 a.ts 告诉我导出了啥，再统计目录 .ts 数写进 report.txt」→ 实际动作 read_file(a.ts)→「导出了常量 x」
+    →权限闸拦 run_command→放行→写 report.txt→count=3（与 sandbox 实际 a.ts/b.ts/c.ts 三个 .ts 文件一致）。属实、非口嗨。
+    模型端走 OpenAI 兼容协议(chat/completions + function calling + SSE 流式)，demo 实测指向 Gemini 兼容端点真实返回
+    tool_calls、逐 chunk 流式——印证「agent 核心是循环、与具体哪家模型无关」(系列 EP09 论点)。
+  - [3][4] loop = while 循环 / 满血版 query 核心也是 while true ← src/query.ts `export async function* query`(line 276)
+    下沉 `queryLoop` 的 `while (true)`(line 460)；「只说话就结束、要 tool 就执行再回灌」对应对 `content.type === 'tool_use'`
+    的提取与回填(line 160 一带)。属实。
+  - [4] 「agent 的本质就是个 while 循环」← 系列 EP01 已立此论点，此处系列内自洽复述、不依赖观众看过 EP01（冷开在 [1]）。
+  - [5] 工具最小三样 name + schema + 干活代码 ← src/Tool.ts 接口 `name`(line 477)、`inputSchema`(line 415)、
+    `call(`(执行,line 400)；另有 `description`(line 407)、`prompt`(权限,line 539)。迷你版取最小子集，属忠实裁剪。
+  - [7][8] 跑命令前问 y/n = 权限闸 ← 致敬系列权限管线集 EP05；demo askPermission 真实拦截 run_command(needsPermission=true)、
+    read_file 放行(needsPermission=false)。属实。
+  - [9] 流式 = 逐块读 SSE 打字机 ← demo streamTurn 用 for await 读 resp.body 的 SSE chunk、delta.content 到达即
+    process.stdout.write。属实。
+  - [13] 工程外壳举例(压缩/并发/缓存定位/防御兜底) ← 均为本系列已拆真实机制(压缩 EP07、并发不写坏文件 EP06、
+    缓存破坏检测 EP14、防御性编程 EP13)，非臆造。未给「二十万行」等无法核实硬数字、只作定性「厚厚一层工程外壳」。
+  - [15] 系列收官钩 = claude-code-source-series 15 集完结；变现引导(完整代码 + 全系列导读笔记)走评论区扣「两百」、不念外链。
+  - 合规：口播读「两百」(TTS 自然)，结尾画面 CTA 大字显示「200」(视觉道具、非字幕)；字幕同源 narration = 口播「两百」。
+  - 人审需重点听（无人耳/whisper 通道，以下声学项未经核）：英文词 while/query/Node/agent/report/Claude Code 实读、
+    coldopen/1 开头与 ending/2 收官句语速听感。
+
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-10
+  drafting: 2026-06-29       # 创作；TTS 余额充足，链路一次跑通（除 build/4 多音字 R1→R2 一轮修复）
+  review: 2026-06-29         # 出审，等飞书人审
+  approved: 2026-06-29 20:58
+  published: 2026-06-29 21:00:30   # 飞书「确认发布」授权 --publish 直发，账号 main，sau 一次过（视频发布成功）
+  scheduled_submit:
+  retro_done:
+
+# 阻塞：无（配音前单段探余额通过，无 1008）
+blocker: {}
+
+# 成片物料（交审）
+deliverables:
+  video: assets/ep15-200-lines-mini-agent.mp4   # 1920×1080，194.22s，~16MB，已混音+烧字幕+去停顿+去拉伸 ✓
+  cover: assets/cover.png                    # 9:16 竖版(1536×2752)，仿 EP01 吉祥物本体·工匠手搓迷你 agent（baoyu-image-gen）✓
+  script: 2-script.md                        # 口播稿唯一真相源（含逐条溯源）✓
+  publish: 4-publish.md                      # 发布物料（5 字段键名匹配解析器）✓
+  demo: demo/                                # 真写的 mini-agent.ts(197 行,跑通) + run-transcript.txt(真实运行记录) ✓

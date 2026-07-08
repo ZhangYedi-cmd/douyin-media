@@ -1,0 +1,83 @@
+# 内容条目元数据 / 状态机
+slug: ep12-ffi-native
+title: "为了检测你按没按 Shift，它直接调了 macOS 系统底层"
+type: kouban
+pillar: depth
+status: published                           # 生产线: ideated→drafting→review→approved→scheduled→published | rejected；2026-06-26 21:20 飞书人审通过后真发抖音（立即发布）
+# 2026-06-26 出审：成片终检闸 A–G 全过（A–F 均在最终 mp4 上验，非组件截图）。
+#   A 声画一致：audio-segments==narrations 文本层全等（脚本校验 11/11 ✓，抽取后未改 narration）；最终 mp4 抽 8 帧
+#     (7s 冷开钩子[JS 玩具语言/读键盘物理状态]/20s 常规思路写C+编译+分发/31s 标题[EP12徽章·让 JS 跟操作系统喊话]/
+#      40s dlopen 打开 Carbon/50s 声明借用 C 函数 i32→u64/62s currentFlags & FLAG_SHIFT·六十多行全包/
+#      74s 三套后端同一接口/88s mac JXA CoreGraphics·win 拼 C# 调 SendInput/101s linux xdotool/
+#      114s 升华[语言没高低·生态和接口·Bun 把 FFI 做成内置]/130s EP13钩[防御性编程多变态]) 字幕==画面==口播逐字一致；
+#   B 音频自然度：depause 2 轮(cap0.25→0.22/thresh-30)压标点死气，段内 >0.45s 死气复扫 = 0；
+#   C 钩子冷开：首句「都说 JavaScript 是写网页的玩具语言，干不了底层」自成立、争议钩、不依赖上文；
+#   D 事实合规：bun:ffi dlopen Carbon(index.ts:26-35)/isModifierPressed+FLAG_SHIFT(index.ts:1-11,48-66)/
+#     CGEventSourceFlagsState 声明 i32→u64(index.ts:30-33)/按位与(index.ts:62-65)/全文 66 行；
+#     三后端 darwin JXA+CoreGraphics+CGEventPost(darwin.ts:64-87)/win32 PowerShell Add-Type C# P/Invoke SendInput(win32.ts:1-90)/
+#     linux xdotool(linux.ts:4-5,124-208)，同一 InputBackend 接口 全溯源 source_repo（见 fact_check）；
+#     「传统要写 C+编译+分发二进制」是行业常识对照非臆造跑分；源码仓社区反编译版措辞已注意；无违禁/绝对化/导流；
+#   E 封面：baoyu-image-gen 9:16 竖版(1536×2752)、复用 EP01 方块吉祥物本体（拳头砸穿网页WEB/运行时RUNTIME/系统底层OS
+#     三层地板、伸到最底层抓发光「⇧ Shift」键，暗底单热橙+橙色冲击火花，背景虚化真实源码锚点 bun:ffi/dlopen Carbon/
+#     CGEventSourceFlagsState/FLAG_SHIFT/SendInput/xdotool）；标题「为了检测你按没按 Shift / 它直接调了系统底层」承担钩子；
+#   F 音画同步：mux 去拉伸(factor=webm/wall)、crop 1920×1080:80:100 无黑边，成片 137.300s==master.wav(137.304s) 对齐；
+#   G 发布物料 4-publish.md 已产、5 字段(标题/正文/简介·话题x5/封面/媒体)经 feishu-bot/meta.py read_publish_material 实跑全命中、
+#     无可解析「建议发布时段」(schedule=None→立即发布)。
+#   dubbing-reviewer 闸口 R1 PASS（subagent 正常派单）：完整性 11/11✓ 真相源同步✓ 死气0✓ 音画一致✓
+#     语速 details/2 经复核判为英文密集统计假象(纯发音 3.76 音节/s 偏慢)非真离群、不调速✓ 多音字/术语 normalize 配置层逐段核对无误✓
+#     （NON-BLOCKING：reviewer 与本 run 均无听觉通道，details/2、ending 段「声学糊读/多音字实读」未经人耳抽听，已诚实标注、留待人审听一遍）。
+source: 2026-06-10-012             # backlog id（系列 EP12，claude-code-source-series s3e12）
+
+# 系列信息
+series: {slug: claude-code-source-series, season: 3, episode: 12}
+plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep12-ffi-native.md"
+# 源码溯源仓（plan frontmatter 路径 /Users/yedi/yedi-study/claude-code-main 不存在，实际在此，与 EP02-11 同仓）
+source_repo: /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main
+fact_check: |
+  全核于 source_repo（行号会漂移，以锚点为准）：
+  - JS 直接读键盘物理状态/没写 C/没编译 ← packages/modifiers-napi/src/index.ts（全文 66 行）：loadFFI() 内
+    const ffi = await import('bun:ffi') 再 ffi.dlopen('/System/Library/Frameworks/Carbon.framework/Carbon', {...})(index.ts:26-35)。
+    纯 TS，无 C 源文件/无编译/无随包二进制，靠 Bun 内置 bun:ffi 直调系统动态库。属实。
+  - 检测 Shift 等修饰键 ← isModifierPressed(modifier)(index.ts:48-66) 支持 shift/control/option/command，
+    常量 FLAG_SHIFT=0x20000 等(index.ts:1-11)。属实。
+  - FFI=外部函数接口·Bun 内置 ← await import('bun:ffi')(index.ts:26) + ffi.FFIType.i32/u64(index.ts:31-32)。属实。
+  - 打开 macOS 自带 Carbon 框架 ← dlopen 首参系统路径 /System/Library/Frameworks/Carbon.framework/Carbon(index.ts:28)。属实。
+  - 声明借用 C 函数+参数/返回值类型 ← dlopen 次参声明 CGEventSourceFlagsState:{args:[i32],returns:u64}(index.ts:30-33)，
+    之后 lib.symbols.CGEventSourceFlagsState(stateID) 像本地函数调(index.ts:37)。属实。
+  - 调一次+按位与 ← currentFlags = cgEventSourceFlagsState(0)(index.ts:62-64) 后 (currentFlags & flag) !== 0(index.ts:65)。属实。
+  - 66 行全包 ← wc -l index.ts = 66；口语化「六十多行」。属实。
+  - 传统写 C+编译+分发二进制 ← 行业常识对照（Node 原生插件历来需 C/C++ + node-gyp 编译 + 按平台分发 .node），
+    用于反衬 bun:ffi 无编译路径，非臆造跑分。
+  - 案例二三套后端 ← packages/@ant/computer-use-input/src/backends/{darwin,win32,linux}.ts，对上层同一 InputBackend 接口
+    (各文件 import type { InputBackend } from '../types.js')。属实。
+  - macOS JXA 调 CoreGraphics 造鼠标事件灌事件流 ← darwin.ts:1-6 头注释「Uses AppleScript(osascript) and JXA … via CoreGraphics events」；
+    jxa() 走 osascript -l JavaScript(darwin.ts:64-72)；buildMouseJxa 内 ObjC.import("CoreGraphics");…CGEventCreateMouseEvent…CGEventPost($.kCGHIDEventTap,e)(darwin.ts:82-87)。属实。
+  - Windows 运行时拼 C# 调 Win32 SendInput·PowerShell 编译再跑 ← win32.ts:1-7 头注释「Uses PowerShell with Win32 P/Invoke(SetCursorPos,SendInput,keybd_event…)」「P/Invoke types compiled once at module load」；
+    WIN32_TYPES 是 Add-Type -Language CSharp @'…public class CuWin32 {[DllImport("user32.dll")]…SendInput(…)…}'@ 的 C# 源串(win32.ts:39-86)，随 ['powershell','-NoProfile','-NonInteractive','-Command',script] 执行(win32.ts:18,27)。属实。
+  - Linux 包一层 xdotool ← linux.ts:4-5 头注释「Uses xdotool…Requires: xdotool」；全程 run(['xdotool',...])(linux.ts:124-208)。属实。
+  - 升华「语言没高低·卡的是生态和接口·Bun 把 FFI 做成内置」← 由上述源码事实引出的工程点评/观点，非营销承诺/非绝对化。
+  - 结尾钩对齐 EP13：日更按 episode 升序，下一集 EP13「Anthropic 工程师的防御性编程，变态到什么程度」(backlog 2026-06-10-013)。
+    结尾钩「敢在生产环境真用还得有一整套兜底·下集盘点防御性编程多变态」对齐 EP13 主题，不剧透、不依赖本集上文。
+  - 冷开自成立：首句「都说 JavaScript 是写网页的玩具语言，干不了底层」自带争议语境，3 秒站得住，不依赖上一集。
+  - 合规：源码仓社区反编译/重建版(措辞已注意未称官方原始仓)；无臆造数据/跑分(「玩具语言」「更狠」「更绝」是口语态度词)；
+    无违禁词/绝对化(未用最/第一/100%)/口播导流。
+  - ★ NON-BLOCKING 局限：dubbing-reviewer 与本 run 均无音频听觉通道，details/2(英文密集段) 与 ending 的「声学糊读/多音字实读」
+    未经人耳抽听，配置层(minimax-t2a.mjs normalize+toneFor)已逐段静态核对无误伤；留待人审时亲耳过一遍这两段。
+
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-10
+  drafting: 2026-06-26
+  review: 2026-06-26        # 出审，等飞书人审
+  approved: 2026-06-26 21:18
+  published: 2026-06-26 21:20    # sau upload-video 真发成功（account=main，立即发布；作品链接待去抖音作品管理人工补）
+  scheduled_submit:
+  retro_done:
+
+# 成片物料（交审）
+deliverables:
+  video: assets/ep12-ffi-native.mp4        # 1920×1080，137.3s，~11.4MB，已混音+烧字幕+去停顿+去拉伸
+  cover: assets/cover.png                   # 9:16 竖版(1536×2752)，仿 EP01 吉祥物本体砸穿三层地板抓 Shift 键（baoyu-image-gen）
+  script: 2-script.md                       # 口播稿唯一真相源（含逐条溯源）
+  publish: 4-publish.md                     # 发布物料（5 字段经解析器键名匹配）

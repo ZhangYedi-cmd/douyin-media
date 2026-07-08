@@ -1,0 +1,491 @@
+# 选题池总账 —— 候选选题的唯一真相来源（粗粒度生命周期 + 去重 + 复盘留痕）
+# 由 douyin-ideate 技能追加与维护。
+#
+# 【状态分两层，别混】★ 单一真相源规则
+#   backlog(本文件) 只管粗粒度三态：idea → picked → published ｜异常：rejected / expired / archived
+#     - idea      候选，未动工
+#     - picked    已 promote 进生产；content/<date>/<slug>/ 已建，细粒度状态看那里的 meta.yaml
+#     - published 已发布（保留做去重 + 复盘 metrics）
+#   生产中的细粒度状态（ideated→drafting→review→approved→scheduled→published）只写 content 的 meta.yaml，
+#   backlog 不镜像。backlog 只在两个时点翻动：promote(置 picked) 与 发布完成(置 published)。
+#   双向指针：backlog.content_path → 内容目录；content 的 meta.source → backlog id。
+#
+# 字段说明：
+#   id        唯一标识 YYYY-MM-DD-NNN
+#   title     建议标题
+#   alt_titles 备选标题
+#   track     depth(深度) | traffic(流量)
+#   format    kouban(口播) | tuwen(图文)
+#   status    见上（粗粒度三态 + 异常）
+#   content_path  promote 后回填，指向 content/<date>/<slug>/（picked/published 必填）
+#   score     总分（系列题免引擎打分，留空）
+#   tier      S/A/B/C/D
+#   scores    六维原始分 {practical,social,emotion,hook,timeliness,trigger}
+#   urgency   queue(可排队) | today(当天必发)
+#   reason    一句话推荐理由
+#   links     素材链接
+#   tags      归一化主题标签（30天去重比对用，如 [claude-code, agent]）
+#   created   入池日期
+#   metrics   发布后回填 {plays,完播率,likes,...}
+
+topics:
+  - id: 2026-06-14-001
+    title: "Claude Code 新的 dynamic workflows 我跑了一周，这才是它跟 Cursor 拉开差距的地方"
+    alt_titles:
+      - "Claude Code dynamic workflows 实测：攻大规模问题它强在哪"
+    track: depth
+    format: kouban
+    status: idea
+    score: 4.25
+    tier: S
+    scores: {practical: 5, social: 4, emotion: 3, hook: 4, timeliness: 4, trigger: 5}
+    urgency: today
+    reason: "蓝海+实用+触发都顶，旗舰热度叠工程落地实测"
+    links:
+      - "https://www.anthropic.com/news/claude-opus-4-8"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-002
+    title: "Kimi 2.7-code 对打 Opus 4.8 修同一个 bug，结果有点意外"
+    alt_titles:
+      - "99 元的 Kimi code-plan 真能替代 Opus 4.8 吗：一手实测"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 4.25
+    tier: S
+    scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 3}
+    urgency: today
+    reason: "一手实测对比，悬念+性价比，时效正热"
+    links:
+      - "https://x.com/lmz2423/status/2066120281916150141"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-003
+    title: "一周 25 个开源模型砸下来，工程师真正该装的就这 5 个"
+    alt_titles:
+      - "2026 开源模型大爆发周速览：LLM/图像/语音怎么挑"
+    track: traffic
+    format: tuwen
+    status: picked          # 已进生产，细粒度状态见 meta.yaml（现 scheduled）
+    content_path: content/2026-06-15/open-weight-5
+    score: 4.15
+    tier: S
+    scores: {practical: 2, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 3}
+    urgency: today
+    reason: "信息过载下的筛选刚需，中文速览蓝海"
+    links:
+      - "https://mer.vin/2026/06/open-weight-ai-release-week-25-models-across-llms-image-audio-video-and-3d-june-2026/"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-004
+    title: "LLM 上下文工程：我是怎么把 10 万 token 压到 2 万还不丢信息的"
+    alt_titles:
+      - "上下文工程实战：压缩、记忆、长会话优化"
+    track: depth
+    format: kouban
+    status: idea
+    score: 4.05
+    tier: S
+    scores: {practical: 5, social: 4, emotion: 3, hook: 4, timeliness: 2, trigger: 4}
+    urgency: queue
+    reason: "实用爆表、每天写代码都撞到，长尾沉淀"
+    links:
+      - "https://github.com/Siddhant-K-code/ContextLab"
+      - "https://github.com/leorod123/llm-context-engineering-playbook"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-005
+    title: "Gemma 4 12B 我塞进笔记本跑多模态，离线能干这些活"
+    alt_titles:
+      - "笔记本级多模态：Gemma 4 12B 实测能不能替代云端"
+    track: traffic
+    format: kouban
+    status: idea
+    score: 3.95
+    tier: A
+    scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
+    urgency: today
+    reason: "笔记本级多模态够惊奇，可演示完播好"
+    links:
+      - "https://huggingface.co/google/gemma-4-12B"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-006
+    title: "Opus 4.8 的 effort 控制 + fast mode，怎么让我账单降一半"
+    alt_titles:
+      - "Opus 4.8 省钱用法：effort 调度 + fast mode 实测"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.75
+    tier: A
+    scores: {practical: 5, social: 3, emotion: 3, hook: 3, timeliness: 4, trigger: 4}
+    urgency: queue
+    reason: "省钱即实用，落地角度差异化"
+    links:
+      - "https://www.anthropic.com/news/claude-opus-4-8"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-007
+    title: "MCP 到底是不是\"新 API\"？一个比喻讲清它的本质"
+    alt_titles:
+      - "MCP 是传输与发现契约：function calling 和它差在哪"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.75
+    tier: A
+    scores: {practical: 4, social: 4, emotion: 3, hook: 4, timeliness: 2, trigger: 4}
+    urgency: queue
+    reason: "概念科普蓝海，触发高，立身型内容"
+    links:
+      - "https://x.com/search?q=MCP%20server%20protocol"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-008
+    title: "JetBrains 头一回开源编码模型 Mellum2，我拆了它的 MoE 怎么省算力"
+    alt_titles:
+      - "Mellum2-12B-A2.5B 源码拆解：8/64 专家怎么近 Qwen3-14B"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.70
+    tier: A
+    scores: {practical: 4, social: 4, emotion: 3, hook: 4, timeliness: 3, trigger: 3}
+    urgency: queue
+    reason: "源码/设计拆解，符合立身支柱"
+    links:
+      - "https://huggingface.co/JetBrains/Mellum2-12B-A2.5B-Thinking"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-009
+    title: "Ideogram 4 第一次开源权重，做带文字的海报终于不糊了"
+    alt_titles:
+      - "Ideogram 4 开源实测：文字排版图为什么它最强"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 3.50
+    tier: A
+    scores: {practical: 3, social: 3, emotion: 4, hook: 3, timeliness: 4, trigger: 2}
+    urgency: today
+    reason: "时效+开源惊奇，文字排版痛点"
+    links:
+      - "https://ideogram.ai/blog/ideogram-4.0/"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-010
+    title: "NVIDIA 550B 的 Mamba-MoE 架构，为什么只激活 10% 参数还能打"
+    alt_titles:
+      - "Nemotron 3 Ultra 架构拆解：混合 Mamba–Transformer 怎么省"
+    track: depth
+    format: kouban
+    status: idea
+    score: 2.90
+    tier: C
+    scores: {practical: 2, social: 4, emotion: 4, hook: 3, timeliness: 3, trigger: 2}
+    urgency: queue
+    reason: "架构有料但偏窄众、实用低，暂缓找切入点"
+    links:
+      - "https://huggingface.co/nvidia/Nemotron-3-Ultra"
+    created: 2026-06-14
+    metrics: {}
+
+  # ─────────────────────────────────────────────────────────────
+  # 系列：Claude Code 源码解读（claude-code-source-series）
+  # 【日更计划 ★ 2026-06-15 起】每天出 1 期，按 episode 升序 EP02→EP15 顺序日更，约 3 周清完。
+  #   清系列期间流量辅线（traffic 题）暂停产出，仅人工攒池子。daily-run 每天取「队首」=
+  #   本系列 status:idea 中 episode 最小的一条。系列清完后恢复双赛道选题驱动。
+  # 这些是已规划好的成系列选题（含脚本/源码导读），不是引擎现抓的。
+  # 规划总目录：/Users/yedi/yedi-medias/plan/claude-code-source-series/README.md
+  # 源码仓库：  /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main（生产前先读 codebase-map.md）
+  # 约定：不补 6 维引擎分（未走打分流程）→ scores 留空，排序按 priority/tier。
+  #       tier 由 plan 的 priority 映射：P0→S, P1→A, P2→B。
+  #       生产某一集前读 plan_file 取脚本+导读，行号需用 Grep 重新定位。
+  # 【路由 ★ 固定】系列剧集走本仓统一 pipeline：开做时 promote→picked，
+  #       建 content/<发布日>/<slug>/（slug 用 ep 文件名，如 ep02-17mb-memory-explosion），
+  #       plan_file 当作 1-brief 等价物喂给 2-create，产物落本仓 content/，**不落外部 plan repo**。
+  #       外部 plan repo 仅作脚本/导读来源（其 README 里的 videos/ 产物路径对本仓不生效）。
+  # ─────────────────────────────────────────────────────────────
+  - id: 2026-06-10-001
+    title: "AI Agent 的本质，其实就是一个 while 循环"
+    track: depth
+    format: kouban
+    status: published
+    content_path: ""        # 建池前已发布于规划 repo，本仓无生产目录（历史例外）
+    series: {slug: claude-code-source-series, season: 1, episode: 1}
+    priority: P0
+    tier: S
+    scores: {}
+    hook_type: 祛魅/争议
+    urgency: queue
+    reason: "系列第一期，已发布（首集祛魅钩子引流）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep01-agent-while-loop.md"
+    tags: [claude-code, 源码解读, agent-loop]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-002
+    title: "一个 17MB 的 JS 文件，让内存从 35MB 暴涨到 1GB"
+    alt_titles:
+      - "内存降 27 倍：Claude Code 打包踩的坑"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-16 21:50 真发成功（飞书确认发布）；细粒度见 content_path 下 meta.yaml
+    series: {slug: claude-code-source-series, season: 1, episode: 2}
+    priority: P0
+    tier: S
+    scores: {}
+    hook_type: 数字反差/破案叙事
+    urgency: today
+    reason: "★ 队首 = 下一个要做（EP01 已发）；P0 数字反差破案，承接引流"
+    content_path: content/2026-06-15/ep02-17mb-memory-explosion   # 2026-06-15 promote 进生产，细粒度状态见 meta.yaml
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep02-17mb-memory-explosion.md"
+    tags: [claude-code, 源码解读, bun, 打包内存]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-003
+    title: "你每月给 Claude 充的钱，一半花在它\"记性太好\"上"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-18 19:05 真发成功（飞书确认发布）；细粒度见 meta.yaml
+    content_path: content/2026-06-18/ep03-token-economics
+    series: {slug: claude-code-source-series, season: 1, episode: 3}
+    priority: P0
+    tier: S
+    scores: {}
+    hook_type: 金钱
+    urgency: queue
+    reason: "P0 金钱钩子，token 成本拆解（队首 = 今天要做，EP02 已发）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep03-token-economics.md"
+    tags: [claude-code, 源码解读, token成本]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-004
+    title: "你按下 Esc 的那 0.1 秒，Claude Code 内部发生了什么"
+    track: depth
+    format: kouban
+    status: picked          # 2026-06-18 promote 进生产；细粒度状态见 meta.yaml（现 review）
+    content_path: content/2026-06-18/ep04-esc-abort-chain
+    series: {slug: claude-code-source-series, season: 1, episode: 4}
+    priority: P1
+    tier: A
+    scores: {}
+    hook_type: 微观链路
+    urgency: queue
+    reason: "P1 微观链路，中断/abort 链路拆解（队首 = 今天要做，EP01-03 已发）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep04-esc-abort-chain.md"
+    tags: [claude-code, 源码解读, 中断链路]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-005
+    title: "Claude Code 凭什么敢让 AI 在你电脑上跑命令？"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-19 21:09 真发成功（飞书人审通过→重发；首发慢渲染超时失败、重试即过）
+    content_path: content/2026-06-19/ep05-permission-pipeline   # 2026-06-19 promote 进生产
+    series: {slug: claude-code-source-series, season: 1, episode: 5}
+    priority: P0
+    tier: S
+    scores: {}
+    hook_type: 安全焦虑
+    urgency: queue
+    reason: "P0 安全焦虑钩子，权限管线拆解（队首 = 今天要做，EP01-04 已发/在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep05-permission-pipeline.md"
+    tags: [claude-code, 源码解读, 权限安全]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-006
+    title: "10 个工具同时跑，为什么不会把你的文件写坏"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-20 21:40 飞书授权后真发成功（账号 main，立即发布）；细粒度见 meta.yaml
+    content_path: content/2026-06-20/ep06-concurrent-tools
+    series: {slug: claude-code-source-series, season: 2, episode: 6}
+    priority: P1
+    tier: A
+    scores: {}
+    hook_type: 悬念/机制
+    urgency: queue
+    reason: "P1 并发工具调度机制，收藏向（队首 = 今天要做，EP01-03/05 已发，EP04 在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep06-concurrent-tools.md"
+    tags: [claude-code, 源码解读, 并发工具]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-007
+    title: "Claude 是怎么\"假装\"记得你三小时前说的话的"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-21 20:56 真发成功（飞书确认发布，账号 main）；细粒度见 meta.yaml。2026-06-22 由 EP08 run 据 meta.yaml 据实对齐（昨日发布侧漏翻）
+    content_path: content/2026-06-21/ep07-context-compaction
+    series: {slug: claude-code-source-series, season: 2, episode: 7}
+    priority: P1
+    tier: A
+    scores: {}
+    hook_type: 拟人/好奇
+    urgency: queue
+    reason: "P1 上下文压缩/compaction，源码视角（区别于 2026-06-14-004 上下文工程实战）（队首 = 今天要做，EP01-03/05/06 已发，EP04 在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep07-context-compaction.md"
+    tags: [claude-code, 源码解读, 上下文压缩]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-008
+    title: "60 个工具只告诉 AI 27 个，剩下的让它自己搜"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-22 20:45 真发成功（飞书确认发布，账号 main）；细粒度见 meta.yaml
+    content_path: content/2026-06-22/ep08-lazy-tool-discovery
+    series: {slug: claude-code-source-series, season: 2, episode: 8}
+    priority: P1
+    tier: A
+    scores: {}
+    hook_type: 新奇概念
+    urgency: queue
+    reason: "P1 工具懒发现（lazy tool discovery），新奇概念"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep08-lazy-tool-discovery.md"
+    tags: [claude-code, 源码解读, 工具发现]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-009
+    title: "同一份代码，怎么同时支持 Claude、GPT、Gemini"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-23 21:40:55 真发成功（飞书「确认发布」授权直发）；细粒度见 meta.yaml
+    content_path: content/2026-06-23/ep09-multi-provider-adapter
+    series: {slug: claude-code-source-series, season: 2, episode: 9}
+    priority: P2
+    tier: B
+    scores: {}
+    hook_type: 工程美学
+    urgency: queue
+    reason: "P2 多 provider 适配器，工程美学（队首 = 今天要做，EP01-03/05-08 已发，EP04 在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep09-multi-provider-adapter.md"
+    tags: [claude-code, 源码解读, 多模型适配]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-010
+    title: "Claude Code 里的子 Agent，就是 AI 给 AI 打工"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-24 21:33:55 真发成功（人清 UI 浮层后重跑 sau 一次过，账号 main）；细粒度见 meta.yaml
+    content_path: content/2026-06-24/ep10-sub-agent-orchestration   # 2026-06-24 promote 进生产
+    series: {slug: claude-code-source-series, season: 2, episode: 10}
+    priority: P1
+    tier: A
+    scores: {}
+    hook_type: 拟人/自指
+    urgency: queue
+    reason: "P1 子 agent 编排，拟人钩子（队首 = 今天要做，EP01-03/05-09 已发，EP04 在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep10-sub-agent-orchestration.md"
+    tags: [claude-code, 源码解读, 子agent]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-011
+    title: "claude --version 为什么 0 毫秒出结果"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-25 21:49 飞书「确认发布」授权→sau 立即真发成功，账号 main
+    content_path: content/2026-06-25/ep11-zero-ms-startup
+    series: {slug: claude-code-source-series, season: 2, episode: 11}
+    priority: P2
+    tier: B
+    scores: {}
+    hook_type: 小切口性能
+    urgency: queue
+    reason: "P2 启动性能小切口（队首 = 今天做，EP01-03/05-10 已发，EP04 在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep11-zero-ms-startup.md"
+    tags: [claude-code, 源码解读, 启动性能]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-012
+    title: "为了检测你按没按 Shift，它直接调了 macOS 系统底层"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-26 21:20 真发成功（飞书「确认发布」授权直发，账号 main）；细粒度见 meta.yaml。2026-06-30 据 meta.yaml 据实从 picked 补翻 published（发布侧当日漏翻）
+    content_path: content/2026-06-26/ep12-ffi-native   # 2026-06-26 promote 进生产
+    series: {slug: claude-code-source-series, season: 3, episode: 12}
+    priority: P2
+    tier: B
+    scores: {}
+    hook_type: 认知颠覆
+    urgency: queue
+    reason: "P2 FFI/native 调用，认知颠覆"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep12-ffi-native.md"
+    tags: [claude-code, 源码解读, ffi-native]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-013
+    title: "Anthropic 工程师的防御性编程，变态到什么程度"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-27 21:42 真发成功（飞书「确认发布」授权 --publish 直发，账号 main）；细粒度见 meta.yaml。2026-06-30 据 meta.yaml 据实从 picked 补翻 published（发布侧当日漏翻）
+    content_path: content/2026-06-27/ep13-defensive-engineering   # 2026-06-27 promote 进生产
+    series: {slug: claude-code-source-series, season: 3, episode: 13}
+    priority: P1
+    tier: A
+    scores: {}
+    hook_type: 盘点
+    urgency: queue
+    reason: "P1 防御性编程盘点，专业人设（队首 = 今天做，EP01-11 已发、EP04/12 在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep13-defensive-engineering.md"
+    tags: [claude-code, 源码解读, 防御性编程]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-014
+    title: "Prompt 缓存崩了，它能告诉你是哪个工具干的"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-28 22:38 真发成功（飞书「确认发布」授权 --publish 直发，账号 main）；细粒度见 meta.yaml。2026-06-30 据 meta.yaml 据实从 picked 补翻 published（发布侧当日漏翻）
+    content_path: content/2026-06-28/ep14-cache-break-detection   # 2026-06-28 promote 进生产
+    series: {slug: claude-code-source-series, season: 3, episode: 14}
+    priority: P2
+    tier: B
+    scores: {}
+    hook_type: 精准干货
+    urgency: queue
+    reason: "P2 缓存失效检测，精准干货（队首 = 今天做，EP01-11 已发，EP04/12/13 在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep14-cache-break-detection.md"
+    tags: [claude-code, 源码解读, prompt缓存]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-015
+    title: "200 行代码，手写一个迷你 Claude Code（完结篇）"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-29 21:00:30 真发成功（飞书「确认发布」授权 --publish 直发，账号 main，sau 一次过）；系列 15 集全清完
+    content_path: content/2026-06-29/ep15-200-lines-mini-agent
+    series: {slug: claude-code-source-series, season: 3, episode: 15}
+    priority: P0
+    tier: S
+    scores: {}
+    hook_type: 实战/变现
+    urgency: queue
+    reason: "P0 系列完结实战，变现出口（手写 mini-agent）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep15-200-lines-mini-agent.md"
+    tags: [claude-code, 源码解读, mini-agent实战]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-07-08-001
+    title: "AI圈突然都在说的 Spec Coding，到底在解决什么问题"
+    alt_titles:
+      - "写代码前先写「说明书」：Spec Coding 是不是智商税"
+      - "GitHub/AWS/Tessl扎堆推的Spec-Driven Development，我扒了一遍"
+    track: depth
+    format: kouban
+    status: picked          # 用户直接指定选题+直接promote进生产，跳过report人挑环节；content/2026-07-08/spec-driven-development/已建
+    content_path: content/2026-07-08/spec-driven-development
+    score: 4.2
+    tier: A
+    scores: {practical: 4, social: 4, emotion: 3, hook: 4, timeliness: 4, trigger: 4}
+    urgency: today
+    reason: "GitHub Spec Kit/AWS Kiro/Tessl三家近期扎堆推Spec-Driven Development，工程提效实战+认知反转（先夸后拆台）双buff，系列刚清完适合接双赛道深度题"
+    links:
+      - "https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html"
+      - "https://github.com/github/spec-kit"
+      - "https://kiro.dev/blog/introducing-kiro/"
+      - "https://tessl.io/blog/how-tessls-products-pioneer-spec-driven-development/"
+      - "https://developer.microsoft.com/blog/spec-driven-development-ai-native-engineering"
+    tags: [spec-driven-development, ai编程, spec-kit, kiro, agentic-engineering]
+    created: 2026-07-08
+    metrics: {}
+

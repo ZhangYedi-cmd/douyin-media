@@ -1,0 +1,69 @@
+# 内容条目元数据 / 状态机
+slug: ep07-context-compaction
+title: "Claude 是怎么\"假装\"记得你三小时前说的话的"
+type: kouban
+pillar: depth
+status: published                  # 生产线: ideated→drafting→review→approved→scheduled→published | rejected；2026-06-21 飞书确认发布授权，20:56 真发成功（账号 main，立即）
+# 2026-06-21 出审：成片终检闸 A–G 全过（A–F 均在最终 mp4 上验，非组件截图）。
+#   A 声画一致：audio-segments==narrations（extract 派生，dubbing-reviewer R1 已核 2.4 同步 exit0）；最终 mp4 抽帧 4 点
+#     (3s 钩子/42s 预测式 badge/179s 断路器事故数据/232s CTA) 字幕==画面==口播逐字一致；
+#   B 音频自然度：depause 1 轮(cap0.25/minact0.45) 后内部死气 >0.45s = 0（复扫为空）；
+#   C 钩子冷开：第一句「跟 AI 聊了三个小时，你回头问它两小时前提的那个需求，它答得头头是道」自成立、不依赖上文；
+#   D 事实合规：四层压缩全溯源 source_repo（见 fact_check），据实纠 plan 的 snip 误framing（电影预告片→模型按 UUID 点名删）；
+#     所有数字(13k/30k/50k·3次·10/5·+1.5万·25万次调用)逐条指行号；无违禁/绝对化/导流；
+#   E 封面：baoyu-image-gen 9:16 竖版(1536x2752)、复用 EP01 方块吉祥物本体（记忆管理员：擦旧页成摘要卡+snip剪刀，狡黠表情=偷偷遗忘）；
+#   F 音画同步：mux 去拉伸 factor≈1.0050，抽帧画音对齐，crop 1920x1080 无黑边；
+#   G 发布物料 4-publish.md 已产、5 字段经 feishu-bot/meta.py 解析器(_FIELD_RE)验证全部命中、无可解析「建议发布时段」。
+#   dubbing-reviewer R1 PASS（六检查点全过；coldopen/2 语速略快为开场冲击句非吞字、layers/ending 语速离群均为 depause/排比统计假象，无返工）。
+source: 2026-06-10-007         # backlog id（系列 EP07，claude-code-source-series s2e7）
+
+# 系列信息
+series: {slug: claude-code-source-series, season: 2, episode: 7}
+plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep07-context-compaction.md"
+# 源码溯源仓（plan frontmatter 路径已过期/不存在，实际在此，与 EP02-06 同仓）
+source_repo: /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main
+fact_check: |
+  全核于 source_repo（2026-06-21 逐条定位，Explore agent 精读 + 主回话复核关键数字与 snip 机制）：
+  src/services/compact/ 目录。
+  - 预测式（auto）← autoCompact.ts:62 AUTOCOMPACT_BUFFER_TOKENS=13_000；:77-82 getAutocompactBufferTokens
+    (effectiveWindow≥800k→50k；≥400k→30k；否则13k)；:33-49 有效窗口=模型窗口−max(最大输出,20k)；
+    :70 TOOL_RESULT_GROWTH_ESTIMATE=15_000；:88-94 estimateMaxTurnGrowth=min(最大输出,20k)+15k；
+    :101-105 阈值=有效窗口−自适应缓冲。API 调用前主动触发（query.ts:637-651）。
+  - 急救式（reactive）← reactiveCompact.ts isWithheldPromptTooLong/isWithheldMediaSizeError
+    (assistant.isApiErrorMessage 且 prompt_too_long/media_size_error)；tryReactiveCompact 调 compactConversation 兜底、
+    hasAttempted 守卫只试一次；query.ts:1343-1405 在 API 报 413/媒体过大后触发。被动兜底，非预测。
+  - 显微（micro）← cachedMicrocompact.ts:19-20 TRIGGER_THRESHOLD=10/KEEP_RECENT=5；getToolResultsToDelete
+    (active>10 删最老 active−5、留最近 5)；createCacheEditsBlock 生成 {type:'cache_edits',
+    edits:[{type:'delete_tool_result', tool_use_id}]}。在 API 缓存层删旧工具结果，不动本地消息主体。
+    microCompact.ts:265-274 time-based 优先短路否则 cached。
+  - 剪辑（snip）← snipCompact.ts:14 SNIP_NUDGE_THRESHOLD=30 + SNIP_NUDGE_TEXT(提示模型用 /force-snip/snip 工具)；
+    snipCompactIfNeeded(:83-147) 找最后 snip_boundary，按 snipMetadata.removedUuids 过滤：点名 UUID 删掉、
+    边界消息保留(记录删了啥)、其余(含边界后)保留。
+    ★ 据实校准：plan 写「保留章节边界剪内部细节/电影预告片」是误framing；源码真实=模型驱动按 UUID 点名删除
+    (哪些删由模型挑)，脚本改写为「AI 自己当剪辑师，点名删旧消息」。
+  - 断路器 ← autoCompact.ts:99 MAX_CONSECUTIVE_AUTOCOMPACT_FAILURES=3；:96-98 注释原文
+    「BQ 2026-03-10: 1,279 sessions had 50+ consecutive failures (up to 3,272) in a single session,
+    wasting ~250K API calls/day globally」；单会话 consecutiveFailures 成功归0(:361)失败+1(:370-378)达3跳闸(:286-294)。
+  - 摘要 fork 分身 + 复用缓存 ← compact.ts:1185-1234 streamCompactSummary：tengu_compact_cache_prefix 默认 true、
+    runForkedAgent(querySource:'compact', forkLabel:'compact', maxTurns:1, skipCacheWrite:true) 复用主会话缓存前缀；
+    MAX_OUTPUT_TOKENS_FOR_SUMMARY=20_000(autoCompact.ts:30)。
+  - 结尾钩对齐实际下一集 EP08（lazy tool discovery / 60 工具只告诉 27 个），非 plan 写的「AI 给 AI 打工/下下集」(=EP10 子 agent)。
+  - 合规：无臆造；所有数字均溯源上述行号；无违禁/绝对化营销/口播导流。
+
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-10
+  drafting: 2026-06-21
+  review: 2026-06-21        # 出审，等飞书人审
+  approved: 2026-06-21 20:54
+  published: 2026-06-21 20:56
+  scheduled_submit:
+  retro_done:
+
+# 成片物料（交审）
+deliverables:
+  video: assets/ep07-context-compaction.mp4   # 1920x1080, 236.4s, ~18.6MB, 已混音+烧字幕+去停顿
+  cover: assets/cover.png                      # 9:16 竖版(1536x2752)，仿 EP01 吉祥物本体（baoyu-image-gen）
+  srt:   assets/ep07.srt                       # 23 cues
+  script: 2-script.md                        # 口播稿唯一真相源（含逐条溯源）

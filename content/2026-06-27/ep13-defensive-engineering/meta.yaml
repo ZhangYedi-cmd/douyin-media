@@ -1,0 +1,86 @@
+# 内容条目元数据 / 状态机
+slug: ep13-defensive-engineering
+title: "Anthropic 工程师的防御性编程，变态到什么程度"
+type: kouban
+pillar: depth
+status: published                            # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+# ★ 2026-06-27 出审：配音余额阻塞已由人充值解除，成片已录出，终检闸 A–G 全过（A/B/F 均在最终 mp4 上验）。
+#   背景：当日首跑时 MiniMax T2A 返回 1008 insufficient balance 卡在配音；人充值后续跑一次到位。
+#   A 声画一致：audio-segments==narrations 文本层全等(脚本校验 14/14 ✓)；最终 mp4 抽 6 帧
+#     (4.04s 钩子[什么叫生产级代码·防出错代码比功能还密]/21.97s #5 守护进程三重保险/46.65s #4 断线密码本[4003永久拒绝·直接不重连]/
+#      102.92s #2 删前先验[点点跳目录/非法字符/超64字符 全抛错]/141.75s 升华[业余处理正常·生产处理万一]/153.22s EP14钩[缓存崩了定位哪个工具])
+#     字幕==画面==口播逐字一致；
+#   B 音频自然度：depause 两轮(cap0.25→0.22)压标点死气 + silenceremove 削前导静音，全片 -30dB:0.45 内部/边缘死气复扫 = 0；
+#   C 钩子冷开：首句「什么叫生产级代码？」自成立(设问钩)、不依赖上文；
+#   D 事实合规：5 条全核于 source_repo(见 fact_check)，并据源码纠正 plan 两处(worktree 30天清理无此逻辑→改 slug 校验；websocket「其它指数退避」实为固定2s)；
+#     所有数字出自源码常量/注释，无臆造跑分；无违禁/绝对化/导流；
+#   E 封面：baoyu-image-gen 9:16 竖版(1536×2752)、复用 EP01 方块吉祥物本体(居中持盾+同心橙色护盾环+5个防御图标 熔断/退避台阶/锁/钥匙/砖墙)，
+#     暗底单热橙、徽章「Claude Code 源码解读·EP13」、标题白「Anthropic 工程师的防御性编程」+橙「变态到什么程度」承担钩子，背景虚化真实源码常量；
+#   F 音画同步：mux 去拉伸(factor=webm/wall=168.187/163.1)、crop 1920×1080:80:100，成片 158.567s==master.wav(158.584s)对齐(diff −0.017s)；record-manual 13 步推进 0 漂移；
+#   G 发布物料 4-publish.md 已产、5 字段键名匹配解析器(标题/正文简介/话题x5/封面/媒体)；无可解析「建议发布时段」(默认立即发布)。
+#   dubbing-reviewer 闸口 R1 PASS（subagent 正常派单）：完整性 14/14✓ 真相源同步 14/14✓ 死气 0✓ 音画一致(文本层)✓
+#     语速 ranking/3,4 经复核判为英文+数字密集的字面统计假象、非真离群、不调速✓ 多音字配置层逐段核对无误伤
+#     (倒着数=shǔ / 不再重启·不重连·重试机会=chóng / 代数=shù 分段独立合成无全局污染 / WebSocket→web socket normalize)✓
+#     （NON-BLOCKING：reviewer 与本 run 均无听觉通道、本机无 whisper，4003/4001 断开码读法[中文数字 vs 英文串]、退出码78、
+#       「倒着数/代数/三重」多音字实读 未经人耳抽听，已诚实标注、留待人审听一遍；若 4003/4001 读成英文串，
+#       改法见 dubbing-reviewer 建议：minimax-t2a.mjs normalize 加 4003→四零零三/4001→四零零一后 rm ranking/3,4 mp3 重合成重录）。
+source: 2026-06-10-013             # backlog id（系列 EP13，claude-code-source-series s3e13）
+
+# 系列信息
+series: {slug: claude-code-source-series, season: 3, episode: 13}
+plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep13-defensive-engineering.md"
+# 源码溯源仓（plan frontmatter 路径 /Users/yedi/yedi-study/claude-code-main 不存在，实际在此，与 EP02-12 同仓）
+source_repo: /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main
+fact_check: |
+  全核于 source_repo（行号会漂移，以锚点为准）：
+  - #5 守护进程三重保险 ← src/daemon/main.ts：BACKOFF_INITIAL_MS=2_000 / BACKOFF_MULTIPLIER=2 / BACKOFF_CAP_MS=120_000
+    (main.ts:20-22)，指数退避 backoffMs=Math.min(backoffMs*MULT,CAP)(main.ts:423-426)；猝死 runDuration<10_000(main.ts:393-394)；
+    MAX_RAPID_FAILURES=5 → parked(main.ts:23,397-401)；EXIT_CODE_PERMANENT=78(main.ts:15；workerRegistry.ts:15 注 EX_CONFIG from sysexits.h)
+    命中即 parking(main.ts:385-390)；跑够 10s 重置 failureCount=0(main.ts:404-407)。全部属实。
+  - #4 断线重连密码本 ← src/remote/SessionsWebSocket.ts：PERMANENT_CLOSE_CODES=new Set([4003])(line34-36)→4003 永久拒绝不重连(247-251)；
+    4001 注「transient during compaction」、MAX_SESSION_NOT_FOUND_RETRIES=3、延迟 RECONNECT_DELAY_MS*retries（线性,21-26,255-269）；
+    其它 RECONNECT_DELAY_MS=2000 固定 + MAX_RECONNECT_ATTEMPTS=5(17-18,276-282)。
+    ★ plan 原写「其它指数退避」与源码不符——源码是固定 2s，口播已据实改为「固定两秒一次、最多五次」。
+  - #3 令牌防穿越 ← src/bridge/jwtUtils.ts createTokenRefreshScheduler：TOKEN_REFRESH_BUFFER_MS=5*60*1000(line52)→提前 5 分钟换；
+    每会话 nextGeneration()(91-99)，doRefresh 内 if(generations.get(sessionId)!==gen){…stale…return}(177-182) 作废旧编号在途刷新
+    (注 Bump generation to invalidate any in-flight async doRefresh,121,233)；MAX_REFRESH_FAILURES=3(58)、failures<MAX 才重试(186-205)。全部属实。
+  - #2 删前先验 ← src/utils/worktree.ts validateWorktreeSlug：注「prevent path traversal and directory escape … joined into
+    .claude/worktrees/<slug> … Throws synchronously — callers rely on this running before any side effects」(52-66)；
+    拒 '.'/'..' 段(75-80)；VALID_WORKTREE_SLUG_SEGMENT=/^[a-zA-Z0-9._-]+$/ 不合规抛错(48,81-84)；MAX_WORKTREE_SLUG_LENGTH=64 超长抛错(49,67-72)；
+    清理走 git worktree remove --force <worktreePath>(843-846)，worktreePath 由 slug 拼成、不校验则可越界 →「免得手一滑删错地方」属合理类比。
+    ★ plan 原写「30 天清理 + 查 git 状态」本仓 worktree.ts 未见该逻辑，已剔除不编造，#2 改写为已核实的 slug 同步校验/fail-closed。
+  - #1 省钱系统熔断 ← src/services/compact/autoCompact.ts：MAX_CONSECUTIVE_AUTOCOMPACT_FAILURES=3(99)，字段注「Consecutive
+    autocompact failures. Reset on success. Used as a circuit breaker to stop retrying」(56-59)；真实数据源码注「BQ 2026-03-10:
+    1,279 sessions had 50+ consecutive failures (up to 3,272)」(97-98)→「一千多个会话失败 50 次以上、最狠 3272 次」属实（口语「三千多次」）。
+    「省钱系统」=对 autocompact 压缩上下文降 token 用量的口语化框定，非营销/非跑分。
+  - 结尾钩对齐 EP14「Prompt 缓存崩了它能告诉你是哪个工具干的」(backlog 2026-06-10-014)；不剧透、不依赖本集上文。
+  - 冷开自成立：首句「什么叫生产级代码？」自带设问语境，3 秒站得住，不依赖上一集。
+  - 合规：源码仓社区反编译/重建版（措辞已注意未称官方原始仓）；所有数字均出自源码常量/注释，无臆造跑分；
+    「最变态/最服/更狠」是口语态度词；无违禁/绝对化（「最」用于盘点名次，非商品化绝对承诺）/口播导流。
+  - ★ NON-BLOCKING（待人审听一遍）：dubbing-reviewer R1 PASS、死气复扫=0、配置层多音字逐段静态核对无误；但 reviewer 与本 run 无听觉通道、
+    本机无 whisper，以下声学项未经人耳：4003/4001 断开码读法(期望中文数字)、退出码 78、「倒着数 shǔ / 代数 shù / 三重 chóng」多音字实读。请人审时重点听这几处。
+
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-10
+  drafting: 2026-06-27       # 创作；首跑卡配音余额，人充值后续跑解除
+  review: 2026-06-27         # 出审，等飞书人审
+  approved: 2026-06-27 21:39
+  published: 2026-06-27 21:42      # sau 真发成功（飞书「确认发布」授权，--publish 直发）
+  scheduled_submit:
+  retro_done:
+
+# 阻塞（已解除）
+blocker:
+  stage: 配音(pipeline 2-create 步骤 3)
+  reason: "MiniMax T2A v2 返回 1008 insufficient balance（余额不足），稳定复现"
+  resolved: 2026-06-27       # 人充值后余额恢复，14 段配音一次合成成功，链路续完
+  detected: 2026-06-27
+
+# 成片物料（交审）
+deliverables:
+  video: assets/ep13-defensive-engineering.mp4   # 1920×1080，158.57s，~16.6MB，已混音+烧字幕+去停顿+去拉伸 ✓
+  cover: assets/cover.png                    # 9:16 竖版(1536×2752)，仿 EP01 吉祥物本体持盾+护盾环（baoyu-image-gen）✓
+  script: 2-script.md                        # 口播稿唯一真相源（含逐条溯源）✓
+  publish: 4-publish.md                      # 发布物料（5 字段键名匹配解析器）✓

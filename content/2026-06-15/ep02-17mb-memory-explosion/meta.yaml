@@ -1,0 +1,27 @@
+# 内容条目元数据 / 状态机
+slug: ep02-17mb-memory-explosion
+title: "一个 17MB 的 JS 文件，让内存从 35MB 暴涨到 1GB"
+type: kouban
+pillar: depth
+status: published               # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+# 2026-06-16 钩子返工：上次 00:12 通过/00:14 发布已被人工取消，开头冷开重做，重新交审
+# 2026-06-16 封面返工(第1次)：中心生物换回 EP01 同款方块像素生物（撑爆姿态），重新交审
+source: 2026-06-10-002      # backlog id（系列 EP02，claude-code-source-series s1e2）
+
+# 系列信息
+series: {slug: claude-code-source-series, season: 1, episode: 2}
+plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep02-17mb-memory-explosion.md"
+# 源码溯源仓（plan frontmatter 路径已过期，实际在此）
+source_repo: /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main
+fact_check: "硬数字全核于 source_repo/CLAUDE.md:83 + build.ts:23/45 + scripts/post-build.ts:17（966→35MB / 27x / 220MB / 600+chunk / 17MB）"
+
+schedule:                  # 计划发布时间（人审通过后定）
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-10
+  drafting: 2026-06-15
+  review: 2026-06-16          # 重新交审（钩子返工后）
+  approved:                   # 作废：上次 00:12 通过因开头钩子问题被取消
+  published: 2026-06-16          # 21:50 真发成功（飞书确认发布授权，sau 立即发布，账号 main）
+  retro_done:

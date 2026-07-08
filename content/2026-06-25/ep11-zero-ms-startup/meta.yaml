@@ -1,0 +1,73 @@
+# 内容条目元数据 / 状态机
+slug: ep11-zero-ms-startup
+title: "claude --version 为什么 0 毫秒出结果"
+type: kouban
+pillar: depth
+status: published                          # 生产线: ideated→drafting→review→approved→scheduled→published | rejected；2026-06-25 21:49 飞书人审通过→sau 立即真发成功
+# 2026-06-25 出审：成片终检闸 A–G 全过（A–F 均在最终 mp4 上验，非组件截图）。
+#   A 声画一致：audio-segments==narrations（从 narrations 抽取后未改 narration）；最终 mp4 抽 8 帧
+#     (3.46s 冷开钩子/19.93s 标题[EP11徽章]/28.38s --version零加载/37.95s MCP快速通道[十几条]/48.2s 三档阶梯+便利店/
+#      57.93s 并行预热/68.2s 遥测400KB+memoize/91.03s EP12钩) 字幕==画面==口播逐字一致；
+#   B 音频自然度：depause 1 轮(cap0.25/thresh-30/minact0.45)+ending/1 削拖尾，段内死气 >0.45s = 0；
+#   C 钩子冷开：第一句「同样是查个版本号，有的命令行工具卡你一秒，Claude Code 几乎是瞬间出结果」自成立、不依赖上文；
+#   D 事实合规：--version 零加载快速路径(cli.tsx:79-84)/特殊模式 await import(MCP/daemon)/并行预热(main.tsx startMdmRawRead+startKeychainPrefetch)/
+#     遥测约400KB延迟加载(init.ts:50 注释)/memoize 防重复(init.ts:66) 全溯源 source_repo（见 fact_check）；
+#     ★ 据实校正 plan：「30 多条逃生通道」夸大 → 改「十几条」(源码实际 14-16 条快速路径)；「400KB」有源码注释依据可写；
+#       对其它工具「慢」是日常体感框架不引跑分；源码仓社区反编译版措辞已注意；无违禁/绝对化(「几乎瞬间」非「最/第一」)/导流；
+#   E 封面：baoyu-image-gen 9:16 竖版(1536x2752)、复用 EP01 方块吉祥物本体（冲刺姿态+速度线+⚡+0ms 标签冲过橙色快速通道，
+#     灰色「FULL BUNDLE/ALL MODULES」模块箱甩身后=快速路径跳过加载）；标题「claude --version / 凭什么 0 毫秒出结果」承担钩子；
+#   F 音画同步：mux 去拉伸(factor=webm/wall)、crop 1920x1080:80:100 无黑边(cropdetect 无裁剪建议)，成片 97.699s==master 对齐；
+#   G 发布物料 4-publish.md 已产、5 字段(标题/正文/话题x5/封面/媒体)键名匹配 feishu-bot/meta.py _FIELD_RE、无可解析「建议发布时段」。
+#   dubbing-reviewer 闸口 R1 PASS（subagent 本环境可用，正常派单）：2.4 真相源同步 10/10✓ 2.1 完整性 10/10✓ 2.3 死气0✓
+#     2.2 语速无 >6.5 绝对离群(max 5.30)✓ 3.1 音画一致(组件硬编码为 narration 条目化派生)✓ 1.2 多音字✓
+#     (NON-BLOCKING 采纳 1 条：coldopen/1「命令行」→ toneFor 增 háng 规则并重合成该段；details/1 语速按真实音频 5.22 不动)。
+source: 2026-06-10-011             # backlog id（系列 EP11，claude-code-source-series s2e11）
+
+# 系列信息
+series: {slug: claude-code-source-series, season: 2, episode: 11}
+plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep11-zero-ms-startup.md"
+# 源码溯源仓（plan frontmatter 路径 /Users/yedi/yedi-study/claude-code-main 不存在，实际在此，与 EP02-10 同仓）
+source_repo: /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main
+fact_check: |
+  全核于 source_repo（2026-06-25 派 Explore subagent Grep/Read 精读关键行号；行号会漂移，以锚点为准）：
+  - --version 零模块快速路径 ← src/entrypoints/cli.tsx async function main()（约76起）第一个快速分支即 --version/-v/-V：
+    注释「Fast-path for --version/-v: zero module loading needed」，console.log(`${MACRO.VERSION} (Claude Code)`) 直接 return，
+    MACRO.VERSION 构建期内联，该路径无额外 import（cli.tsx:79-84）。脚本「直接打印退出、一个多余模块都不加载、入口第一个分支」属实。
+  - 特殊模式只动态加载那一小块 ← cli.tsx 大量子命令走 await import：--claude-in-chrome-mcp → await import('../utils/claudeInChrome/mcpServer.js')(:108-109)；
+    daemon → await import('../daemon/main.js')(:239-240)；整文件约 46 处 await import。脚本「MCP server/daemon 只动态加载那块、用到啥才加载啥」属实。
+  - ★「十几条快速通道」← 据实校正：plan 原文「30 多条逃生通道」夸大。源码实际 14-16 条明确标注的快速路径/向后兼容分支
+    (--version/--dump-system-prompt/--claude-in-chrome-mcp/--chrome-native-host/--computer-use-mcp/--acp/weixin/--daemon-worker/
+     remote-rc-sync-bridge/daemon/autonomy/--bg/job/environment-runner/self-hosted-runner/--worktree --tmux 等)。脚本写「十几条」不写「30 多条」。
+  - 完整界面才加载全家桶 ← 只有走到完整交互入口才进 src/main.tsx 拉全套；前述快速路径在 cli.tsx 内早退不进 main.tsx。便利店买水类比是说明性比喻非技术断言。
+  - 并行预热 ← src/main.tsx 头部(约1-22)在模块继续加载前立即触发 startMdmRawRead()(MDM 策略子进程读取)、startKeychainPrefetch()(macOS Keychain 异步预取)，
+    均 fire-and-forget 不 await，与后续加载并行；init.ts 内另有 void Promise.all([...]) / void import(...).then() 并行初始化。
+    脚本「并行去读配置、连系统钥匙串，跟模块加载同时进行」属实。
+  - 遥测约 400KB 延迟加载 ← src/entrypoints/init.ts:50 设计注释「~400KB of OpenTelemetry + protobuf modules until telemetry is actually initialized」
+    (次行另注 gRPC exporters ~700KB 进一步在 instrumentation.ts 懒加载)；延迟点 await import('../utils/telemetry/instrumentation.js')(约345-348)。
+    ★「400KB」有源码注释依据(非从 package.json 推算)，可写。脚本属实。
+  - memoize 防重复 ← src/entrypoints/init.ts 约66 export const init = memoize(async () => {...})(import memoize from 'lodash-es/memoize.js')。
+    脚本口语化「包了层记忆，调过一次就直接返回，绝不做第二遍」对应 memoize 语义未夸大。
+  - 结尾钩对齐 EP12：日更按 episode 升序，下一集 EP12「为了检测你按没按 Shift，它直接调了 macOS 系统底层」(FFI/native，backlog 2026-06-10-012)。
+    结尾钩「JavaScript 凭什么能直接调用操作系统的底层接口」对齐 EP12 主题，不剧透细节、不依赖本集上文。
+  - 冷开自成立：首句自带完整语境(查版本号差距)，第一次刷到 3 秒站得住，不依赖「上一集」。
+  - 合规：源码仓社区反编译/重建版(措辞已注意未称官方原始仓)；无臆造数据/跑分(对其它工具「慢」是日常体感框架)；
+    「先看需求再花钱」「便利店买水」是工程点评/比喻非营销承诺；无违禁/绝对化(「几乎瞬间」非最/第一/100%)/口播导流。
+  - 封面装饰代码内 return "0.11.0" 是封面美术示意文本(非内容里的版本/跑分事实断言)，合规。
+
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-10
+  drafting: 2026-06-25
+  review: 2026-06-25        # 出审，等飞书人审
+  approved: 2026-06-25 21:47
+  published: 2026-06-25 21:49      # sau upload-video 立即发布，「视频发布成功」
+  scheduled_submit:
+  retro_done:
+
+# 成片物料（交审）
+deliverables:
+  video: assets/ep11-zero-ms-startup.mp4   # 1920x1080，97.7s，~8.3MB，已混音+烧字幕+去停顿+去拉伸
+  cover: assets/cover.png                  # 9:16 竖版(1536x2752)，仿 EP01 吉祥物本体冲刺快速通道甩开全家桶模块箱（baoyu-image-gen）
+  script: 2-script.md                      # 口播稿唯一真相源（含逐条溯源）
+  publish: 4-publish.md                    # 发布物料（5 字段经解析器键名匹配）

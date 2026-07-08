@@ -1,0 +1,34 @@
+# 内容条目元数据 / 状态机
+slug: ep03-token-economics
+title: "你每月给 Claude 充的钱，一半花在它\"记性太好\"上"
+type: kouban
+pillar: depth
+status: published              # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+# 2026-06-18 出审：成片终检闸 A–F 全过（成片上验）；dubbing-reviewer R1 PASS；
+# 合规返工：narration/画面「最骚」→「最妙」已重合成+重录（避敏感词），重录后音画同步 factor≈0.99
+source: 2026-06-10-003      # backlog id（系列 EP03，claude-code-source-series s1e3）
+
+# 系列信息
+series: {slug: claude-code-source-series, season: 1, episode: 3}
+plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep03-token-economics.md"
+# 源码溯源仓（plan frontmatter 路径已过期，实际在此，与 EP02 同仓）
+source_repo: /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main
+fact_check: "硬数字全核于 source_repo：toolIndex.ts:34-36(3.0/2.5/1.0) / autoCompact.ts:62,79-81,99(13k/30k/50k,熔断3) / compact.ts:455-457(复用缓存,98%miss) / promptCacheBreakDetection.ts:35-37(77%) / poorMode.ts + prompts.ts:372(穷鬼模式) / CORE_TOOLS tools.ts:137。Prompt cache 1/10 = Anthropic 公开定价"
+
+schedule:                  # 计划发布时间（人审通过后定）
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-10
+  drafting: 2026-06-18
+  review: 2026-06-18          # 出审，等飞书人审
+  approved: 2026-06-18 18:58
+  published: 2026-06-18 19:05
+  retro_done:
+
+# 成片物料（交审）
+deliverables:
+  video: assets/ep03-token-economics.mp4   # 1920x1080, 164.0s, ~12.8MB, 已混音+烧字幕
+  cover: assets/cover.png                  # 9:16 竖版，仿 EP01 吉祥物本体（baoyu-image-gen）
+  srt: assets/ep03.srt                     # 26 cues
+  script: 2-script.md                      # 口播稿唯一真相源（含逐条溯源）

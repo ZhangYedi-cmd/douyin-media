@@ -1,0 +1,23 @@
+{
+  "_README": "账号级配音配置(tts-dub 用)。voice_id=账户克隆音色,跨所有内容复用。per-内容多音字/语速覆盖按需加到 overrides(dubbing-check 会提示)。换音色跑 tts-dub/scripts/list-voices.mjs。",
+  "provider": "minimax",
+  "outDir": "public/audio",
+
+  "voice_id": "moss_audio_4dd8142e-67b1-11f1-bb38-6e911a02fa3c",
+  "speed": 1.1,
+  "pitch": 0,
+
+  "_normalize": "高频英文缩写念法规整(只改配音、不碰字幕源)。本账号 AI 技术向常见缩写,按需增删。",
+  "normalize": [
+    ["RAG", "R A G"],
+    ["MCP", "M C P"],
+    ["LLM", "L L M"],
+    ["API", "A P I"]
+  ],
+
+  "_pronunciation": "全局多音字留空,同字多音用 overrides 逐段(避免全局误伤)。",
+  "pronunciation": [],
+
+  "_overrides": "逐段覆盖 speed/pitch/pronunciation/voice_id,键=segment id(chapter/step)。dubbing-check 发现多音字/语速离群时填这里。",
+  "overrides": {}
+}

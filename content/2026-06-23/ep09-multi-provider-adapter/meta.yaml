@@ -1,0 +1,74 @@
+# 内容条目元数据 / 状态机
+slug: ep09-multi-provider-adapter
+title: "同一份代码，怎么同时支持 Claude、GPT、Gemini"
+type: kouban
+pillar: depth
+status: published                      # 生产线: ideated→drafting→review→approved→scheduled→published | rejected；2026-06-23 飞书人审通过授权直发，21:40:55 真发成功
+# 2026-06-23 出审：成片终检闸 A–G 全过（A–F 均在最终 mp4 上验，非组件截图）。
+#   A 声画一致：audio-segments==narrations（extract 派生；dubbing-reviewer R1 PASS）；最终 mp4 抽帧 3 点
+#     (4s 钩子/64s 事件映射/158s EP10钩) 字幕==画面==口播逐字一致；
+#   B 音频自然度：depause 1 轮(cap0.25/minact0.45)+coldopen/1 二压(cap0.22/minact0.40)，段内死气 >0.45s = 0；
+#     成片 17 处静音全为段间边界停顿(0.52–0.79s)，唯首段后 1.02s 略长=钩子提问后留白(落在 9.4s 已过 3s 窗、让钩子落地)，非段内死气；
+#   C 钩子冷开：第一句「Claude Code 改一个环境变量，就能让它去跑 GPT、跑 Gemini」自成立、不依赖上文；
+#   D 事实合规：7 种 provider、选择优先级、流式翻译官、事件映射全溯源 source_repo 行号（见 fact_check）；
+#     ★ 据实校正 plan 的「核心代码一行没改」(实有 claude.ts 条件分发分支，准确=下游干活代码不动)、
+#       「零缓冲/延迟为零」(事件级零攒包属实，SSE 帧级有协议必需缓冲)；无违禁/绝对化/导流；
+#   E 封面：baoyu-image-gen 9:16 竖版(1536x2752)、复用 EP01 方块吉祥物本体（戴像素耳机当「同声传译官」：左侧 GPT/Gemini/Grok 三形态输入气泡进、右侧统一「Claude 格式」橙箭头出）；
+#   F 音画同步：mux 去拉伸 factor≈0.9767，抽帧画音对齐，crop 1920x1080 无黑边；
+#   G 发布物料 4-publish.md 已产、5 字段经 feishu-bot/meta.py 解析器(_FIELD_RE)验证全部命中、无可解析「建议发布时段」。
+#   dubbing-reviewer R1 PASS（完整性/真相源/语速/念法规则[行→háng、GPT/API 逐字母]/死气/音画文本一致全过；
+#     coldopen/2 净语速 6.56 边缘偏快非吞字、details/3 落区间内，均非阻断，未返工）。
+source: 2026-06-10-009             # backlog id（系列 EP09，claude-code-source-series s2e9）
+
+# 系列信息
+series: {slug: claude-code-source-series, season: 2, episode: 9}
+plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep09-multi-provider-adapter.md"
+# 源码溯源仓（plan frontmatter 路径 /Users/yedi/yedi-study/claude-code-main 已过期/不存在，实际在此，与 EP02-08 同仓）
+source_repo: /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main
+fact_check: |
+  全核于 source_repo（2026-06-23 Explore agent 精读 + 主回话抽验关键行号）：
+  - provider 列表 = 7 种 ← src/utils/model/providers.ts:6-13
+    `export type APIProvider = 'firstParty' | 'bedrock' | 'vertex' | 'foundry' | 'openai' | 'gemini' | 'grok'`。
+    firstParty=自家 Claude；openai/gemini/grok=别家模型；bedrock/vertex/foundry=云上部署通道。
+    ★ 据实表述「一共七种：自家 Claude + GPT/Gemini/Grok + 三种云上通道」，封面同此(Claude+GPT+Gemini+Grok+云通道×3=7)。
+  - 选择优先级 ← providers.ts:15-32 getAPIProvider()：先 settings.modelType(openai/gemini/grok)；
+    再 CLAUDE_CODE_USE_BEDROCK/VERTEX/FOUNDRY；再 CLAUDE_CODE_USE_OPENAI/GEMINI/GROK；全不命中 return 'firstParty'(默认)。
+    脚本口语化「设置最优先 > 环境变量 > 默认 Claude」属实。
+  - 流式翻译官（适配器）← src/services/api/openai/responsesAdapter.ts:249-443
+    adaptResponsesStreamToAnthropic(stream, model)：async function*，:286 `for await (const event of stream)`
+    逐帧消费 GPT(Responses API)的 SSE 事件，即时 yield 出 Anthropic 的 BetaRawMessageStreamEvent。
+    请求方向转换 convertMessagesToResponsesInput()（:61，Anthropic→OpenAI 输入）。
+  - 事件一一对应 ← responsesAdapter.ts：output_text.delta→content_block_delta/text_delta(:290-312)；
+    reasoning→thinking_delta(:315-337)；output_item.added→content_block_start/tool_use(:340-374)；
+    function_call_arguments.delta→input_json_delta(:377-391)；output_item.done→content_block_stop(:394-405)；
+    response.completed/incomplete→message_delta+message_stop(:419-441)。
+  - 「即翻即传」+ 帧级缓冲澄清 ← 事件级零攒包(每 event 立即 yield)属实；SSE 解析 parseSSE()(:193-222)
+    有协议必需的字节缓冲找 \n\n 帧边界。★ 脚本说「每收到一个小片段，当场翻、当场传」，不喊「零缓冲/延迟为零」。
+  - 一家模型一个目录 + 加新 provider 不碰旧码 ← src/services/api/{openai,gemini,grok}/（各含 index.ts 导出
+    queryModel<Provider>、client.ts）；分发在 src/services/api/claude.ts:1334-1372：
+    `if (getAPIProvider()==='openai'){ const {queryModelOpenAI}=await import('./openai/index.js'); yield* queryModelOpenAI(...) }`，
+    gemini/grok 同构分支。加新模型 = 新建目录 + 此处加一条 import 分支 + providers.ts 加类型/环境变量，旧代码不动。
+  - 下游归一无感知 ← 所有 provider 最终 yield 成 Anthropic SDK 统一事件/消息类型(StreamEvent/AssistantMessage，
+    packages/@ant/model-provider/src/types/message.ts)；claude.ts 下游 for await 只 switch 这套 Anthropic 事件
+    → agent 循环/工具/UI 拿到永远同一种格式，不知背后是 GPT 还是 Claude。
+  - 结尾钩对齐 EP10：日更按 episode 升序，下一集 = EP10「Claude Code 里的子 Agent」(AI 给 AI 打工)。
+  - 合规：无臆造数据；7种/优先级/函数名/事件映射均溯源上述行号；据实校正 plan 的「核心代码一行没改」「零缓冲」夸大；
+    「适配器模式/对扩展开放对修改关闭」是工程点评非营销承诺；无违禁/绝对化/口播导流。
+
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-10
+  drafting: 2026-06-23
+  review: 2026-06-23        # 出审，等飞书人审
+  approved: 2026-06-23 21:38
+  published: 2026-06-23 21:40:55
+  scheduled_submit:
+  retro_done:
+
+# 成片物料（交审）
+deliverables:
+  video: assets/ep09-multi-provider-adapter.mp4   # 1920x1080，175.3s，~13.5MB，已混音+烧字幕+去停顿
+  cover: assets/cover.png                         # 9:16 竖版(1536x2752)，仿 EP01 吉祥物本体当传译官（baoyu-image-gen）
+  script: 2-script.md                             # 口播稿唯一真相源（含逐条溯源）
+  publish: 4-publish.md                           # 发布物料（5 字段经解析器验证）

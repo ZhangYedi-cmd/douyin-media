@@ -1,0 +1,82 @@
+# 内容条目元数据 / 状态机
+slug: ep08-lazy-tool-discovery
+title: "60 个工具只告诉 AI 一小半，剩下的让它自己搜"
+type: kouban
+pillar: depth
+status: published                    # 生产线: ideated→drafting→review→approved→scheduled→published | rejected；2026-06-22 20:45 飞书确认后 --publish 直发成功
+# 2026-06-22 出审：成片终检闸 A–G 全过（A–F 均在最终 mp4 上验，非组件截图）。
+#   A 声画一致：audio-segments==narrations（extract 派生；dubbing-reviewer R1 PASS）；最终 mp4 抽帧 3 点
+#     (1.8s 钩子/58s「28」核心数/102.7s TF-IDF) 字幕==画面==口播逐字一致；
+#   B 音频自然度：depause 1 轮(cap0.25/minact0.45)+ending/2 二压(cap0.22/minact0.40)，段内死气 >0.45s = 0；
+#     成片 17 处静音全为段间边界停顿(0.52–0.79s)，无段内死气；
+#   C 钩子冷开：第一句「你给 AI 的工具越多，它就越聪明吗？恰恰相反」自成立、不依赖上文；
+#   D 事实合规：核心白名单 28 个、TF-IDF 权重 3.0/2.5/1.0、CJK bigram 全溯源 source_repo（见 fact_check）；
+#     ★ 据实弃用 plan/标题的「60 / 27」死数（源码无硬编码 60，核心实际 28）；无违禁/绝对化/导流；
+#   E 封面：baoyu-image-gen 9:16 竖版(1536x2752)、复用 EP01 方块吉祥物本体（工具管理员：面前少数核心工具亮、身后整墙暗锁工具箱、手举放大镜搜）；
+#   F 音画同步：mux 去拉伸 factor≈1.0063，抽帧画音对齐，crop 1920x1080 无黑边；
+#   G 发布物料 4-publish.md 已产、5 字段经 feishu-bot/meta.py 解析器(_FIELD_RE)验证全部命中、无可解析「建议发布时段」。
+#   dubbing-reviewer R1 PASS（完整性/真相源/语速/念法规则覆盖/死气/音画文本一致全过；
+#     ending/4 CTA 略快、coldopen/1 开场快均判功能性快节奏非吞字，非阻断，未返工）。
+source: 2026-06-10-008             # backlog id（系列 EP08，claude-code-source-series s2e8）
+
+# 系列信息
+series: {slug: claude-code-source-series, season: 2, episode: 8}
+plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep08-lazy-tool-discovery.md"
+# 源码溯源仓（plan frontmatter 路径 /Users/yedi/yedi-study/claude-code-main 已过期/不存在，实际在此，与 EP02-07 同仓）
+source_repo: /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main
+fact_check: |
+  全核于 source_repo（2026-06-22 逐条定位，Explore agent 精读 + 主回话复核关键数字与行号）：
+  - 核心工具白名单 ← src/constants/tools.ts:137-174 CORE_TOOLS = new Set([...])，注释:131-135 原文
+    「Core tools that are always loaded with full schema at initialization. These tools are never
+    deferred — they appear in the initial prompt. All other tools (non-core built-in + all MCP tools)
+    are deferred and must be discovered via SearchExtraToolsTool / ExecuteExtraTool.」
+    实际数量 = 28 个：26 个显式常量(:140-173, Read/Edit/Write/Glob/Grep/NotebookEdit/Agent/AskUserQuestion/
+    TaskOutput/TaskStop/TaskCreate/TaskGet/TaskList/TaskUpdate/TodoWrite/EnterPlanMode/ExitPlanMode/
+    VerifyPlanExecution/WebFetch/WebSearch/LSP/Skill/Sleep/SearchExtraTools/ExecuteExtraTool/SyntheticOutput)
+    + SHELL_TOOL_NAMES 展开 2 个(:139 注释 'Bash','Shell')。
+    ★ 据实校准：plan/标题写「60 个 / 只告诉 27 个」——源码里【没有】硬编码的 60，也不是 27；
+      核心白名单实际 28 个。脚本不把 60 当源码事实讲，改述「内置几十个工具 + 可无限接 MCP，
+      但只把固定的二十来(28)个核心塞进 prompt」。延迟集是开放无上限的（含【所有】MCP 工具）。
+  - 工具注册表浮动 ← src/tools.ts:217-280 getAllBaseTools()：约 24 个无条件 + 一批条件加载
+    (hasEmbeddedSearchTools 才省掉 Glob/Grep；USER_TYPE==='ant' 才加 Config/Tungsten/REPL；
+    isTodoV2Enabled 才加 Task* 四件；ENABLE_LSP_TOOL/isWorktreeModeEnabled/各 ?Tool 存在性…)
+    + cronTools(3) + ListMcpResources/ReadMcpResource + isSearchExtraToolsEnabledOptimistic 才加
+    SearchExtraToolsTool(:276) + ExecuteTool 永远在(:279 注释「first-class, always available, not deferred」)。
+    → 总数随 feature flag / env / 接入的 MCP 浮动，无定值。脚本用「几十个」不报死数。
+  - TF-IDF 搜索引擎 ← src/services/searchExtraTools/toolIndex.ts：
+    :3-8 从 skillSearch/localSearch 导入 tokenizeAndStem/computeWeightedTf/computeIdf/cosineSimilarity；
+    :81 只索引 deferredTools(tools.filter(isDeferredTool))；:113-117 computeWeightedTf 三字段加权；
+    :137-143 computeIdf 后 tf*idf；:180 cosineSimilarity 打分；:146 日志原文
+    「indexed ${entries.length} deferred tools from ${tools.length} total tools」坐实核心/延迟二分。
+  - 字段加权 ← toolIndex.ts:33-37 TOOL_FIELD_WEIGHT = {name:3.0, searchHint:2.5, description:1.0}。
+    ★ plan 写「工具名 3.0 / 搜索提示 2.5 / 描述 1.0」属实，逐行对上。
+  - 中文 bigram ← localSearch.ts tokenize():158-165 CJK 连续段切 2 字一组(slice(j,j+2))；
+    toolIndex.ts:43 CJK_MIN_BIGRAM_MATCHES=2、:45 CJK_RANGE、:182-188 中文 token 命中<2 且无 ascii 命中则 score=0。
+    细节:190-191 查询串完整包含工具规范名 → score 提到 0.75。
+  - 工具搜索这个工具本身 ← 名 'SearchExtraTools'(packages/builtin-tools/.../SearchExtraToolsTool/constants.ts
+    SEARCH_EXTRA_TOOLS_TOOL_NAME)；它自己在 CORE_TOOLS 里(tools.ts:171)常驻 prompt——AI 靠它去搜被延迟的工具。
+    另有 ExecuteExtraTool(ExecuteTool) 一等公民、用于真正调用搜到的延迟工具。
+  - 主动预取 ← searchExtraTools/prefetch.ts：用户输入/助手回复时从消息历史提取查询、构索引、搜 top3、
+    去重(本会话未发现过)，产 tool_discovery attachment 提示 UI（按需 + 预取双通道）。
+  - 升华据实：「给 AI 的信息越准越好不是越多越好」是设计取舍的口语化（token 成本 + 工具过多干扰选择），
+    非营销话术。结尾钩对齐【实际下一集 EP09】（多 provider 适配：同一套代码接 Claude/GPT/Gemini）。
+  - 合规：无臆造数据；所有数字(28/3.0/2.5/1.0/bigram=2/0.75/top3)均溯源上述行号；
+    据实弃用 plan 的 60/27 死数；无违禁/绝对化营销/口播导流。
+
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-10
+  drafting: 2026-06-22
+  review: 2026-06-22        # 出审，等飞书人审
+  approved: 2026-06-22 20:43
+  published: 2026-06-22 20:45
+  scheduled_submit:
+  retro_done:
+
+# 成片物料（交审）
+deliverables:
+  video: assets/ep08-lazy-tool-discovery.mp4   # 1920x1080，已混音+烧字幕+去停顿
+  cover: assets/cover.png                      # 9:16 竖版，仿 EP01 吉祥物本体（baoyu-image-gen）
+  srt:   assets/ep08.srt
+  script: 2-script.md                          # 口播稿唯一真相源（含逐条溯源）

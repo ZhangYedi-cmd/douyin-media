@@ -1,0 +1,68 @@
+# 内容条目元数据 / 状态机
+slug: ep05-permission-pipeline
+title: "Claude Code 凭什么敢让 AI 在你电脑上跑命令？"
+type: kouban
+pillar: depth
+status: published               # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+# 2026-06-19 21:09 真发成功（飞书人审通过，账号 main，立即发布）。首发 21:01 在「填标题/描述」步 wait_for 10s 超时失败，
+#   加诊断重发→诊断未触发、同选择器一次过 → 真因=发布页偶发慢渲染（非 DOM 改版，回填曾误判已纠正）；
+#   已修引擎 main.py:fill_title_and_description wait_for 10s→30s。详见 4-publish.md 回填。
+# 2026-06-19 出审：成片终检闸 A–F 全过（均在最终 mp4 上验，非组件截图）。
+#   A 声画一致：audio-segments==narrations（extract 派生）；最终 mp4 抽帧 6 点(钩子rm-rf/安检流水线/Bash自检/弹窗兜底/git信任gate/CTA) 字幕==画面==口播逐字一致；
+#   B 音频自然度：depause 2 轮(cap0.25/minact0.45 + 边缘 cap0.22/minact0.40)后内部死气 >0.45s = 0；
+#   C 钩子冷开：第一句「AI 在你电脑上敲下 rm -rf，到真正执行，中间隔着几道关卡？」自成立、不依赖上文；
+#   D 事实合规：五道关卡+最妙细节全溯源 source_repo（见 fact_check），纠正 plan「context.ts」锚点(实为 main.tsx)、AI分类器据实标注 auto/ANT-only 不夸大；无违禁/绝对化/导流；
+#   E 封面：baoyu-image-gen 9:16 竖版(1536x2752)、复用 EP01 方块吉祥物本体(守门人姿态拦 rm -rf + 五道闸门)；
+#   F 音画同步：mux 去拉伸 factor≈1.005，抽帧画音对齐。
+#   G 发布物料 4-publish.md 已产、5 字段经 feishu-bot/meta.py 解析器验证全部命中、无可解析「建议发布时段」。
+#   dubbing-reviewer R1 PASS（6 检查点全过；唯一 NON-BLOCKING=trust/1≈7.2c/s 略快，未到吃字，未返工）。
+source: 2026-06-10-005       # backlog id（系列 EP05，claude-code-source-series s1e5）
+
+# 系列信息
+series: {slug: claude-code-source-series, season: 1, episode: 5}
+plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep05-permission-pipeline.md"
+# 源码溯源仓（plan frontmatter 路径 /Users/yedi/yedi-study/claude-code-main 已过期/不存在，实际在此，与 EP02-04 同仓）
+source_repo: /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main
+fact_check: |
+  全核于 source_repo（2026-06-19 逐条定位）：
+  - 权限主管道 hasPermissionsToUseToolInner ← src/utils/permissions/permissions.ts:1179
+    顺序：1a deny 规则(:1192) → 1b ask 规则(:1205) → 1c 工具自检 tool.checkPermissions(:1237)
+    → 1e requiresUserInteraction / 1f 内容级 ask / 1g safetyCheck(.git/.claude/ 等 bypass-immune):1252-1281
+    → 2a bypass / 2b always-allow(:1305) → 3 passthrough→ask(:1321)。
+  - 三态 PermissionBehavior = 'allow'|'deny'|'ask' ← src/types/permissions.ts:45；
+    PermissionResult 另有内部 'passthrough'(:257)；decisionReason 链路可审计(:181,206,235)。
+  - AI 分类器层（auto 模式）← permissions.ts:519-602（外层 hasPermissionsToUseTool，ask + mode==='auto'
+    且 feature('TRANSCRIPT_CLASSIFIER') → 走分类器，非交互直接 deny；该 feature 在外部构建为 ANT-ONLY
+    stub，见 bashClassifier.ts 头注；脚本据实表述为"auto 模式下的 AI 判断层"，不夸大其默认开启）。
+  - 工具自检懂 shell ← Bash 走 tool.checkPermissions，子命令解析见 src/utils/bash/bashParser.ts
+    + src/utils/permissions/bashClassifier.ts（管道/危险命令识别）。
+  - Hook 拦截层（PreToolUse 可 allow/deny/ask 改写）← src/utils/hooks.ts:633-660
+    （hookSpecificOutput.permissionDecision: 'allow'|'deny'|'ask'，deny 产 blockingError）。
+  - 弹窗问人 = behavior 'ask' 最终回落用户确认（permissions.ts:1321 passthrough→ask；外层非 auto/dontAsk → 提示）。
+  - ★ 最妙细节（git 状态也要先信任）← src/main.tsx:501-527 prefetchSystemContextIfSafe：
+    交互模式下仅 checkHasTrustDialogAccepted() 为真才 prefetch git status；
+    注释明写 "Git commands can execute arbitrary code via hooks and config (e.g. core.fsmonitor,
+    diff.external)"（:503）。trust 边界说明见 src/interactiveHelpers.tsx:170。
+    ★ 纠偏：plan frontmatter 把该锚点写成 src/context.ts，实际在 src/main.tsx；context.ts 只有 getGitStatus。
+  - 结尾承接钩对齐 EP06（日更按 episode 升序，下一集=EP06「10 个工具同时跑，为什么不会把你的文件写坏」/并发调度），
+    非 plan 随手写的某集。
+
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-10
+  drafting: 2026-06-19
+  review: 2026-06-19        # 出审，等飞书人审
+  approved: 2026-06-19 20:59
+  published: 2026-06-19 21:09
+  scheduled_submit:
+  retro_done:
+
+# 成片物料（交审）
+deliverables:
+  video: assets/ep05-permission-pipeline.mp4   # 1920x1080, 181.7s, ~16.7MB, 已混音+烧字幕+去停顿
+  # 2026-06-19 22:06 修正版：coldopen/1 配音「rm -rf」念法 减(jiǎn)→杠(gàng)，重合成+重录重混。
+  #   normalize 规则已改 minimax-t2a.mjs。⚠️ 此为已发布之后的修正成片，是否替换线上需人定（见下方说明）。
+  cover: assets/cover.png                       # 9:16 竖版(1536x2752)，仿 EP01 吉祥物本体（baoyu-image-gen）
+  srt:   assets/ep05.srt                         # 23 cues
+  script: 2-script.md                           # 口播稿唯一真相源（含逐条溯源）

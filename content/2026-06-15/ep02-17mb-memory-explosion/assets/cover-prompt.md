@@ -1,0 +1,11 @@
+Vertical 9:16 short-video cover image for a tech series. The FIRST reference image is EP01's cover — treat its mascot as the SAME established series character and reuse its identity. Match EP01's visual style EXACTLY: same warm dark near-black background, same SINGLE hot-orange accent color (no other bright colors), same faint low-opacity monospace source-code filling the background, same FLAT PIXEL-ART (blocky, low-res, square-pixel) mascot rendering, same hand-drawn orange spark/burst marks, same bold confident layout and typography weight.
+
+CENTER (main visual anchor) — IDENTITY LOCK: reuse the EXACT SAME mascot from EP01's cover (the reference image): a SQUARE / BLOCKY flat pixel-art orange creature with a rectangular box-shaped body, two simple solid-black rectangular pixel eyes, and short stubby blocky legs. Do NOT redesign it, do NOT make it round/fluffy/hamster-like, do NOT create a new similar-looking character. Keep the same blocky proportions, same eye style, same flat pixel rendering as EP01. ONLY change its pose/expression: now it is COMICALLY OVERSTUFFED and about to BURST — its blocky body bulging and swollen like it swallowed way too much, stubby legs strained under the weight, wide shocked pixel eyes. A few hand-drawn orange spark / explosion burst marks pop around it to signal memory overflowing. Keep it flat, blocky, charming pixel-art — NOT realistic, NOT 3D, NOT round.
+
+TOP: a rounded pill-shaped badge with a thin hot-orange outline stroke (transparent fill), centered, containing the text:  Claude Code 源码解读 · EP02
+
+BOTTOM: large BOLD sans-serif Chinese title, two lines, very high contrast, crisp and perfectly legible (render the Chinese characters accurately):
+  Line 1 (pure white):  内存从 35MB
+  Line 2:  暴涨到 1GB   ← render "暴涨到 1GB" in the hot-orange accent color, extra bold
+
+Composition: generous breathing room, mascot centered in upper-middle, title anchored at the bottom, badge at top. Very dark warm-black canvas with faint blurred monospace JS bundler code behind everything at low opacity. NO realistic humans. Cinematic, editorial, developer aesthetic. All Chinese text must be spelled and rendered correctly and sharply. Series consistency with EP01 is the top priority: same character, same palette, same mood.

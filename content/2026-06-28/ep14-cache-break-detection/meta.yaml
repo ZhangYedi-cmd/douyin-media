@@ -1,0 +1,82 @@
+# 内容条目元数据 / 状态机
+slug: ep14-cache-break-detection
+title: "Prompt 缓存崩了，它能告诉你是哪个工具干的"
+type: kouban
+pillar: depth
+status: published                              # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+# ★ 2026-06-28 出审：成片已录出，终检闸 A–G 全过（A/B/F 均在最终 mp4 上验）。TTS 余额充足（配音前单段探测通过），无 1008 阻塞。
+#   A 声画一致：audio-segments==narrations 文本层全等(脚本校验 15/15 ✓)；最终 mp4 抽 5 帧
+#     (5.8s 钩子[prompt缓存省一大笔钱·命中打到一折]/80.5s blackbox#5[工具不揉成一个·每个schema单独哈希]/
+#      117.0s blackbox#8[77%·工具集没变schema变了·点名哪个工具]/146.4s blackbox#10[diff验尸报告·cache-break-7x3q.diff·--debug逐字看]/
+#      192.8s ending#2[EP15钩·两百行手写迷你Claude Code]) 字幕==画面==口播逐字一致；
+#   B 音频自然度：depause 压 >0.45s 内部死气到 ≤0.28(blackbox/8 二压一次)，silencedetect(-38dB:0.3) 复扫全 15 段内部死气>0.45 = 0；
+#   C 钩子冷开：首句「做 AI 应用的都知道，prompt 缓存能省一大笔钱」自成立(共识钩)、不依赖上文；
+#   D 事实合规：全核于 source_repo(见 fact_check)；数字(一折/77%/5%/2000token/约九成)均出自源码常量·注释或 Anthropic 计费规则，无臆造跑分；
+#     纠 plan 框定：plan 的「你根本不知道为什么」据源码注释(line 572-575 ~90%服务端)升级为「黑匣子也能洗清你的代码」更准；无违禁/绝对化/导流；
+#   E 封面：baoyu-image-gen 9:16 竖版(1536×2752)、复用 EP01 方块吉祥物本体(法医姿态·站在打开的飞机黑匣子旁)，
+#     箱内升起验尸报告哈希行(systemHash/model/tool[3]/tool[4]/finalHash)，唯 tool[3] 高亮热橙带放大镜✕=凶手工具，余行灰橙带勾；
+#     暗底单热橙、徽章「Claude Code 源码解读·EP14」、标题白「Prompt 缓存崩了」+橙「它能点名是哪个工具」承担钩子，背景虚化真实源码常量；
+#   F 音画同步：mux 去拉伸(factor=webm/wall=205.16/207.93=0.9867)、crop 1920×1080:80:100、trimSec 3.917，
+#     成片 199.730s==master.wav(199.729s)对齐(diff≈0s)；record-manual 15 步自适应校验推进 0 漂移；
+#   G 发布物料 4-publish.md 已产、5 字段键名匹配解析器(标题/正文简介/话题x5/封面/媒体)；无可解析「建议发布时段」(默认立即发布)。
+#   dubbing-reviewer 闸口 R1 PASS（subagent 正常派单）：完整性 15/15✓ 真相源同步 15/15✓ 死气复扫 0✓ 音画一致(文本层)✓
+#     语速离群均判为英文(prompt/token/schema/diff/beta/debug)密集的字面统计假象或区间内正常节奏、非真离群、不调速✓
+#     多音字独立复核确认本集无陷阱(全片「行」仅 ending/2「两百行 háng」一处·无同字多音冲突)✓
+#     （NON-BLOCKING：reviewer 与本 run 无听觉通道、本机无 whisper，英文词(prompt/token/schema/diff/debug/beta)实读
+#       与 coldopen/1 开头语速 未经人耳抽听，已诚实标注、留待人审听一遍；若英文词读糊，改法：minimax-t2a.mjs normalize
+#       加对应逐字母/转写规则后 rm 该段 mp3 重合成重录）。
+source: 2026-06-10-014             # backlog id（系列 EP14，claude-code-source-series s3e14）
+
+# 系列信息
+series: {slug: claude-code-source-series, season: 3, episode: 14}
+plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep14-cache-break-detection.md"
+# 源码溯源仓（plan frontmatter 路径 /Users/yedi/yedi-study/claude-code-main 不存在，实际在此，与 EP02-13 同仓）
+source_repo: /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main
+fact_check: |
+  全核于 source_repo（主文件 src/services/api/promptCacheBreakDetection.ts，726 行；行号会漂移，以锚点为准）：
+  - [3] 前缀逐字节一致才命中 ← 整体逻辑即对会改变服务端缓存键的客户端因素逐项快照；stripCacheControl/computeHash/
+    buildDiffableContent(system+tools+model 拼成可 diff 文本，line 206-225)。属实。
+  - [5][6] 两阶段逐项哈希快照 ← recordPromptState(phase1·请求前,line 247) 记 PreviousState：systemHash/toolsHash/
+    cacheControlHash(注「Catches scope/TTL flips global↔org,1h↔5m that stripCacheControl erases」line 31-33)/model/fastMode/
+    globalCacheStrategy/betas/effortValue/extraBodyHash/perToolHashes 等十余项(type PreviousState line 28-69)。属实。
+  - [7][9] 每个工具单独哈希 ← perToolHashes: Record<string,number>(line 38)、computePerToolHashes 逐工具 computeHash(line 187-199)。属实。
+  - [8] 逐项对比拼人话 ← checkResponseForCacheBreak(phase2,line 438) 按 pendingChanges 拼 parts，如
+    `tools changed (+N/-M tools)` / `(tool prompt/schema changed, same tool set)` / `system prompt changed (+N chars)`(line 511-516,501-509)。属实。
+  - [10] 77% ← line 35-37 注释「Diffed to name which tool's description changed when toolSchemasChanged but added=removed=0
+    (77% of tool breaks per BQ 2026-03-22)」。属源码注释真实数据。
+  - [11] 阈值 5%+2000 ← MIN_CACHE_MISS_TOKENS=2_000(line 120)；触发判定 cacheReadTokens>=prevCacheRead*0.95 ||
+    tokenDrop<MIN_CACHE_MISS_TOKENS 则不报(line 485-491)→ 即掉>5% 且绝对掉≥2000 才报。属实。
+  - [12] diff 验尸报告 ← writeCacheBreakDiff 用 createPatch(diff 库) 把 prevDiffableContent→buildDiffableContent 写成 .diff 文件到
+    getClaudeTempDir()，路径进 summary 日志供 --debug(line 648-660,707-726)。属实。
+  - [13] 约九成服务端 ← line 572-575 注「when all client-side flags are false and the gap is under TTL, ~90% of breaks are
+    server-side routing/eviction…」；无客户端变更时 reason 标 `likely server-side (prompt unchanged, <5min gap)` /
+    `possible 5min/1h TTL expiry`(line 583-589)；TTL 常量 CACHE_TTL_5MIN_MS/CACHE_TTL_1HOUR_MS(line 125-126)。属实。
+  - [1] 缓存命中「打到一折」← Anthropic prompt cache 命中读取计费约为基础输入价 1/10(cache read≈0.1×)，故「打到一折」属实、
+    非臆造跑分；口播框定为「省一大笔钱」更稳。
+  - [15] 结尾钩对齐 EP15「两百行代码手写迷你 Claude Code（完结篇）」(backlog 2026-06-10-015)；不剧透、不依赖本集上文。
+  - 冷开自成立：首句「做 AI 应用的都知道 prompt 缓存能省一大笔钱」自带共识语境，3 秒站得住，不依赖上一集。
+  - 合规：源码仓为社区反编译/重建版（措辞未称官方原始仓）；所有数字均出自源码常量·注释或计费规则，无臆造跑分；
+    「最关键/最阴/最服」为口语态度词；无违禁/绝对化（无「最」类商品化绝对承诺）/口播导流。
+  - ★ NON-BLOCKING（待人审听一遍）：dubbing-reviewer R1 PASS、死气复扫=0、多音字本集无陷阱(静态核对)；但 reviewer 与本 run
+    无听觉通道、本机无 whisper，以下声学项未经人耳：英文词 prompt/token/schema/diff/debug/beta 实读、coldopen/1 开头语速听感。请人审重点听这几处。
+
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-10
+  drafting: 2026-06-28       # 创作；TTS 余额充足，链路一次跑通
+  review: 2026-06-28         # 出审，等飞书人审
+  approved: 2026-06-28 22:36
+  published: 2026-06-28 22:38
+  scheduled_submit:
+  retro_done:
+
+# 阻塞：无（配音前单段探余额通过，无 1008）
+blocker: {}
+
+# 成片物料（交审）
+deliverables:
+  video: assets/ep14-cache-break-detection.mp4   # 1920×1080，199.73s，~18MB，已混音+烧字幕+去停顿+去拉伸 ✓
+  cover: assets/cover.png                    # 9:16 竖版(1536×2752)，仿 EP01 吉祥物本体·法医+黑匣子验尸报告（baoyu-image-gen）✓
+  script: 2-script.md                        # 口播稿唯一真相源（含逐条溯源）✓
+  publish: 4-publish.md                      # 发布物料（5 字段键名匹配解析器）✓
