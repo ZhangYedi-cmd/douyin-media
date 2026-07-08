@@ -16,24 +16,11 @@
 状态机记账(如 `meta.yaml` 置 `retro_done`)、写治理日志不算"改大脑",可自动。
 
 ## 任务现状
-当前只接两个「养大脑」任务（都构成数据反哺闭环），其余记 TODO，按需再接。
+**任务清单唯一出处 = `tasks.md`**：yaml 注册表（dispatcher 读）+ 每任务一张**任务卡**（为什么存在 / 目标怎么选 / 干什么 / 产物与记账 / 人审关注点）。本文件不复述清单，防两处漂移。
+- 当前启用 2 个：`retro`（复盘，阶段契约另见 `retro.md`）、`benchmark-refresher`——都构成数据反哺闭环。
+- 另 7 个 TODO 登记在册（disabled，含元层 account-audit），**任务卡即接入规格**：接入 = 按卡写执行 skill + 翻 `enabled`。
 
-| 任务 | 干什么 | 状态 |
-|---|---|---|
-| **复盘**（`retro.md`） | 拉已发布作品后台数据→漏斗归因→产**大脑变更提议**(人审后应用) | ✅ 执行 skill `douyin-retro` 已建可用 |
-| **benchmark-refresher** | 重新抓料验证 `brain/benchmarks.md` 对标账号/打法是否还成立 | ✅ 执行 skill `benchmark-refresher` 已建（手动触发，agent-reach） |
-
-#### TODO（治理债登记，暂不接）
-| 任务 | 干什么 | 客观度 |
-|---|---|---|
-| link-rot-checker | 巡检已发布内容 / `sources.md` 外链失效 | 全客观 |
-| sop-doc-sync | `pipeline/*.md`+CLAUDE.md 约定 vs `.claude/skills/` 实际脱节 | 全客观 |
-| backlog-gardener | 清选题池：删过期、去撞题、剔与已发布重复（过期清扫已并入 douyin-ideate Step 2.0，本任务只剩撞题/重复维度） | 半客观 |
-| retro-debt-collector | 扫 meta.yaml 发布>7d 仍非 `retro_done` 的补做复盘 | 全客观 |
-| stale-fact-auditor | 扫已发布技术结论/benchmark 标记过时被推翻 | 低客观，需人审 |
-| cover-style-normalizer | 巡检历史封面标记风格漂移 | 低客观，需人审 |
-
-（设计背景与验证分级见 `docs/2026-06-14-账号熵增治理流水线规划.md`——那是历史快照，现行以本表为准）
+（设计背景与验证分级见 `docs/2026-06-14-账号熵增治理流水线规划.md`——那是历史快照，现行以 `tasks.md` 为准）
 
 > 统一产物格式见 `report-template.md`（治理执行记录报告：现状/发现/变更提议/盲区/落地记录）。
 > 报告落 `logs/<date>-<task>.md`，dispatcher 落地后摘要进 `logs/index.jsonl`。
@@ -41,8 +28,8 @@
 ## 骨架现状
 - ✅ `harness-dispatcher`（调度,**触发感知**非纯加权随机）、`tasks.md` 注册表、`logs/` —— 已落地。
 - ✅ 执行 skill：`douyin-retro`(复盘)、`benchmark-refresher`(对标/打法复核)。
-- 📋 TODO `account-audit` 元层(读 index.jsonl 调治理线自身配置)——设计已议(触发感知调参 + 自动/人审分级，自调边界待定，见 `tasks.md` 注释)；现 logs 为空，攒够数据再建。
-- 📋 其余执行 skill（link-rot / sop-sync / …）见 TODO，dispatcher 跑顺后按需接。
+- 📋 TODO `account-audit` 元层(读 index.jsonl 调治理线自身配置)——自调边界与熄火条件见 `tasks.md` 它的任务卡；现 logs 为空，攒够数据再建。
+- 📋 其余执行 skill（link-rot / sop-sync / …）见 `tasks.md` 任务卡，dispatcher 跑顺后按需接。
 
 > dispatcher 为何不用纯加权随机:复盘是**事件触发**、benchmark 是**周期**,都不是同质随机债;加权池预留给未来 per-item 任务。详见 `tasks.md` 与规划文档第四节。
 
