@@ -16,10 +16,7 @@
    - 无题可取 → **停产 + 按「阻塞即上报」推飞书**，不硬造题。
    promote：该条 `status: idea→picked`、回填 `content_path: content/<今天>/<slug>/`，建该目录、`meta.yaml` 写 `source: <backlog id>`，据 backlog 条目写 `1-brief.md` 喂下一步（系列条目则用其 `plan_file` 当 brief）。
 3. **创作**：按 `pipeline/2-create.md` 从 `plan_file`（脚本+源码导读）出口播成品；含 `dubbing-reviewer` 配音质检循环，过创作自检。
-4. **出审**：每条 `meta.yaml` status=`review`，更新 `dashboard.md`，经 **`feishu-notify`** 把待审清单推到飞书等人审（见 `pipeline/3-review.md`）。
-   - ★ **出审前必产 `4-publish.md`**（发布物料：标题/正文简介/话题标签 3–5 个/封面路径/媒体文件）。
-     原因：飞书「过审 → 确认发布」卡在**人点过审后立即**读 `4-publish.md` 拼 sau 命令，这发生在阶段 4 之前；缺它则确认卡报「缺标题·无法发布」（EP03 踩过）。
-     **别写可解析的「建议发布时段」字段**（非 datetime 文本会被原样传给 sau `--schedule`），默认走立即发布，要定时由人在确认时指定。
+4. **出审**：`meta.yaml` status=`review`，更新 `dashboard.md`，经 **`feishu-notify`** 推审核卡（见 `pipeline/3-review.md`）。前提：`pipeline/2-create.md` 成片终检闸 A–G 全过（G = ★出审前必产 `4-publish.md`，规则细节以那里为准，教训 L5/L6）。
 5. **不发布**：到此停。等人在飞书点过/打回。
 
 ## 阻塞即上报（铁律）

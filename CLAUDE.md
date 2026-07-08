@@ -17,6 +17,14 @@ AI 方向的工程提效实战 + 源码解读（技术深度为主），辅以 A
 - 工作日全自动只跑到「出审」为止（`pipeline/3-review.md`），**发布必须人审通过**。
 - 每条内容的状态写在它的 `meta.yaml`，改状态同时更新 `dashboard.md`。
 - 复盘结论要回写到 `brain/benchmarks.md`，让账号大脑迭代。
+- 阻塞即上报：导致停产/挂起的事件必经 feishu-notify 推人，只写本地日志不算上报（`pipeline/daily-run.md`）。
+
+## 文档架构约定（防漂移）
+- `pipeline/*.md` 是**阶段契约**（输入/输出/状态翻转/闸口），操作细节住对应 skill；同一规则只写一处，其余引用。
+- 踩坑教训的「故事」只登记 `pipeline/lessons.md`（SOP 里标 Lx 回指）；「打法」沉淀 `brain/benchmarks.md`。
+- `dashboard.md` 是派生视图非真相源；状态真相源 = 各 `meta.yaml` + `backlog.yaml`。
+- 状态记账唯一位置 = 发布收尾（douyin-publish Step 5：meta/backlog/dashboard 一次翻齐），其它环节不代翻。
+- `docs/` 是只读历史存档（纪要/ADR），现行规则不得只住那里。
 
 ## Skill 调用约定
 （待我们逐节点确认后补全。先占位，避免乱调。）

@@ -71,10 +71,11 @@ cd "$SAU_DIR" && uv run sau douyin check --account main
 读输出：出现 `视频发布成功`/`提交成功`/`submitted` = 成功；否则失败。
 > 注意：sau 当前输出不一定带作品链接，链接可能要去抖音作品管理人工补。
 
-### Step 5 · 留痕
+### Step 5 · 留痕（★ 发布收尾 = 全流水线状态记账的唯一位置，见 pipeline/4-publish.md）
 - `4-publish.md`：回填 实际发布时间、（能拿到的）作品链接、用的账号。
 - `meta.yaml`：`status` = `published`(立即) / `scheduled`(定时)。
-- `dashboard.md`：更新该条状态。
+- `backlog.yaml`：`meta.source` 指向的条目 `picked → published`（**本步必做**——历史上两次漏翻靠 daily-run 事后补，故收口在这，其它环节不代翻）。
+- `dashboard.md`：在制表移出该条。
 - 失败：写失败原因到 `4-publish.md`，`status` 不动，报警。
 
 ## 文件结构

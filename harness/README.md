@@ -24,8 +24,16 @@
 | **benchmark-refresher** | 重新抓料验证 `brain/benchmarks.md` 对标账号/打法是否还成立 | ✅ 执行 skill `benchmark-refresher` 已建（手动触发，agent-reach） |
 
 #### TODO（治理债登记，暂不接）
-link-rot-checker · sop-doc-sync · backlog-gardener · retro-debt-collector · stale-fact-auditor · cover-style-normalizer
-（说明见 `docs/2026-06-14-账号熵增治理流水线规划.md` 第 4.1 节 TODO 表）
+| 任务 | 干什么 | 客观度 |
+|---|---|---|
+| link-rot-checker | 巡检已发布内容 / `sources.md` 外链失效 | 全客观 |
+| sop-doc-sync | `pipeline/*.md`+CLAUDE.md 约定 vs `.claude/skills/` 实际脱节 | 全客观 |
+| backlog-gardener | 清选题池：删过期、去撞题、剔与已发布重复（过期清扫已并入 douyin-ideate Step 2.0，本任务只剩撞题/重复维度） | 半客观 |
+| retro-debt-collector | 扫 meta.yaml 发布>7d 仍非 `retro_done` 的补做复盘 | 全客观 |
+| stale-fact-auditor | 扫已发布技术结论/benchmark 标记过时被推翻 | 低客观，需人审 |
+| cover-style-normalizer | 巡检历史封面标记风格漂移 | 低客观，需人审 |
+
+（设计背景与验证分级见 `docs/2026-06-14-账号熵增治理流水线规划.md`——那是历史快照，现行以本表为准）
 
 > 统一产物格式见 `report-template.md`（治理执行记录报告：现状/发现/变更提议/盲区/落地记录）。
 > 报告落 `logs/<date>-<task>.md`，dispatcher 落地后摘要进 `logs/index.jsonl`。
