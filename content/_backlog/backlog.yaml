@@ -495,3 +495,160 @@ topics:
     created: 2026-07-08
     metrics: {}
 
+
+  # ── 2026-07-08 调研批（双赛道恢复后首轮，report: research-2026-07-08.md）──
+  - id: 2026-07-08-002
+    title: "Claude Fable 5 上手实测：新 Mythos 级模型在 Claude Code 里跑一天，和 Opus 4.8 差在哪"
+    alt_titles:
+      - "Anthropic 憋的大招 Fable 5 实测：贵没贵、强没强、值不值得切"
+    track: depth
+    format: kouban
+    status: idea
+    score: 4.55
+    tier: S
+    scores: {practical: 5, social: 5, emotion: 4, hook: 4, timeliness: 5, trigger: 4}
+    urgency: today
+    reason: "旗舰发布趁热做深度实测（深度题破例today）；账号Claude Code系列刚完结，受众精准衔接；X上已有Codex vs Claude抉择焦虑=需求实证"
+    links:
+      - "https://www.anthropic.com/news/claude-fable-5-mythos-5"
+    tags: [claude, fable-5, anthropic, model-review, claude-code]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-003
+    title: "GPT-5.6 vs Opus 4.8 vs Fable 5：同一个真实开发任务，三家旗舰对打"
+    alt_titles:
+      - "三大旗舰同题实测：GPT-5.6 首发日我拿真项目试了试"
+    track: traffic
+    format: kouban
+    status: idea
+    score: 4.50
+    tier: S
+    scores: {practical: 4, social: 4, emotion: 4, hook: 5, timeliness: 5, trigger: 4}
+    urgency: today
+    reason: "GPT-5.6 官宣 7/9 公开（多源一致），发布当天做对打实测=时效峰值+悬念完播；一手实测可溯源不踩红线。★依赖：7/9 发布后才能做"
+    links:
+      - "https://www.straitstimes.com/business/companies-markets/openai-says-powerful-new-model-to-launch-publicly-on-july-9"
+      - "https://www.neowin.net/news/openai-to-release-gpt-56-sol-terra-and-luna-on-july-9/"
+    tags: [gpt-5.6, openai, model-comparison, benchmark, claude]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-004
+    title: "GLM-5 免费接进 Claude Code：NVIDIA NIM 这波白嫖实测，账单能不能归零"
+    alt_titles:
+      - "不花一分钱跑 Claude Code？GLM-5 on NIM 实测"
+    track: depth
+    format: kouban
+    status: idea
+    score: 4.30
+    tier: S
+    scores: {practical: 5, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 4}
+    urgency: today
+    reason: "省钱+实操双高，r/LocalLLaMA 热帖；与池内 006(Opus省钱)同域不同法可成'省钱系列'。★创作时先核实 NIM 免费条款/限速"
+    links:
+      - "https://www.reddit.com/r/LocalLLaMA/comments/1r5nnhz/glm5_is_officially_on_nvidia_nim_and_you_can_now/"
+    tags: [glm-5, claude-code, cost-saving, nvidia-nim]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-005
+    title: "GPT-5.6 明天就来：Sol/Terra/Luna 三版本怎么选，agent 记忆还要单独收费"
+    alt_titles:
+      - "GPT-5.6 发布前瞻速览：三个版本 + agent memory 定价"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 4.15
+    tier: S
+    scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 3}
+    urgency: today
+    reason: "发布日热搜词，速览图文抢时效；只讲产品与定价、不碰政策争议（红线）。与 -003 对打实测错开：这条发布日当天出，实测隔天出"
+    links:
+      - "https://www.straitstimes.com/business/companies-markets/openai-says-powerful-new-model-to-launch-publicly-on-july-9"
+      - "https://economictimes.indiatimes.com/news/international/business/openai-gpt-5-6-rollout-begins-july-9-new-features-models-and-everything-else-to-know/articleshow/132257449.cms"
+    tags: [gpt-5.6, openai, new-model, pricing]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-006
+    title: "karpathy 新玩具 autoresearch 拆解：AI agent 自动在单卡上跑训练研究"
+    alt_titles:
+      - "AI 自己做 AI 研究？karpathy/autoresearch 源码速读"
+    track: depth
+    format: kouban
+    status: idea
+    score: 4.00
+    tier: S
+    scores: {practical: 3, social: 5, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
+    urgency: queue
+    reason: "karpathy 出品=社交货币满格；源码/设计拆解立身题（+0.2 立身加成已含）；agent 自动做研究是'卧槽'点"
+    links:
+      - "https://github.com/karpathy/autoresearch"
+    tags: [karpathy, agent, research-automation, source-reading]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-007
+    title: "gemini-cli 源码速读：Google 版 Claude Code 抄了什么、改了什么"
+    alt_titles:
+      - "拆完 Claude Code 再拆 Gemini CLI：同一道题两家怎么答"
+    track: depth
+    format: kouban
+    status: idea
+    score: 4.00
+    tier: S
+    scores: {practical: 4, social: 4, emotion: 3, hook: 4, timeliness: 3, trigger: 4}
+    urgency: queue
+    reason: "GitHub trending 在榜；接续源码解读心智（+0.25 立身加成已含）。★刚发完 15 集 Claude Code 源码，隔 1-2 周再排避免审美疲劳"
+    links:
+      - "https://github.com/google-gemini/gemini-cli"
+    tags: [gemini-cli, google, source-reading, agent]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-008
+    title: "ponytail：让你的 AI agent 学会'最好的代码是不写的代码'"
+    alt_titles:
+      - "给 AI 装上'最懒高级工程师'人格，代码质量反而上去了"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.90
+    tier: A
+    scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 3, trigger: 4}
+    urgency: queue
+    reason: "反直觉理念（少写代码=好）+可直接套用的 agent 提示工程，观点型口播好做钩子"
+    links:
+      - "https://github.com/DietrichGebert/ponytail"
+    tags: [agent, code-quality, prompt-engineering, github]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-009
+    title: "工程师的身份危机：Claude Code 之父对谈 DoorDash 创始人，'放下写代码的执念'"
+    alt_titles:
+      - "'人对写代码这门手艺有执念，你得放下'——这话你服吗"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.30
+    tier: B
+    scores: {practical: 2, social: 4, emotion: 4, hook: 4, timeliness: 3, trigger: 4}
+    urgency: queue
+    reason: "观点/情绪题，评论区易吵=互动高；实用低拉低总分。★创作前先找到访谈原片核实引语出处（现仅见 X 转述）"
+    links:
+      - "https://x.com/search?q=Andy%20Fang%20Claude%20Code%20identity%20crisis"
+    tags: [claude-code, industry-opinion, career, ai-coding]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-010
+    title: "NVIDIA Audex 30B：一个模型同时把音频听懂、把话说清"
+    alt_titles:
+      - "音频+文本统一模型 Audex 速览：不牺牲文本智商的听说合一"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 3.15
+    tier: B
+    scores: {practical: 2, social: 3, emotion: 3, hook: 3, timeliness: 4, trigger: 2}
+    urgency: queue
+    reason: "7/7 刚发的多模态开源，速览图文成本低；受众偏窄故 B 级"
+    links:
+      - "https://www.marktechpost.com/2026/07/07/nvidia-releases-audex-nemotron-labs-audex-30b-a3b-a-unified-audio-text-llm-that-preserves-the-text-intelligence-of-its-backbone/"
+    tags: [nvidia, audio-llm, multimodal, new-model]
+    created: 2026-07-08
+    metrics: {}
