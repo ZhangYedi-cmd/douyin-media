@@ -37,8 +37,8 @@ description: 熵增治理线的调度器(框架层)。定时或手动触发时,�
 ## 触发方式
 定时(人在 Claude Code 客户端配)或手动 `/harness-dispatcher`,细则以 `harness/README.md` 触发节为准。
 
-## 配套(框架层,后续)
-- `account-audit`(元层,待建):读 `logs/index.jsonl` 统计成功率 → 回调 `tasks.md` 的 `weight`/启停。dispatcher 跑出的 index.jsonl 就是它的输入。
+## 配套(框架层)
+- `account-audit`(元层,已启用,periodic:30d):读 `logs/index.jsonl` 统计 → 按边界表回调 `tasks.md` 配置。dispatcher 跑出的 index.jsonl 就是它的输入,像普通任务一样被本 skill 派活。
 
 ## 依赖
 | 依赖 | 用途 | 必须 |
