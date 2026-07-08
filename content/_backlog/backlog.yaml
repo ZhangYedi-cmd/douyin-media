@@ -28,6 +28,12 @@
 #   created   入池日期
 #   metrics   发布后回填 {plays,完播率,likes,...}
 
+# ── 取题指针（daily-run 读）──
+# 人钦点下一条要做的选题：填 id，daily-run 最高优先取它，promote 后置回 null。
+# 为 null 时 daily-run 在 status:idea 中按 score 取最高（同分先 depth）。
+# 人挑题 = 只改这一个字段，不靠条目在文件里的物理位置。
+next_up: null
+
 topics:
   - id: 2026-06-14-001
     title: "Claude Code 新的 dynamic workflows 我跑了一周，这才是它跟 Cursor 拉开差距的地方"

@@ -53,6 +53,11 @@ description: >
 > **平台侧信号从哪来**：由发布后的 `douyin-retro` 复盘反向补足——哪类选题完播/涨粉好、评论区想看啥，回写 `brain/benchmarks.md` 影响下次打分。这是**自己受众**的真实信号，比爬通用平台热点更贴账号。
 
 ### Step 2 · 过滤去重
+0. **过期清扫（expiry sweep，每轮必做，先于去重）**：对池中现存 `status: idea` 逐条判：
+   - `timeliness ≥ 4` 且入池（`created`）超 7 天 → 置 `status: expired`（时效窗已关）。
+   - `urgency: today` 且入池超 2 天 → 置 `expired`（当天题隔天即废）。
+   - 深度常青题（`timeliness ≤ 2`）不清扫，可长期排队。
+   expired 条目**保留在池里**做去重比对，不删除；清扫结果（几条、哪几条）写进当次报告。
 1. agent-reach 线索按主题合并去重。
 2. 对 `content/_backlog/backlog.yaml` + `content/` 已发历史做去重：按每条 `tags`（归一化主题标签）比对，**30 天内同主题直接丢**；无 tags 时退化为标题+链接比对。
 3. 砍掉不符定位 / 做不了 / 纯噪音的。
@@ -83,7 +88,7 @@ description: >
 
 ## 去重与时效纪律
 - 去重窗口 30 天，比对 backlog + 已发历史的主题关键词。
-- `urgency=today` 的流量题当天没做完即作废（标 `status: expired`）。
+- 过期清扫规则见 Step 2.0（timeliness≥4 超 7 天 / today 超 2 天 → expired），每轮运行自动执行——只入不出的池子会烂（2026-07-08 教训：9 条 idea 躺 24 天全过时）。
 - 深度题可在池子里排队滚动复用。
 
 ## 依赖
