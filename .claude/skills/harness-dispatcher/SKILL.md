@@ -1,6 +1,6 @@
 ---
 name: harness-dispatcher
-description: 熵增治理线的调度器(框架层)。定时或手动触发时,读 automation/harness/tasks.md 注册表,对每个启用任务评估触发条件(事件窗口/周期/加权池),把到点的任务派给对应执行 skill(douyin-retro / benchmark-refresher / …),收回「执行记录报告」,把摘要 append 进 logs/index.jsonl。调度与执行解耦:加治理任务只改 tasks.md,不动本 skill。触发:跑治理、巡检一轮、harness、治理调度、dispatcher、该做哪些治理了。
+description: 熵增治理线的调度器(框架层)。定时或手动触发时,读 harness/tasks.md 注册表,对每个启用任务评估触发条件(事件窗口/周期/加权池),把到点的任务派给对应执行 skill(douyin-retro / benchmark-refresher / …),收回「执行记录报告」,把摘要 append 进 logs/index.jsonl。调度与执行解耦:加治理任务只改 tasks.md,不动本 skill。触发:跑治理、巡检一轮、harness、治理调度、dispatcher、该做哪些治理了。
 ---
 
 # harness-dispatcher · 治理线调度器
@@ -9,9 +9,9 @@ description: 熵增治理线的调度器(框架层)。定时或手动触发时,�
 > 它本身**不干治理活、不碰 brain/线上**——只决定"跑谁",活和铁律(只产报告、人审后应用)在各执行 skill 里。
 
 ## 干活前必读
-1. `automation/harness/README.md`(治理线宪法 + 铁律)。
-2. `automation/harness/tasks.md`(任务注册表 + trigger 类型说明)。
-3. `automation/harness/logs/index.jsonl`(历史运行,算"周期到没到""窗口做没做"靠它)。
+1. `harness/README.md`(治理线宪法 + 铁律)。
+2. `harness/tasks.md`(任务注册表 + trigger 类型说明)。
+3. `harness/logs/index.jsonl`(历史运行,算"周期到没到""窗口做没做"靠它)。
 
 ## 流程
 1. **读注册表**:解析 `tasks.md` 的 yaml,取 `enabled: true` 的任务。
@@ -36,7 +36,7 @@ description: 熵增治理线的调度器(框架层)。定时或手动触发时,�
 
 ## 触发方式
 - 现在:**手动** `/harness-dispatcher`(跑一轮"该做哪些治理")。
-- 后续:挂 Claude Code `schedule`/cron 定时(如每日一次),入口就是本 skill。调度频率见 `automation/schedule.md` 的治理线说明(待补)。
+- 后续:挂 Claude Code `schedule`/cron 定时(如每日一次),入口就是本 skill。定时 cron 待验稳后加(见 harness/README.md 触发节)。
 
 ## 配套(框架层,后续)
 - `account-audit`(元层,待建):读 `logs/index.jsonl` 统计成功率 → 回调 `tasks.md` 的 `weight`/启停。dispatcher 跑出的 index.jsonl 就是它的输入。

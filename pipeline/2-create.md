@@ -18,7 +18,7 @@
    - 它有硬节点：会停下跟你对齐"稿子/outline/主题/素材/开发模式"5 件事。
    - **落位**：Vite 项目放 `build/`（工作目录，不进 assets）；内部 script.md 是 `2-script.md` 的派生件，**以 2-script.md 为准**。
    - 在 `build/` 里 `npm run extract-narrations` → 产出 `audio-segments.json`（分段文案）。**不要**用它自带的 `synthesize-audio`（走坏掉的 mmx CLI）。
-3. **配音**：用 **`tts-dub`** 合成——`node <tts-dub>/scripts/synthesize.mjs --config ../tts.config.json --segments audio-segments.json`。音色读账号级 `tts.config.json`（克隆音色 `moss_audio_4dd8142e…`），输出落 `build/public/audio/<chapter>/<step>.mp3`。多音字/单段语速问题加到 config 的 `overrides`。
+3. **配音**：用 **`tts-dub`** 合成——在 `build/` 里跑 `node <tts-dub>/scripts/synthesize.mjs --config tts.config.json --segments audio-segments.json`。config 用 **build 内的 `tts.config.json`**（从账号级模板 `brain/tts.config.json` 复制，克隆音色 `moss_audio_4dd8142e…`），输出落 `build/public/audio/<chapter>/<step>.mp3`。多音字/单段语速问题加 build 内 config 的 `overrides`；沉淀性读法规则回写 `brain/tts.config.json` 模板。
    - **真相源铁律**（防音画不符）：synthesize 读的是 `audio-segments.json`，不是 `narrations.ts`。**改过任何 narration 文案，必须先 `npm run extract-narrations` 重抽，再 `rm` 改动段 mp3（否则按文件名被 skip）再合成**。否则会"画面新文案、声音旧文案"。
    - **死气检查**：合成后 `silencedetect` 扫各段，>0.45s 的内部死气（常因 `「」`引号 / `——` / 拟声词）用 `rec/depause.mjs` 去停顿（cap 0.25 / minact 0.45，切静音边界不切词）。
 4. **配音审批（subagent 闸口，最多 3 轮 loop）**：主回话合成完**第一批音频**后，**派 `dubbing-reviewer` subagent** 审批质量——它跑 `dubbing-check` 的合成后检查点（完整性 / 语速离群 / 多音字 / 音画一致），回判 **PASS / FAIL + 每条改法**。**职责分离**：reviewer 只判不改（无 Edit/Write），修复与重合成都由主回话做。

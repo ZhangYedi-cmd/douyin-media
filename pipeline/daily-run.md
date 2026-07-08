@@ -30,9 +30,11 @@
 ## 产出
 - 当日 1 个内容目录（status=review）；或停产时一条飞书阻塞通知 + 日志
 - 更新后的 `dashboard.md`
-- 运行日志写入 `logs/<日期>.md`
+- 运行日志写入 `pipeline/logs/<日期>.md`
 
 ## 参数
 - 模式：**双赛道选题驱动**（每日 1 条，深度:流量 ≈ 6:4 滚动配比）
 - 取题：`next_up` 指针优先，无则按 score；调研间隔 ≥2 天先跑 `douyin-ideate`
+- 触发：工作日定时 agent（prompt 在 `~/.claude/scheduled-tasks/douyin-ai/SKILL.md`，读本文件执行）；休息日不触发，人工按需
 - 用到的 skill：见各 `pipeline/*.md`（创作四件套 + dubbing-reviewer 质检）
+- 治理线（复盘/巡检）**不在本表**：时间驱动、独立调度，见 `harness/`

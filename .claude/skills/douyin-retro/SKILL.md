@@ -1,6 +1,6 @@
 ---
 name: douyin-retro
-description: 抖音作品复盘引擎。复用 social-auto-upload 的 cookie 免扫码拉创作者中心后台数据,用传播漏斗定位每条作品"漏在哪一环",产出归因报告 + 大脑变更提议(brain/benchmarks.md 等),人审后应用,不自动改 brain。属熵增治理线(automation/harness/retro.md),不是生产流水线阶段。当用户说"复盘""拉数据""这条为什么火/不火""作品数据分析",或发布后 24h/72h/7d 跟踪时使用。触发:复盘、retro、作品数据、为什么火、完播率、涨粉分析。
+description: 抖音作品复盘引擎。复用 social-auto-upload 的 cookie 免扫码拉创作者中心后台数据,用传播漏斗定位每条作品"漏在哪一环",产出归因报告 + 大脑变更提议(brain/benchmarks.md 等),人审后应用,不自动改 brain。属熵增治理线(harness/retro.md),不是生产流水线阶段。当用户说"复盘""拉数据""这条为什么火/不火""作品数据分析",或发布后 24h/72h/7d 跟踪时使用。触发:复盘、retro、作品数据、为什么火、完播率、涨粉分析。
 ---
 
 # douyin-retro · 抖音作品复盘
@@ -10,7 +10,7 @@ description: 抖音作品复盘引擎。复用 social-auto-upload 的 cookie 免
 
 ## 干活前必读
 1. `brain/benchmarks.md`(历史均值基线、已知有效打法)、`brain/positioning.md`(支柱定位)。
-2. `automation/harness/retro.md`(治理任务约束)、`automation/harness/README.md`(治理线宪法)。
+2. `harness/retro.md`(治理任务约束)、`harness/README.md`(治理线宪法)。
 3. 本 skill 的 `references/funnel-attribution.md`(归因模型,核心)。
 
 ## 流程
@@ -45,9 +45,9 @@ cd tools/social-auto-upload
 - 高表现信息源 → 建议给 `brain/sources.md` 打标。
 - 评论热词/衍生线索 → 建议进 `content/_backlog/`。
 - 画像/涨粉系统性异常 → 建议动 `positioning.md`/`persona.md`,附依据。
-> **铁律**:复盘只产报告与变更提议,**绝不自动改 `brain/` 或线上资产**——与治理线宪法、发布铁律一致(`automation/harness/README.md`)。
+> **铁律**:复盘只产报告与变更提议,**绝不自动改 `brain/` 或线上资产**——与治理线宪法、发布铁律一致(`harness/README.md`)。
 
-## 时机(对齐 automation/harness/retro.md)
+## 时机(对齐 harness/retro.md)
 发布后 **24h / 72h / 7d** 各跑一次,看衰减与长尾。手动随时可跑。
 
 ## 待扩展(v2)

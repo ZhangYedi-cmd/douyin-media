@@ -29,7 +29,7 @@
 状态机分两层（互不镜像）：
 > - **选题池**（`backlog.yaml`，粗粒度）：`idea → picked → published`（异常 `rejected/expired/archived`）。
 > - **生产线**（内容目录 `meta.yaml`，细粒度）：`ideated → drafting → review → approved → scheduled → published`（异常 `rejected`）。
-> backlog 仅在 promote(→picked) 和 发布完成(→published) 翻动；中间细粒度只走 meta.yaml。`published` 是生产线终态；`retro_done` 由**治理线**（`automation/harness/`）复盘后置位，不属生产流程。
+> backlog 仅在 promote(→picked) 和 发布完成(→published) 翻动；中间细粒度只走 meta.yaml。`published` 是生产线终态；`retro_done` 由**治理线**（`harness/`）复盘后置位，不属生产流程。
 
 ## 选题池
 见 `content/_backlog/`：**9 条 idea ｜ 2 条 picked**（open-weight-5、EP04）**｜ 14 条 published**（EP01、EP02、EP03、EP05、EP06、EP07、EP08、EP09、EP10、EP11、EP12、EP13、EP14、EP15）。最近调研：`content/_research/research-2026-06-14.md`。

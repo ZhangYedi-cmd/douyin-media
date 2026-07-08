@@ -4,7 +4,7 @@ title: "AI圈突然都在说的 Spec Coding，到底在解决什么问题"
 type: kouban
 pillar: depth
 status: drafting           # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
-                           # retro_done 由治理线(automation/harness/)复盘后置位，非生产线状态
+                           # retro_done 由治理线(harness/)复盘后置位，非生产线状态
 source: 2026-07-08-001     # backlog id；用户直接指定选题，跳过report人挑，直接promote
 
 schedule:                  # 计划发布时间

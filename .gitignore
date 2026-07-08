@@ -16,3 +16,6 @@ __pycache__/
 
 # OS
 .DS_Store
+
+# Claude Code 定时任务锁
+.claude/scheduled_tasks.lock
