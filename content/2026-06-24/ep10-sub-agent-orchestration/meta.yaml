@@ -64,7 +64,7 @@ timestamps:
   approved: 2026-06-24 21:00
   published: 2026-06-24 21:33:55
   scheduled_submit:
-  retro_done: 2026-06-28        # 治理线首跑·72h窗口；见 5-retro.md（主漏点：前5秒劝退，但留存转化全系列最强）
+  retro_done: 2026-07-08        # 72h(06-28)+7d(07-08)均完成，终态；见 5-retro.md（主漏点：前5秒劝退，72h→7d几乎零增量，衰减符合预期）
 
 # 成片物料（交审）
 deliverables:

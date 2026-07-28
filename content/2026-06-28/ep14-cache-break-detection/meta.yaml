@@ -69,7 +69,7 @@ timestamps:
   approved: 2026-06-28 22:36
   published: 2026-06-28 22:38
   scheduled_submit:
-  retro_done:
+  retro_done: 2026-07-08        # 治理线补跑·72h+7d窗口（首次拉取，无分段历史）；见 5-retro.md（ctr系列最高但plays偏低=曝光不足疑点）
 
 # 阻塞：无（配音前单段探余额通过，无 1008）
 blocker: {}

@@ -1,0 +1,39 @@
+# 内容条目元数据 / 状态机
+slug: hy3-moe-teardown
+title: "腾讯 Hy3 只有别人一半大，凭什么敢对标 2 倍参数旗舰：MoE 架构拆解"
+type: kouban
+pillar: depth
+status: review             # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+                           # retro_done 由治理线(harness/)复盘后置位，非生产线状态
+source: 2026-07-10-001     # backlog id；next_up 空按 score 取；top-3 实测题(4.55/4.50/4.30)红线跳过、3.90(Reddit 403 核不到)跳过，取 3.85 depth 架构拆解可溯源题
+# ★ 取题决策见 1-brief.md 文末 + 4-publish.md 备注。深度题（独立视觉，非 claude-code-source-series 系列）。
+# ★ 角度修正：backlog 旧钩「一半大小打赢 GLM-5.2」误导；片内如实澄清=盲测赢旧版 GLM-5.1、GLM-5.2 编码仍领先，主线走「取舍换性价比」。
+# ★ 2026-07-14 出审：终检闸 A-G 全过（A/B/F 均在最终 mp4 上验，抽 6 帧，见 4-publish.md 备注）。
+#   A 声画一致：audio-segments 12/12 == 2-script narration；抽 6 帧验字幕==画面==口播文本，段级精准同步。
+#   B 音频自然度：silencedetect(d=0.45) 各段 0.45–0.74s 停顿均落逗号/句号边界=句读韵律（停顿数与标点吻合），无句中死气。
+#   C 钩子冷开：[1]"一个模型，参数只有对手的一半，却敢在自己主页上写：对标两倍参数的旗舰"独立事实陈述，自成立，不依赖前情（非系列）。
+#   D 事实合规：全片数字锚腾讯官方 model card/benchmark 附录/VentureBeat，片尾明标"官方自测、第三方待定"；非我方实测非臆造；无违禁/绝对化/导流。
+#   E 封面：baoyu-image-gen 生成 9:16(1536×2752)竖版，暖橙原创视觉（小橙立方 MoE 点阵 vs 大暗立方 + VS），非视频截帧、非系列吉祥物。
+#   F 音画同步：npm run record 确定性渲染，video 254.16s/audio 251.9s+buffer≈254.3s（factor≈1.0 无拉伸），抽 6 帧多点复核无滞后、字幕已烧入(L15)。
+#   G 发布物料：4-publish.md 已产，字段键名匹配解析器（meta.py _FIELD_RE 实测 5 字段全解析、正文用"正文/简介"），无可解析"建议发布时段"。
+
+schedule:                   # 计划发布时间（未定，出审到此止）
+publish_url:                # 发布后回填
+
+timestamps:
+  ideated: 2026-07-14
+  drafting: 2026-07-14
+  review: 2026-07-14
+  approved:
+  published:
+  retro_done:
+
+# 阻塞：无
+blocker: {}
+
+# 成片物料（交审）
+deliverables:
+  video: assets/hy3-moe-teardown.mp4   # 1920×1080，254.2s(≈4分14秒)，~5.5MB，已混音+烧分句字幕+4.1抽6帧验声画同步(factor≈1.0无拉伸) ✓
+  cover: assets/cover.png              # 9:16竖版(1536×2752)，暖橙原创视觉(小橙立方MoE点阵21B激活 vs 大暗立方2×参数+VS)，标题"只有对手一半大/凭什么叫板两倍旗舰"承担钩子 ✓
+  script: 2-script.md                  # 口播稿唯一真相源（含 7 条逐条溯源） ✓
+  publish: 4-publish.md                # 发布物料（字段键名匹配解析器，已实测解析） ✓

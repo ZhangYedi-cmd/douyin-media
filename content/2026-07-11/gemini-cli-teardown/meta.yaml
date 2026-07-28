@@ -1,0 +1,49 @@
+# 内容条目元数据 / 状态机
+slug: gemini-cli-teardown
+title: "拆完 Claude Code 再拆 Gemini CLI：同一道题，Google 的开源答案抄了什么、改了什么"
+type: kouban
+pillar: depth
+status: retro_done            # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+                            # retro_done 由治理线(harness/)复盘后置位，非生产线状态
+source: 2026-07-08-007      # backlog id；双赛道按 score 自动取（4.00，能诚实自动做完里的最高分：002/003/004 需一手实测跳过、005前瞻已过期）
+# ★ 2026-07-11 出审：终检闸 A-G 全过（A/B/F 均在最终 mp4 上验，见 4-publish/3-review「给人审的备注」）。
+#   A 声画一致：音频从 audio-segments.json 全量重合成(=narrations.ts 同源)；字幕 ?subs=1 取同一 narration；抽帧 s_8/s_150/s_202 三章字幕==对应 narration。
+#   B 音频自然度：dubbing-reviewer R1 PASS（4 硬门槛全绿）；depause 后 12 段 >0.45s 内部死气复扫全 0。
+#   C 钩子冷开：[coldopen/1]「一个能钻进你终端、自己读代码、自己改文件、自己跑命令的 AI 编程 agent，Google 把它整份源码开源了…」直接场景、自成立，不依赖前情（非系列）。
+#   D 事实合规：全片溯源见 2-script.md 文末（源=google-gemini/gemini-cli 公开仓 Apache-2.0，2026-07-11 clone 逐条锚 file:line 亲验）；全片不报任何 benchmark 跑分；「抄」为修辞、正文用趋同/收敛表述；对 Claude Code 描述均公开可核实事实。
+#   E 封面：baoyu-image-gen 生成 9:16(1536×2752) 竖版，双色对照原创视觉（暖橙 Claude Code 闭源+锁+混淆 hex / 靛紫 Gemini CLI 开源+可读源码 class Turn/MAX_TURNS=100/shouldConfirmExecute/packages），无臆造跑分、非系列吉祥物/EPxx 徽章/截帧。
+#   F 音画同步：npm run record 确定性渲染，视频 212.86s vs 音频(210.5s+12×0.2s buffer=212.9s)，factor≈0.9998，无拉伸。
+#   G 发布物料：4-publish.md 已产，5 字段键名匹配解析器，无可解析「建议发布时段」。
+#   多音字：reviewer 点名默认读音正确；已 pin 8 类(转/调/落/行/得/长/只/差) correct-by-construction 逐段注音（tts.config overrides，per-段无跨段误伤）。
+#   本条为独立深度题（非 claude-code-source-series），复用工程蓝图脚手架 + Gemini 靛紫 accent 新身份（对比题双色：暖橙标 Claude Code）。
+
+# 取题说明
+notes: |
+  非系列独立深度题（源码/设计拆解，立身支柱）。取题逻辑：next_up 为 null，status:idea 按 score 取最高——
+  红线过滤掉「需人工上手实测才能诚实写」的 4.55/4.50/4.30 三条（Fable5实测/GPT-5.6三旗舰对打/GLM-5免费白嫖，
+  自动 run 会踩「不臆造 benchmark」红线，沿 2026-07-10 karpathy run 已确立惯例）+ 4.15前瞻(005,GPT-5.6已7/9发布,前瞻时效已过)，
+  本条 4.00 是能诚实自动做完里最高分。软性审美疲劳注记（刚完结CC系列+昨日karpathy亦源码题）已过1周窗(06-29收官→今12天)，不硬阻，记入日志给治理线。
+  角度：拆完 Claude Code 15 集后，对着 gemini-cli 全开源源码做同题对照——「同一道题两家怎么答」。全片claim锚 gemini-cli 源码 file:line。
+  「抄」为修辞钩子（对齐 backlog 标题），正文用「撞车/同一套骨架/收敛」，溯源注明趋同设计非实证抄袭。
+
+schedule:                   # 计划发布时间
+publish_url:                # 发布后回填
+
+timestamps:
+  ideated: 2026-07-08       # 07-08 调研批入池
+  drafting: 2026-07-11
+  review: 2026-07-11
+  approved: 2026-07-11 21:50
+  scheduled:
+  published: 2026-07-11 21:52   # 飞书确认发布卡授权，sau 立即发布成功；作品链接待人工补
+  retro_done: 2026-07-18  # ⚠仅复盘窗口走完，限流死档待人工止损/申诉
+
+# 阻塞：无（TTS 余额单段探测正常，无 1008）
+blocker: {}
+
+# 成片物料（交审）
+deliverables:
+  video: assets/gemini-cli-teardown.mp4   # 1920×1080 H.264，212.9s(3:32)，~11.5MB，已混音+去停顿+烧字幕(?subs=1分句闪现)+抽帧验音画同步(factor≈0.9998,无拉伸) ✓
+  cover: assets/cover.png                    # 9:16竖版(1536×2752)，双色对照原创视觉(暖橙闭源 Claude Code / 靛紫开源 Gemini CLI)，无臆造跑分 ✓
+  script: 2-script.md       # 口播稿唯一真相源（含逐条锚 gemini-cli 源码 file:line 溯源）✓
+  publish: 4-publish.md      # 发布物料（5字段键名匹配解析器）✓

@@ -1,0 +1,53 @@
+# 内容条目元数据 / 状态机
+slug: karpathy-autoresearch
+title: "karpathy 新仓 autoresearch：让 AI 整夜自己做 AI 研究，源码就三个文件"
+type: kouban
+pillar: depth
+status: retro_done            # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+                            # retro_done 由治理线(harness/)复盘后置位，非生产线状态
+                            # ★ 2026-07-17 7d 窗口收口（24h/72h/7d 三窗齐）：健康偏好非破圈片。
+                            #   终值 plays 9504=源码基线1.37x；完播率1.32%三窗均垫基线下(账号级短板第8轮同向,非本条特有)；
+                            #   互动率3.78%>基线靠收藏撑(收藏167≈赞172)；评论7天冻结在1(软CTA实测无效)；
+                            #   转粉 pv51/fans11 正常但长尾不转粉。详见 5-retro.md + harness/logs/2026-07-17-retro.md
+source: 2026-07-08-006      # backlog id；双赛道按 score 自动取（4.00，能诚实自动做完里的最高分）
+# ★ 2026-07-10 出审：终检闸 A-G 全过（A/B/F 均在最终 mp4 上验，见 4-publish.md「给人审的备注」）。
+#   A 声画一致：抽帧 7 点，各段字幕文本==对应 narration；audio-segments 合成后未改。
+#   B 音频自然度：dubbing-reviewer R1 PASS；depause 后 12 段 >0.46s 内部死气复扫全 0。
+#   C 钩子冷开：[coldopen/1]「你睡觉的时候，一个 AI 整晚在改你的模型代码…」直接场景，自成立，不依赖前情（非系列）。
+#   D 事实合规：全片溯源见 2-script.md 文末（源=karpathy/autoresearch 公开仓，agent-reach 核对）；commit 表标注「示例」；val_bpb 只讲性质不报分；无绝对化/导流。
+#   E 封面：baoyu-image-gen 生成 9:16(1536×2752) 竖版，磷光绿终端原创视觉，非系列吉祥物、非视频截帧；终端日志无臆造跑分数字（v1 误生成已重生成剔除）。
+#   F 音画同步：npm run record 确定性渲染，视频189.24s vs 音频189.28s，factor≈1.0002，无拉伸。
+#   G 发布物料：4-publish.md 已产，5 字段键名匹配解析器，无可解析「建议发布时段」。
+#   多音字：reviewer 点名四类(行/调/只/差)已逐段注音 correct-by-construction 重合成（tts.config overrides，per-段不跨段误伤）。
+#   本条为独立深度题（非 claude-code-source-series），复用工程蓝图脚手架 + 磷光绿 accent 新身份。
+
+schedule:                   # 计划发布时间
+publish_url:                # 发布后回填
+
+timestamps:
+  ideated: 2026-07-08       # 07-08 调研批入池
+  drafting: 2026-07-10
+  review: 2026-07-10
+  approved: 2026-07-10 20:53
+  scheduled:
+  published: 2026-07-10 20:55
+  retro_done: 2026-07-17 09:09
+
+# 阻塞：无
+blocker: {}
+
+# 成片物料（交审）
+deliverables:
+  video: assets/karpathy-autoresearch.mp4   # 1920×1080，189.3s，~9.3MB，已混音+去停顿+烧字幕(分句)+去拉伸验证 ✓
+  cover: assets/cover.png                    # 9:16竖版(1536×2752)，磷光绿终端原创视觉（git log keep/discard/crash + 月牙 + 大字标题）✓
+  script: 2-script.md       # 口播稿唯一真相源（含逐条溯源）✓
+  publish: 4-publish.md      # 发布物料（5字段键名匹配解析器）✓
+
+# 选题说明
+notes: |
+  非系列独立深度题（源码/设计拆解，立身支柱）。取题逻辑：next_up 为 null，
+  status:idea 按 score 取最高——但红线过滤掉「需人工上手实测才能写」的 4.55/4.50/4.30
+  三条（Fable5/GPT-5.6对打/GLM-5免费，自动 run 会踩「不臆造 benchmark」红线，
+  research-2026-07-10.md:53 治理线亦如此判），本条 4.00 是能诚实自动做完里的最高分。
+  封面沿用 spec-driven 先例：品牌一致原创视觉，非 claude-code-source-series 吉祥物/EPxx 徽章
+  （本条非该系列，套用会假冒不存在的集号）。

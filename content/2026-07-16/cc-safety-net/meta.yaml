@@ -1,0 +1,50 @@
+# 内容条目元数据 / 状态机
+slug: cc-safety-net
+title: "AI 一条命令删了我整个 home 目录——给编程 agent 装个「安全网」拦住 rm -rf"
+type: kouban
+pillar: depth
+status: published              # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+                            # retro_done 由治理线(harness/)复盘后置位，非生产线状态
+source: 2026-07-15-001      # backlog id；next_up 空按 score 取最高——红线过滤掉需一手实测的 002/003/004(4.55/4.50/4.30)，本条 4.35 是可诚实自动做完的最高分（源码/机制拆解，锚 file:line 亲验），与治理线 dashboard 判断一致
+# ★ 2026-07-16 出审：终检闸 A-G 全过（A/B/F 均在最终 mp4 上验）。
+#   A 声画一致：13 段 audio-segments.json == narrations（改文案后重 extract+重 build）；抽帧 coldopen/1@11.1s、confirm/3@110.4s、confirm/4@129.9s、ending/2@220.9s 四处字幕==对应 narration、画面对齐；字幕保留原文(CLAUDE.md)，normalize 只改配音。
+#   B 音频自然度：dubbing-reviewer R1 PASS（四硬门槛全绿）；全 13 段 depause(cap0.25/minact0.45)后 >0.45s 内部死气复扫全 0。
+#   C 钩子冷开：[coldopen/1]「一个 AI 编程 agent，一条命令就把我整个 home 目录删干净了…」危险场景冷开、自成立、不依赖前情（非系列）。
+#   D 事实合规：全片溯源见 2-script.md 文末（源=kenryu42/cc-safety-net 公开仓 MIT v1.0.6，2026-07-16 clone 逐条锚 file:line 亲验）；不报任何 benchmark 跑分；删 home 事件为 repo 自述真实动机；无绝对化/导流。
+#   E 封面：baoyu-image-gen 竖版 9:16(1536×2752)，复用 EP01 像素吉祥物本体(--ref)，绿安全网接住红 rm -rf，徽章「AI 编程·机制拆解」诚实非系列标识、非截帧。
+#   F 音画同步：npm run record 确定性渲染，视频 228.931s vs 预期 228.9s，factor≈1.000，无拉伸。
+#   G 发布物料：4-publish.md 已产，5 字段键名匹配解析器，无可解析「建议发布时段」。
+#   多音字：R1 点名 8 类逐段注音正确无同段冲突；R1 软提醒(.md 念法)已处理(normalize CLAUDE.md/AGENTS.md→点 M D，重合成3段)。
+#   本条为独立深度题（非 claude-code-source-series），复用工程蓝图脚手架 + 安全网绿 accent 新身份 + 复用 EP01 吉祥物本体建品牌。
+
+# 取题说明
+notes: |
+  非系列独立深度题（源码/机制拆解，立身支柱）。取题逻辑：next_up 为 null，status:idea 按 score 取最高——
+  红线过滤掉「需人工上手实测才能诚实写」的 4.55/4.50/4.30 三条（Fable5实测/GPT-5.6三旗舰对打/GLM-5免费白嫖，
+  自动 run 会踩「不臆造 benchmark」红线，沿 2026-07-10 karpathy / 07-11 gemini run 已确立惯例），
+  本条 4.35 是能诚实自动做完里最高分（dashboard 亦已标为「可自动真做的最高分」）。
+  角度：AI 删库真实事件 → 软规则(CLAUDE.md)拦不住 AI → cc-safety-net 用「解析命令语义+递归拆壳」的硬 hook 在命令进 shell 前拦破坏性操作、防绕过、跨 7 CLI。
+  与已发 EP05 权限管线呼应但角度不同（第三方硬约束 hook vs Claude Code 内建权限）。
+  全片 claim 锚 github.com/kenryu42/cc-safety-net 源码 file:line（v1.0.6，MIT，2026-07-16 shallow clone 亲验）。
+
+schedule:                   # 计划发布时间
+publish_url:                # 发布后回填
+
+timestamps:
+  ideated: 2026-07-15       # 07-15 治理线 ideate 入池
+  drafting: 2026-07-16
+  review: 2026-07-16
+  approved: 2026-07-16 20:48
+  scheduled:
+  published: 2026-07-16 20:50
+  retro_done:
+
+# 阻塞：无（TTS 余额单段探测正常，无 1008）
+blocker: {}
+
+# 成片物料（交审）
+deliverables:
+  video: assets/cc-safety-net.mp4   # 1920×1080 H.264，228.9s(3:49)，~11.4MB，已混音+去停顿(13段全depause,死气0)+烧字幕(?subs=1)+抽帧验音画同步(factor≈1.000,无拉伸) ✓
+  cover: assets/cover.png            # 9:16竖版(1536×2752)，复用 EP01 像素吉祥物本体+绿安全网接住红 rm -rf，诚实非系列徽章，无臆造跑分 ✓
+  script: 2-script.md       # 口播稿唯一真相源（含逐条锚 cc-safety-net 源码 file:line 溯源）✓
+  publish: 4-publish.md      # 发布物料（5字段键名匹配解析器）✓

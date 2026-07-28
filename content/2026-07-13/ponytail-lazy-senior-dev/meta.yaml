@@ -1,0 +1,38 @@
+# 内容条目元数据 / 状态机
+slug: ponytail-lazy-senior-dev
+title: "给 AI 装一个「最懒高级工程师」：ponytail 让它学会不写多余代码"
+type: kouban
+pillar: depth
+status: published            # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+                            # retro_done 由治理线(harness/)复盘后置位，非生产线状态
+source: 2026-07-08-008      # backlog id；next_up 空按 score 取；top-3 实测题红线跳过（无人线无法如实产），取最高分可溯源解读题
+# ★ 取题决策见 1-brief.md 文末备注。深度题（非 claude-code-source-series 系列，独立视觉）。
+# ★ 2026-07-13 出审：终检闸 A-G 全过（A/B/F 均在最终 mp4 上验，见 4-publish.md 备注）。
+#   A 声画一致：audio-segments==narrations；4.1 抽 5 帧验字幕==画面==口播，同步无误。
+#   B 音频自然度：dubbing-reviewer R1 直接 PASS（15 段死气经波形对位证实全为句读韵律非句中死气）；ladder/2·3 定向 depause 提节奏。
+#   C 钩子冷开：[1]"你让 AI 帮你写一个日期选择器…"独立场景陈述，自成立，不依赖前情（非系列）。
+#   D 事实合规：全片数字均 ponytail 项目自测并标注来源，非我方实测非臆造；溯源见 2-script.md 文末（全一手 README/issue#126）；无违禁/绝对化/导流。
+#   E 封面：baoyu-image-gen 生成 9:16(1536×2752)竖版，暖橙原创视觉（ponytail 扎马尾工程师角色），非视频截帧、非系列吉祥物。
+#   F 音画同步：npm run record 确定性渲染，video 219.76s/audio 219.79s（factor≈1.0 无拉伸），抽帧多点复核无滞后。
+#   G 发布物料：4-publish.md 已产，字段键名匹配解析器（正文用「正文/简介」，publish.py:42 支持），无可解析「建议发布时段」。
+
+schedule:                   # 计划发布时间（立即发布，未定时）
+publish_url:                # 发布后回填（sau 未返回链接，待创作者中心人工补）
+
+timestamps:
+  ideated: 2026-07-13
+  drafting: 2026-07-13
+  review: 2026-07-13
+  approved: 2026-07-13 21:01
+  published: 2026-07-13 21:04
+  retro_done:
+
+# 阻塞：无
+blocker: {}
+
+# 成片物料（交审）
+deliverables:
+  video: assets/ponytail-lazy-senior-dev.mp4   # 1920×1080，219.8s，~11MB，已混音+ladder定向去停顿+烧分句字幕+4.1抽帧验声画同步(无拉伸) ✓
+  cover: assets/cover.png                       # 9:16竖版(1536×2752)，暖橙原创视觉(ponytail扎马尾工程师+坏码划掉→一行橙光) ✓
+  script: 2-script.md                           # 口播稿唯一真相源（含逐条溯源） ✓
+  publish: 4-publish.md                         # 发布物料（字段键名匹配解析器，已验） ✓

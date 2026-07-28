@@ -1,0 +1,47 @@
+# 内容条目元数据 / 状态机
+slug: context-engineering
+title: "上下文工程：怎么把 10 万 token 的 AI 会话压到 2 万，还不丢关键信息"
+type: kouban
+pillar: depth
+status: retro_done            # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+                           # retro_done 由治理线(harness/)复盘后置位，非生产线状态
+                           # ★ 2026-07-17 7d 窗口收口，同日人工澄清后结案。
+                           #   ✅ audit=自见 的真因 = **人工主动隐藏**（人判本条视频质量不行，发布后自行隐藏）。
+                           #   非平台限流、非误设私密、非卡审——治理线 6 轮(07-10~07-17)按「可见性异常」追查全部是空转，
+                           #   机器分不出「被平台限」与「被人隐藏」，因为隐藏动作没在本文件留痕。
+                           #   ⚠ plays=0 因此是预期内的，不是故障；本条内容漏斗表现无数据可评，也不必再评。
+                           #   人工核查待办已撤销（见 5-retro.md 结案段）。留痕规范提议见 harness/logs/2026-07-17-retro.md。
+hidden_by_human: 2026-07-17  # 人工隐藏留痕（日期=治理线获知日，实际隐藏日人未指明）。
+                           # 语义：本条已主动下架、不参与公开分发，audit≠公开 属预期，治理线勿再当异常追。
+                           # 原因：人判视频质量不行。此字段为本轮新增约定，尚未进状态机契约——见 07-17 报告提议。
+source: 2026-06-14-004       # backlog id；双赛道恢复后首条自动选题（next_up 空→按 score 取「可自动真做不踩红线」最高项）
+# ★ 2026-07-09 出审：终检闸 A-G 全过（A/B/F 均在最终 mp4 上验，见 4-publish.md「给人审的备注」）。
+#   A 声画一致：dubbing-reviewer 2.4 check-source-sync PASS(15/15)、3.1 组件文本==narration；4.1抽帧8点声画同步（段中一致）。
+#   B 音频自然度：dubbing-reviewer 2.3 PASS；depause 全15段处理后复扫无 >0.45s 内部死气。
+#   C 钩子冷开：[1]"你有没有过这种时刻：用AI写代码聊到一半它突然失忆"通用场景陈述，自成立，不依赖任何前情（非系列内容）。
+#   D 事实合规：全片溯源见2-script.md文末（Anthropic官方+Manus+Chroma+2repo，均口播提及）；[12]单价标注为Manus所引示例；无违禁/绝对化；互动=评论区提问非导流。
+#   E 封面：baoyu-image-gen生成9:16(1536×2752)竖版，midnight-press原创视觉（压缩隐喻+大字标题），非系列吉祥物、非视频截帧。
+#   F 音画同步：npm run record确定性渲染，4.1抽帧拉伸因子≈1(231.22==音频和231.23)无headless拉伸；首帧白闪已修(index.html内联暗底)。
+#   G 发布物料：4-publish.md已产，meta.py解析器实测精确取5认可字段，无可解析"建议发布时段"。
+#   本集为双赛道恢复后首条自动选题（非claude-code-source-series），首用 midnight-press 主题；dubbing-reviewer R1 直接 PASS。
+
+schedule:                  # 计划发布时间
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-07-09
+  drafting: 2026-07-09
+  review: 2026-07-09
+  approved: 2026-07-09 21:35
+  published: 2026-07-09 21:37
+  retro_done: 2026-07-17 09:09
+
+# 阻塞：无
+blocker: {}
+
+# 成片物料（交审）
+deliverables:
+  video: assets/context-engineering.mp4       # 1920×1080，231.2s，~9.8MB，已混音+去停顿(15段)+烧分句字幕+4.1抽帧验证声画同步(无拉伸)✓
+  cover: assets/cover.png                      # 9:16竖版(1536×2752)，midnight-press原创视觉（token压缩隐喻+「上下文工程」大字）✓
+  script: 2-script.md                          # 口播稿唯一真相源（含逐条溯源：Anthropic官方+Manus+Chroma+2repo）✓
+  publish: 4-publish.md                        # 发布物料（5字段键名匹配解析器，无可解析发布时段）✓

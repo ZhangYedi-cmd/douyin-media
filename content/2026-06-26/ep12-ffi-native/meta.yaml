@@ -73,7 +73,7 @@ timestamps:
   approved: 2026-06-26 21:18
   published: 2026-06-26 21:20    # sau upload-video 真发成功（account=main，立即发布；作品链接待去抖音作品管理人工补）
   scheduled_submit:
-  retro_done:
+  retro_done: 2026-07-08        # 治理线补跑·7d窗口；见 5-retro.md（播放量系列最低，ctr未采无法坐实主因）
 
 # 成片物料（交审）
 deliverables:

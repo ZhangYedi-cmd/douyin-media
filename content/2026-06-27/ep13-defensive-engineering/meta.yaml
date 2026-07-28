@@ -69,7 +69,7 @@ timestamps:
   approved: 2026-06-27 21:39
   published: 2026-06-27 21:42      # sau 真发成功（飞书「确认发布」授权，--publish 直发）
   scheduled_submit:
-  retro_done:
+  retro_done: 2026-07-08        # 治理线补跑·7d窗口；见 5-retro.md（完播率次低但互动不低，疑信息密度过高劝退中途观众）
 
 # 阻塞（已解除）
 blocker:

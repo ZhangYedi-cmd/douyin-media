@@ -63,7 +63,7 @@ timestamps:
   approved: 2026-06-25 21:47
   published: 2026-06-25 21:49      # sau upload-video 立即发布，「视频发布成功」
   scheduled_submit:
-  retro_done:
+  retro_done: 2026-07-08        # 治理线补跑·7d窗口；见 5-retro.md（主漏点：中段节奏/共鸣，完播/互动/涨粉全系列垫底）
 
 # 成片物料（交审）
 deliverables:

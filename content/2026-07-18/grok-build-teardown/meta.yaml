@@ -1,0 +1,59 @@
+# 内容条目元数据 / 状态机
+slug: grok-build-teardown
+title: "xAI 把旗舰 coding agent 源码全开了：拆开核心，就是一个 while 循环"
+type: kouban
+pillar: depth
+status: published             # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+                            # retro_done 由治理线(harness/)复盘后置位，非生产线状态
+source: 2026-07-17-002       # backlog id
+# ★ 2026-07-19 出审：终检闸 A-G 全过（A/B/F 均在最终 mp4 上验）。
+#   A 声画一致：9 段 audio-segments.json == narrations.ts == 2-script.md 三源逐字一致（dubbing-reviewer R1 独立核过）；
+#     抽 6 帧 coldopen/1@6.5s、coldopen/2@17.2s(while钩子)、theloop/1@25s(loop面板)、gems/1@47s(加密对比)、gems/3@83s(搬竞品工具)、ending/2@110.5s(CTA)
+#     字幕==对应 narration、画面对齐；字幕保留原文，normalize 只改配音。
+#   B 音频自然度：dubbing-reviewer R1 PASS（1 轮，未触上限）；9 段逐段 depause(cap0.25/minact0.45) 后 >0.45s 段内死气复扫全 0。
+#     成片段边界 0.5-0.78s 停顿为分节拍呼吸（段尾+200ms trail+段首）非段内死气。
+#   C 钩子冷开：[coldopen/1]「xAI 把自家旗舰的 coding agent，全部源码开到 GitHub 上了…」自成立、非系列不依赖上文。
+#   D 事实合规：全片溯源见 2-script.md 文末对照表（源=官方公告 x.ai/news/grok-build-open-source + 仓库 xai-org/grok-build main 分支，
+#     2026-07-18 由 agent-reach + 真读源码核对）；agent loop=turn.rs、XOR加密=prompt_encrypted.rs、读竞品配置=skills/discovery.rs、
+#     移植竞品工具=implementations/codex·opencode+THIRD-PARTY-NOTICES 均有源码位置。star数/SpaceXAI品牌名/默认模型id 存疑弃用；
+#     「加密」不念 XOR、「明着抄」如实说成合规vendored、「读竞品配置」说成兼容复用；无绝对化/导流。
+#   E 封面：baoyu-image-gen 竖版 9:16(1536×2752)，复用 EP01 像素吉祥物本体(--ref)，吉祥物站铁锈橙 while 循环环里，
+#     徽章「AI 源码解读 · coding agent」诚实非系列标识、非截帧。
+#   F 音画同步：npm run record 确定性渲染，视频 116.66s vs 口播 114.86s，差 1.8s=9段×200ms trailMs，factor≈1.000，无拉伸。
+#   G 发布物料：4-publish.md 已产，5 字段经 tools/feishu-bot/meta.py 实跑解析通过，无可解析「建议发布时段」。
+#   多音字：6 段 per-段 override（调diào/藏cáng/塞sāi/重chóng/行háng/当dàng），R1 复核无死键、无同段冲突。
+#   ★ 字体已按人反馈放大(2026-07-19)：场景文字放大到 CC 源码系列 EP01 量级(钩子120/标题66/正文46/次级30-34/出处24px)，
+#     字幕46→54px；原因抖音竖屏压窄条小字看不清；抽5帧复检无溢出。沉淀为 memory kouban-font-scale-large。
+#   ★ 控时长：1:57，在 style-guide 深度题 2-3min 内且刻意做短（benchmarks 完播率短板 9 轮同向），未超时。
+
+# 取题说明
+notes: |
+  深度题（源码解读，立身支柱）。取题逻辑：next_up 为 null，status:idea 中按 score 取最高 = 本条 4.00（唯一最高，无并列）。
+  旁证：上一轮(07-17)发流量题 Kimi K3，按 positioning 6:4 滚动配比下轮回 depth 正合适；本条 depth。
+  ★可诚实自动做完：全程读公开源码 + 官方公告 + 文档，无一手实测、无臆造数字。
+  ⚠️审美疲劳（连拆 CLI harness）：上一条 CLI teardown 是 07-11 gemini-cli，距今 7 天已隔开；Grok Build 是 xAI 旗舰全新角度，记账不否决。
+  ⚠️完播率短板（benchmarks 9 轮同向）：本条刻意做短（1:57），强 CTA（评论区扣「源码」换源码地图）。
+  角度：一个旗舰 coding agent 的心脏就是个 while 循环（呼应账号 EP01 立身命题），值钱的全在循环外那圈——
+  加密提示词 / 读竞品配置复用 / 移植竞品工具 三个反常识 + 一个可偷的工程细节。
+
+schedule:                   # 计划发布时间
+publish_url:                # 发布后回填
+
+timestamps:
+  ideated: 2026-07-17       # 治理线 ideate 当日入池
+  drafting: 2026-07-18
+  review: 2026-07-19
+  approved: 2026-07-19 19:28
+  scheduled:
+  published: 2026-07-19 19:30
+  retro_done:
+
+# 阻塞：无（TTS 余额单段探测正常，无 1008）
+blocker: {}
+
+# 成片物料（交审）
+deliverables:
+  video: assets/grok-build-teardown.mp4   # 1920×1080 H.264，116.66s(1:57)，~5.4MB，已混音+去停顿(段内死气0)+烧字幕(?subs=1)+抽帧验音画同步(factor≈1.000,无拉伸) ✓
+  cover: assets/cover.png                  # 9:16竖版(1536×2752)，复用 EP01 像素吉祥物本体+铁锈橙 while 循环环，诚实非系列徽章 ✓
+  script: 2-script.md                      # 口播稿唯一真相源（含逐条对源溯源表）✓
+  publish: 4-publish.md                    # 发布物料（5字段实跑解析通过）✓

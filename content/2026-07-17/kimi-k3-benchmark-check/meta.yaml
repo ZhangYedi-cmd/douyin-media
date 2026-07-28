@@ -1,0 +1,58 @@
+# 内容条目元数据 / 状态机
+slug: kimi-k3-benchmark-check
+title: "Kimi K3「击败 Fable 5」？我把官方那张 35 行的表逐行读了一遍"
+type: kouban
+pillar: traffic
+status: published             # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+                            # retro_done 由治理线(harness/)复盘后置位，非生产线状态
+source: 2026-07-17-001      # backlog id
+# ★ 2026-07-17 出审：终检闸 A-G 全过（A/B/F 均在最终 mp4 上验）。
+#   A 声画一致：15 段 audio-segments.json == narrations.ts == 2-script.md 三源逐字一致（dubbing-reviewer R2 独立验，含 tally 前移一位后无错位）；
+#     抽帧 coldopen/1@8s、tally/1@38s、tally/3@70s、promises/2@165s、ending/3@218s 五处字幕==对应 narration、画面对齐；
+#     字幕保留原文，normalize 只改配音。
+#   B 音频自然度：dubbing-reviewer R1 FAIL→R2 PASS（2 轮，未触上限）；全片 depause(cap0.25/minact0.45)后 >0.45s 内部死气复扫全 0。
+#   C 钩子冷开：[coldopen/1]「这两天你肯定刷到了：国产开源大模型，击败 Claude Fable 5…」蹭公共热点冷开、自成立、不依赖前情（非系列）。
+#   D 事实合规：全片溯源见 2-script.md 文末对照表（源=官方博客 kimi.com/blog/kimi-k3 的 Full Benchmark Table 文本表 + simonwillison.net 2026-07-16，均 2026-07-17 亲抓）；
+#     自算项(35行/第一8行/13-35/20-34)为本人逐行脚本计数、口播明说「我数的」；争议数 AA-Briefcase(1527/1547/1548 三方打架)全片弃用；
+#     主动给 Arena 前端榜「确实第一」的公道，不唱衰不捧杀；无绝对化/导流。
+#   E 封面：baoyu-image-gen 竖版 9:16(1536×2752)，复用 EP01 像素吉祥物本体(--ref)，琥珀荧光笔核账本，
+#     徽章「AI 新模型 · 跑分对账」诚实非系列标识、非截帧。（已知瑕疵：装饰表格高亮行同时有 ✕/✓，近看矛盾，缩略图不可辨，见 4-publish.md）
+#   F 音画同步：npm run record 确定性渲染，视频 223.99s vs 预期口播 221.0s，factor≈1.000，无拉伸。
+#   G 发布物料：4-publish.md 已产，5 字段经 tools/feishu-bot/meta.py 实跑解析通过，无可解析「建议发布时段」。
+#   多音字：13 条 per-段 override，R2 复核无死键/无同段冲突；全片「行」均为 háng 且逐段注全（含「自行车」的段已随控时长删除）。
+#   ★ 控时长：初剪 4:20 → 删两段收到 3:44（依 style-guide 时长上限 + benchmarks 完播率短板 8 轮同向）；仍超 3:00 约 44s，交人裁，详见 4-publish.md。
+
+# 取题说明
+notes: |
+  流量题（新模型时效，祛魅角度）。取题逻辑：next_up 为 null，status:idea 中按 score 取最高 = 本条 4.15（唯一最高，无并列）。
+  旁证：近 7 条取题（07-08~07-16）全为 depth，traffic 已欠账，与 positioning 的 6:4 滚动配比同向；
+  本条亦是本批唯一 urgency=today（旗舰热度窗 2-3 天）。
+  角度：X 疯传「国产开源模型击败 Fable 5」→ 官方博客原话自述「overall 仍落后 Fable 5 与 GPT 5.6 Sol」
+  → 逐行对账官方 35 行表（我自己数：K3 第一仅 8 行，含 1 行平手）→ 那个「第一」只在 Arena 前端代码榜单一榜成立（这条必须讲公道）
+  → 表底脚注才是肉：K3 用自家 KimiCode harness、其余用 Claude Code/Codex，且 Fable 5 那列带 Opus 4.8 fallback（两边都不干净）
+  → 权重 07-27 才放（开源是期票）+ $3/$15 国产最贵（涨 3 倍多）。
+  ★ 可诚实自动做完：全程读公开材料 + 官方文本表，无一手实测、无臆造数字。
+  ★ 数字纪律：选题报告的「AA-Briefcase 1527」与官方表(1548)/AA自述(1547)三方打架 → 全片弃用该数（已在 1-brief 钉死）。
+  ★ 视觉：新建 ledger(对账台)主题，琥珀=审计荧光笔身份色，与 cc-safety-net 的 blueprint 区分；复用 EP01 吉祥物本体建品牌。
+
+schedule:                   # 计划发布时间
+publish_url:                # 发布后回填
+
+timestamps:
+  ideated: 2026-07-17       # 治理线 ideate 当日入池
+  drafting: 2026-07-17
+  review: 2026-07-17
+  approved: 2026-07-17 21:01
+  scheduled:
+  published: 2026-07-17 21:04
+  retro_done:
+
+# 阻塞：无（TTS 余额单段探测正常，无 1008）
+blocker: {}
+
+# 成片物料（交审）
+deliverables:
+  video: assets/kimi-k3-benchmark-check.mp4   # 1920×1080 H.264，223.99s(3:44)，~10.3MB，已混音+去停顿(死气0)+烧字幕(?subs=1)+抽帧验音画同步(factor≈1.000,无拉伸) ✓
+  cover: assets/cover.png                      # 9:16竖版(1536×2752)，复用 EP01 像素吉祥物本体+琥珀荧光笔核账本，诚实非系列徽章 ✓
+  script: 2-script.md                          # 口播稿唯一真相源（含逐条对源溯源表 + 弃用数说明）✓
+  publish: 4-publish.md                        # 发布物料（5字段实跑解析通过）✓

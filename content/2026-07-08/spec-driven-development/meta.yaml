@@ -3,9 +3,18 @@ slug: spec-driven-development
 title: "AI圈突然都在说的 Spec Coding，到底在解决什么问题"
 type: kouban
 pillar: depth
-status: drafting           # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
-                           # retro_done 由治理线(harness/)复盘后置位，非生产线状态
+status: retro_done           # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+                           # retro_done 由治理线(harness/)复盘后置位，非生产线状态（7d 窗口 2026-07-16 收）
 source: 2026-07-08-001     # backlog id；用户直接指定选题，跳过report人挑，直接promote
+# ★ 2026-07-08 出审：终检闸 A-G 全过（A/B/F 均在最终 mp4 上验，见 4-publish.md「给人审的备注」）。
+#   A 声画一致：check-source-sync PASS(15/15)；4.1抽帧多点验证声画同步无误。
+#   B 音频自然度：dubbing-reviewer R1 FAIL(14/15段死气)→depause批量修复→R2 PASS。
+#   C 钩子冷开：[1]"AI写错代码嘴硬修好"直接场景陈述，自成立，不依赖任何前情（非系列内容）。
+#   D 事实合规：全片溯源见2-script.md文末（7篇一手信源+知识库11条原子笔记）；[12]数据已标注厂商自述限定。
+#   E 封面：baoyu-image-gen生成9:16(1536x2752)竖版，blueprint主题原创视觉，非系列吉祥物、非视频截帧。
+#   F 音画同步：npm run record确定性渲染(非旧版拉伸容易出问题的shoot.cjs流程)，4.1抽帧5点+全15步复核无滞后。
+#   G 发布物料：4-publish.md已产，5字段键名匹配解析器，无可解析"建议发布时段"。
+#   本集为独立深度题（非claude-code-source-series），首用blueprint主题；新增「分句字幕」机制(useCaptionCycle)。
 
 schedule:                  # 计划发布时间
 publish_url:               # 发布后回填
@@ -13,10 +22,17 @@ publish_url:               # 发布后回填
 timestamps:
   ideated: 2026-07-08
   drafting: 2026-07-08
-  review:
-  approved:
-  published:
-  retro_done:
+  review: 2026-07-08
+  approved: 2026-07-08 23:35
+  published: 2026-07-08 23:36
+  retro_done: 2026-07-16 09:09
 
 # 阻塞：无
 blocker: {}
+
+# 成片物料（交审）
+deliverables:
+  video: assets/spec-driven-development.mp4   # 1920×1080，198.7s，~8.2MB，已混音+去停顿+烧字幕(分句)+去拉伸验证 ✓
+  cover: assets/cover.png                     # 9:16竖版(1536×2752)，blueprint主题原创视觉（工程标注卡+SPEC CODING大字）✓
+  script: 2-script.md                         # 口播稿唯一真相源（含逐条溯源）✓
+  publish: 4-publish.md                       # 发布物料（5字段键名匹配解析器）✓
