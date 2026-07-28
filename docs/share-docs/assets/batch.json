@@ -1,0 +1,13 @@
+{
+  "jobs": 3,
+  "tasks": [
+    { "id": "01-compare", "promptFiles": ["prompts/style-a.md", "prompts/01-compare.md"], "image": "01-compare.png", "provider": "openai", "model": "gpt-image-2", "ar": "16:9", "quality": "2k" },
+    { "id": "02-four-generations", "promptFiles": ["prompts/style-a.md", "prompts/02-four-generations.md"], "image": "02-four-generations.png", "provider": "openai", "model": "gpt-image-2", "ar": "16:9", "quality": "2k" },
+    { "id": "03-state-machine", "promptFiles": ["prompts/style-b.md", "prompts/03-state-machine.md"], "image": "03-state-machine.png", "provider": "openai", "model": "gpt-image-2", "ar": "16:9", "quality": "2k" },
+    { "id": "04-dual-lines", "promptFiles": ["prompts/style-b.md", "prompts/04-dual-lines.md"], "image": "04-dual-lines.png", "provider": "openai", "model": "gpt-image-2", "ar": "16:9", "quality": "2k" },
+    { "id": "05-three-rings", "promptFiles": ["prompts/style-b.md", "prompts/05-three-rings.md"], "image": "05-three-rings.png", "provider": "openai", "model": "gpt-image-2", "ar": "16:9", "quality": "2k" },
+    { "id": "06-gates-comic", "promptFiles": ["prompts/style-a.md", "prompts/06-gates-comic.md"], "image": "06-gates-comic.png", "provider": "openai", "model": "gpt-image-2", "ar": "16:9", "quality": "2k" },
+    { "id": "07-boundary-map", "promptFiles": ["prompts/style-b.md", "prompts/07-boundary-map.md"], "image": "07-boundary-map.png", "provider": "openai", "model": "gpt-image-2", "ar": "16:9", "quality": "2k" },
+    { "id": "08-closing-comic", "promptFiles": ["prompts/style-a.md", "prompts/08-closing-comic.md"], "image": "08-closing-comic.png", "provider": "openai", "model": "gpt-image-2", "ar": "16:9", "quality": "2k" }
+  ]
+}
