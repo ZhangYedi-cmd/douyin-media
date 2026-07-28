@@ -22,13 +22,16 @@
    - **余额探测**：批量合成前先单段试合成探余额；返 1008（余额尽）→ 停在「就差配音」`status=drafting`，推飞书报充值，不推审不硬跑（L9）。
    - **真相源铁律**（防音画不符）：synthesize 读的是 `audio-segments.json`，不是 `narrations.ts`。**改过任何 narration 文案，必须先 `npm run extract-narrations` 重抽，再 `rm` 改动段 mp3（否则按文件名被 skip）再合成**。否则会"画面新文案、声音旧文案"。
    - **死气检查**：合成后 `silencedetect` 扫各段，>0.45s 的内部死气（常因 `「」`引号 / `——` / 拟声词）用 `rec/depause.mjs` 去停顿（cap 0.25 / minact 0.45，切静音边界不切词）。
+     - **不能原地写**（`in == out` 时 ffmpeg 截断输入、**静默失败、exit 0**）：写临时文件再 move；**跑完必 silencedetect 复扫验数为 0**，别信 exit code（L16）。
+   - **多音字同段两读**：逐段注音只能解「同字在不同段不同读」；**同一段内同字两读**（如「就得打折 děi」+「诚实得多 轻声 de」）无解 → **改文案解冲突**，并同步 `2-script.md` / `narrations.ts` / 组件三处（L17）。
+   - **增删段后必重排 `overrides` 键**：段号前移/后移会让注音注到错的段（旧键成死键、新段漏注），改完重跑 extract（L18）。
 4. **配音审批（subagent 闸口，最多 3 轮 loop）**：主回话合成完**第一批音频**后，**派 `dubbing-reviewer` subagent** 审批质量——它跑 `dubbing-check` 的合成后检查点（完整性 / 语速离群 / 多音字 / 音画一致），回判 **PASS / FAIL + 每条改法**。**职责分离**：reviewer 只判不改（无 Edit/Write），修复与重合成都由主回话做。
    - **PASS** → 进步骤 5 录屏。
    - **FAIL** → 主回话按 reviewer 的改法修（`tts.config.json` overrides / 文案 normalize / `segment-overrides.json` 单段调速 / 组件整句对齐）→ **重合成（步骤 3）** → 再派 reviewer 复审（带上轮次号）。
    - 上限 **3 轮**：第 3 轮仍 FAIL → **停，升级人审**（reviewer 报告写进 `3-review.md`，`meta.yaml` 挂起），**不强行往下录**。
    > 录屏后的 **4.1 抽帧对齐**不在本闸口，步骤 5 录完单独跑（防 headless 拉伸）。
 5. **录屏成片（无人）**：`npm run build && npm run record -- --serve --out final.mp4`——headless 确定性渲染 + ffmpeg 自动配音 mux，全程零点击（见 web-video-presentation `references/RECORDING.md`）。
-   - **录屏后体检（4.1，主回话做，不走 subagent）**：跑 dubbing-check 检查点 4.1——按调度时刻抽几帧验音画同步、查 headless 拉伸（webm 时长 > 墙钟则去拉伸 mux）。**这是录屏环节的小循环**：失败就修复重录，与步骤 4 的配音批次审批（`dubbing-reviewer`）分开，那个只管配音、不碰录屏产物。
+   - **录屏后体检（4.1，主回话做，不走 subagent）**：跑 dubbing-check 检查点 4.1——按调度时刻抽几帧验音画同步、查 headless 拉伸（webm 时长 > 墙钟则去拉伸 mux）、**查字幕已烧入**（`auto-record.mjs` 默认 URL 无 `?subs=1` 且 `--serve` 覆盖 `--url`，会漏字幕；抽帧确认，缺则给 build 内 auto-record 加 `/?subs=1` 重录，L15）。**这是录屏环节的小循环**：失败就修复重录，与步骤 4 的配音批次审批（`dubbing-reviewer`）分开，那个只管配音、不碰录屏产物。
    > 有静音步 / 想人工微调时退回 Auto 模式 `?auto=1` 人工录屏，但那不进无人流水线。
 6. **封面生成（★ 必做 · 竖版 9:16 · 交审前强制，不可跳过）**：用 **`baoyu-image-gen`** 出竖屏封面 → `assets/cover.png`（**禁止拿横屏视频帧充数**，L1）。
    - **风格选择**：

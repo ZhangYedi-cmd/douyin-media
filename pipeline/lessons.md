@@ -19,3 +19,7 @@
 | L12 | 口语梗词（「最骚」「大冤种」）被过度规避导致重录，实际平台不禁 | 只避硬违禁（导流/夸大/真敏感词），口语词不规避不重录（人审若有异议再改） |
 | L13 | 每集 build 重新 npm install，浪费且易版本漂移 | 克隆上一集 build 复用 node_modules，别重装 |
 | L14 | 2026-06-30~07-05 取题空跑 6 天，停产只写本地日志没人看见 | `daily-run.md` 阻塞即上报铁律：停产/挂起必推飞书 |
+| L15 | gemini-cli-teardown 首录漏字幕：web-video-presentation 的 `auto-record.mjs` 默认导航到无 `?subs=1` 的 URL，且 `--serve` 会覆盖 `--url`，成片无字幕，抽帧对照上集才发现 | `2-create.md` 步骤 5 + 终检闸 A：录屏前确认 auto-record 用 `?subs=1`（--serve 模式需在 build 内 `auto-record.mjs` 给 URL 加 `/?subs=1`）；录后 4.1 抽帧必查字幕已烧入 |
+| L16 | kimi-k3 批量去停顿**原地写**（`depause.mjs in.mp3 in.mp3`）：ffmpeg 打开输出即截断输入，**静默失败**——17 段跑完命令不报错、时长一点没变，死气全留着。只看「命令没报错」就会带着 64 处死气出审 | `2-create.md` 步骤 3 死气检查：depause **必须写临时文件再 move**，且**跑完必 silencedetect 复扫**验数为 0（别信 exit code，信复扫） |
+| L17 | kimi-k3 `ending/2` 同段两读冲突：「就得打折(děi)」与「诚实得多(轻声 de)」同在一段，逐段注音无解（注 děi 会误伤轻声那个） | `2-create.md` 步骤 3：同段同字两读时**改文案解冲突**（本例「诚实得多→诚实很多」），并同步 2-script.md / narrations.ts / 组件三处真相源；注音只解决「同字在不同段不同读」，解决不了「同段两读」 |
+| L18 | kimi-k3 控时长删段后，`tally` 章各段整体前移一位，但 `tts.config.json` 的 `overrides` 键仍按旧编号 → 注音会**注到错的段**上（旧键成死键、新段漏注） | `2-create.md` 步骤 3：**增删段后必重排 overrides 键**并重跑 extract；dubbing-reviewer 闸复核「override 有无死键 / 段是否错位」兜底 |
