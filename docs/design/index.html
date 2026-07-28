@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>流水线看板 · 原型总览</title>
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  .wrap { max-width: var(--container-max); margin: 0 auto; padding: var(--space-12) var(--container-gutter-desktop); }
+  .hero h1 { font-size: var(--text-2xl); letter-spacing: var(--tracking-display); }
+  .hero p { max-width: 720px; }
+  .rules { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-4); }
+
+  .screens { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin-top: var(--space-6); }
+  .screen-card { display: block; color: var(--fg); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-4); transition: box-shadow var(--motion-fast) var(--ease-standard); }
+  .screen-card:hover { box-shadow: var(--elev-raised); text-decoration: none; }
+  .screen-card h3 { display: flex; gap: var(--space-2); align-items: baseline; }
+  .screen-card h3 .en { font: 400 11px var(--font-mono); color: var(--muted); }
+  .screen-card .scene { font-size: var(--text-xs); color: var(--muted); margin-top: 4px; }
+
+  /* 缩略图：纯 CSS 布局示意 */
+  .thumb { height: 96px; border: 1px solid var(--border-soft); border-radius: var(--radius-sm); background: var(--bg); margin-bottom: var(--space-3); padding: 8px; display: flex; gap: 5px; overflow: hidden; }
+  .thumb i { display: block; border-radius: 3px; background: color-mix(in oklab, var(--fg), transparent 90%); }
+  .thumb .col { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+  .thumb .acc { background: color-mix(in oklab, var(--accent), transparent 55%); }
+  .thumb .wrn { background: color-mix(in oklab, var(--warn), transparent 45%); }
+  .thumb .grn { background: color-mix(in oklab, var(--success), transparent 55%); }
+
+  .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-top: var(--space-6); align-items: start; }
+  .swatches { display: flex; gap: var(--space-2); margin: var(--space-3) 0; }
+  .sw { flex: 1; height: 44px; border-radius: var(--radius-sm); border: 1px solid var(--border); position: relative; }
+  .sw span { position: absolute; left: 6px; bottom: 4px; font: 500 9px/1 var(--font-mono); color: var(--muted); }
+  footer { margin-top: var(--space-12); padding-top: var(--space-4); border-top: 1px solid var(--border); font-size: var(--text-xs); color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero" data-od-id="ix-hero">
+    <p class="eyebrow" style="margin-bottom: var(--space-2);">高保真原型 · 桌面应用 · 6 页全覆盖</p>
+    <h1>Pipeline Console · 流水线看板</h1>
+    <p style="margin-top: var(--space-3); color: var(--muted);">
+      抖音内容流水线的本地只读看板：把散在 meta.yaml / backlog.yaml / 日志里的状态一屏看清。
+      对应 PRD <span class="mono">2026-07-11-流水线看板-PRD.md</span> 的 V1 + V1.5 全部页面（权限 L0 只读 + L1 安全动作）。
+    </p>
+    <div class="rules">
+      <span class="badge"><i></i>铁律 1 · 只做派生视图，无数据库</span>
+      <span class="badge"><i></i>铁律 2 · 不代翻状态，零写按钮</span>
+      <span class="badge"><i></i>铁律 3 · 治理报告只展示 + 标记已读</span>
+    </div>
+  </header>
+
+  <section data-od-id="ix-screens">
+    <div class="screens">
+      <a class="screen-card" href="overview.html">
+        <div class="thumb">
+          <div class="col" style="flex: 2;"><i style="height: 22px;"></i><i class="wrn" style="flex: 1;"></i><i style="height: 18px;"></i></div>
+          <div class="col"><i style="flex: 1;"></i><i class="grn" style="height: 26px;"></i><i style="height: 20px;"></i></div>
+        </div>
+        <h3>P1 总览 <span class="en">Overview</span></h3>
+        <p class="scene">晨检 · 10 秒答「今天正常吗 / 有几条在制 / 有什么要我处理」，5 条警报规则置顶</p>
+      </a>
+
+      <a class="screen-card" href="kanban.html">
+        <div class="thumb">
+          <div class="col"><i style="height: 10px;"></i><i style="height: 34px;"></i></div>
+          <div class="col"><i style="height: 10px;"></i><i class="wrn" style="height: 46px;"></i></div>
+          <div class="col"><i style="height: 10px;"></i><i class="grn" style="height: 40px;"></i></div>
+          <div class="col"><i style="height: 10px;"></i><i style="height: 30px;"></i><i style="height: 24px;"></i></div>
+        </div>
+        <h3>P2 生产看板 <span class="en">Kanban</span></h3>
+        <p class="scene">审前 / 发布后 · 7 状态列只读排布，停留超时描边琥珀，筛选类型 / pillar / 系列</p>
+      </a>
+
+      <a class="screen-card" href="detail.html">
+        <div class="thumb">
+          <div class="col" style="flex: 2;"><i style="height: 20px;"></i><i class="wrn" style="height: 14px;"></i><i style="flex: 1;"></i></div>
+          <div class="col"><i style="height: 40px;"></i><i class="acc" style="height: 12px;"></i><i style="flex: 1;"></i></div>
+        </div>
+        <h3>P3 内容详情 <span class="en">Detail</span></h3>
+        <p class="scene">审前 · 从卡片点入（非导航项）：时间轴、阶段产物、口播稿、终检 A–G、溯源链</p>
+      </a>
+
+      <a class="screen-card" href="backlog.html">
+        <div class="thumb">
+          <div class="col"><i style="height: 12px;"></i><i style="height: 12px;"></i><i class="acc" style="height: 22px;"></i><i style="height: 12px;"></i><i style="height: 12px;"></i></div>
+        </div>
+        <h3>P4 选题池 <span class="en">Backlog</span></h3>
+        <p class="scene">选题 · score 降序表格，行展开六维分数 + promote 指引，撞题 / 过期标记</p>
+      </a>
+
+      <a class="screen-card" href="harness.html">
+        <div class="thumb">
+          <div class="col"><i style="height: 12px;"></i><i style="height: 12px;"></i><i style="height: 12px;"></i><i style="height: 12px;"></i></div>
+          <div class="col"><i class="acc" style="flex: 1;"></i></div>
+        </div>
+        <h3>P5 治理线 <span class="en">Harness</span></h3>
+        <p class="scene">治理审 · 任务注册表 + 运行账本 + 报告阅读器（标记已读存本机），复盘窗口矩阵</p>
+      </a>
+
+      <a class="screen-card" href="metrics.html">
+        <div class="thumb">
+          <div class="col"><i class="acc" style="height: 40px; clip-path: polygon(0 70%, 25% 20%, 50% 85%, 75% 45%, 100% 25%, 100% 100%, 0 100%);"></i><i style="height: 10px;"></i><i style="height: 10px;"></i></div>
+        </div>
+        <h3>P6 数据复盘 <span class="en">Metrics</span></h3>
+        <p class="scene">复盘 · 快照表 + 完播率折线（悬停十字线），空值不装有，漏斗结论只引用不重算</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="meta-grid" data-od-id="ix-system">
+    <div class="card">
+      <header style="margin-bottom: var(--space-2);"><h2>设计系统 · Neutral Modern</h2></header>
+      <div class="swatches">
+        <div class="sw" style="background: var(--bg);"><span>--bg</span></div>
+        <div class="sw" style="background: var(--surface);"><span>--surface</span></div>
+        <div class="sw" style="background: var(--fg);"><span style="color: var(--surface);">--fg</span></div>
+        <div class="sw" style="background: var(--muted);"><span style="color: var(--surface);">--muted</span></div>
+        <div class="sw" style="background: var(--accent);"><span style="color: var(--accent-on);">--accent</span></div>
+      </div>
+      <ul class="muted" style="font-size: var(--text-xs); line-height: 1.9; margin: 0; padding-left: 18px;">
+        <li>钴蓝 accent 只给「当前导航 + 未读/主动作」，每屏 ≤ 2 处</li>
+        <li>语义色约定：琥珀 = 待人/逾期 · 红 = 阻塞/断裂 · 绿 = 健康/完成</li>
+        <li>Inter 全站；slug、时间、计数一律等宽字体 + tabular-nums</li>
+        <li>白卡 + 1px 边框，无投影堆叠；留白做分隔</li>
+      </ul>
+    </div>
+    <div class="card">
+      <header style="margin-bottom: var(--space-2);"><h2>原型说明</h2></header>
+      <ul class="muted" style="font-size: var(--text-xs); line-height: 1.9; margin: 0; padding-left: 18px;">
+        <li>数据为 PRD 场景样例（EP04 类漏翻、TTS 1008、撞题对等均有对应演示）</li>
+        <li>可跑的交互：全局搜索（⌘K）、看板筛选、选题行展开/排序、报告阅读 + 标记已读（localStorage 持久）、复制命令、折线悬停、手动刷新</li>
+        <li>PRD 有「暗色为主」备注，本稿按所选 Neutral Modern 浅色契约执行，暗色可另出一版</li>
+        <li>P3 详情以 EP18（review 中）为例；所有内容卡暂统一指向该示例页</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    Pipeline Console 原型 · 2026-07-11 · 对应里程碑：V1（P1–P3 + 全局 G1–G4）与 V1.5（P4–P6）已全部画出，V2/V3 动作类功能未包含
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EP18 内容详情 · Pipeline Console</title>
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  /* 页面局部：产物 tab 切换 */
+  .doc-tabs { display: flex; gap: var(--space-1); margin-bottom: var(--space-3); }
+  .doc-tabs button {
+    padding: 6px 12px; border: 1px solid var(--border); background: var(--surface);
+    border-radius: var(--radius-sm); cursor: pointer;
+    font: 500 var(--text-xs)/1 var(--font-mono); color: var(--muted);
+  }
+  .doc-tabs button.on { background: var(--tint-accent); border-color: color-mix(in oklab, var(--accent), transparent 60%); color: var(--accent); }
+  .doc-pane { display: none; }
+  .doc-pane.on { display: block; }
+  .script-doc { font-size: var(--text-base); line-height: 1.9; }
+  .script-doc p { margin: 0 0 var(--space-3); }
+  .hook {
+    background: var(--tint-warn); border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4); position: relative; margin-bottom: var(--space-3);
+  }
+  .hook .eyebrow { color: color-mix(in oklab, var(--warn), var(--fg) 45%); }
+  .gate { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--space-1); text-align: center; }
+  .gate div { border: 1px solid var(--border-soft); border-radius: var(--radius-sm); padding: 8px 4px; font: 500 10px/1.5 var(--font-mono); }
+  .gate b { display: block; font-size: var(--text-sm); }
+  .gate .pass b { color: var(--success); }
+  .gate .warn-g { background: var(--tint-warn); border-color: color-mix(in oklab, var(--warn), transparent 40%); }
+  .gate .warn-g b { color: color-mix(in oklab, var(--warn), var(--fg) 40%); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="side-brand">
+      <span class="logo">PL</span>
+      <div><b>Pipeline Console</b><small>抖音内容流水线 · 本地看板</small></div>
+    </div>
+    <nav class="side-nav">
+      <a href="overview.html">总览 <span class="en">Overview</span><span class="dot-warn" title="有警报"></span></a>
+      <a href="kanban.html" class="active">生产看板 <span class="en">Kanban</span><span class="cnt">5</span></a>
+      <a href="backlog.html">选题池 <span class="en">Backlog</span><span class="cnt">8</span></a>
+      <a href="harness.html">治理线 <span class="en">Harness</span><span class="cnt" id="navUnread">3</span></a>
+      <a href="metrics.html">数据复盘 <span class="en">Metrics</span></a>
+    </nav>
+    <div class="side-foot">localhost:5170 · 只读派生视图<br>V1 · 权限 L0/L1<br>真相源：meta / backlog / logs</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="lights">
+        <span class="light ok" data-tip="飞书 server：进程运行中（ps 检查 server.py）"><i></i>飞书</span>
+        <span class="light ok" data-tip="抖音 cookie：有效 · 读 07-10 sau check 缓存，不主动外呼"><i></i>Cookie</span>
+        <span class="light bad" data-tip="TTS 余额：今日 daily-run 日志出现 1008 余额不足"><i></i>TTS</span>
+        <span class="light warn" data-tip="git 工作区：2 个未提交变更"><i></i>git</span>
+      </div>
+      <div class="gsearch">
+        <input id="gsearch" class="gsearch-input" type="search" placeholder="搜 slug / 标题 / backlog id（⌘K）" autocomplete="off">
+        <div class="gsearch-pop" id="gsearchPop" hidden></div>
+      </div>
+      <div class="refresh-wrap">
+        <button class="btn btn-sm" id="refreshBtn"><span class="spin">⟳</span> 刷新</button>
+        <span class="refresh-time" id="refreshTime"></span>
+      </div>
+    </header>
+
+    <main class="page">
+      <p class="eyebrow" style="margin-bottom: var(--space-2);"><a href="kanban.html" style="color: inherit;">生产看板</a> / EP18</p>
+
+      <!-- 3.1 元信息头 -->
+      <section class="card" data-od-id="dt-meta" style="margin-bottom: var(--space-4);">
+        <header style="margin-bottom: var(--space-2);">
+          <h1 style="font-size: var(--text-xl);">EP18 Agent 记忆系统怎么搭</h1>
+          <span class="badge b-warn"><i></i>review · 停留 3 天</span>
+          <div class="right" style="display: flex; gap: var(--space-2);">
+            <button class="btn btn-sm" onclick="odToast('已请求在编辑器打开 content/2026-07-04-agent-memory/（L1 安全动作）')">在编辑器打开目录</button>
+            <button class="btn btn-sm" onclick="odToast('4-publish.md 未产出，无法拼装 sau dry-run 命令（终检闸 F 未过）')" title="命令从 4-publish.md 字段拼装，仅复制不执行">复制 sau dry-run 命令</button>
+          </div>
+        </header>
+        <p class="mono muted" style="font-size: var(--text-xs);">content/2026-07-04-agent-memory · 口播 · 深度 · 系列「Agent 实战」#3 · 来源 <a href="backlog.html">T-035</a> · schedule — · publish_url —</p>
+        <div class="tl">
+          <div class="node done"><div class="n">ideated</div><div class="d">07-04 10:12</div></div>
+          <div class="node done"><div class="n">drafting</div><div class="d">07-05 09:40</div></div>
+          <div class="node now"><div class="n">review</div><div class="d">07-08 18:05</div></div>
+          <div class="node empty"><div class="n">approved</div><div class="d">—</div></div>
+          <div class="node empty"><div class="n">scheduled</div><div class="d">—</div></div>
+          <div class="node empty"><div class="n">published</div><div class="d">—</div></div>
+        </div>
+        <p class="muted" style="margin-top: var(--space-3); font-size: 11px;">时间轴取自 meta.yaml timestamps · 缺失节点显示为空，不推断</p>
+      </section>
+
+      <div class="grid" style="grid-template-columns: 3fr 2fr; align-items: start;">
+
+        <!-- ══ 左：产物导航 + 阅读器 ══ -->
+        <div class="grid">
+          <section class="card" data-od-id="dt-artifacts">
+            <header><h2>阶段产物</h2><span class="right">content/2026-07-04-agent-memory/</span></header>
+            <div class="file-row"><span>1-brief.md</span><span class="st" style="color: var(--success);">✓ 07-04</span></div>
+            <div class="file-row"><span>2-script.md</span><span class="muted">v3</span><span class="st" style="color: var(--success);">✓ 07-08</span></div>
+            <div class="file-row"><span>3-review.md</span><span class="st" style="color: var(--success);">✓ 07-08</span></div>
+            <div class="file-row missing"><span>4-publish.md</span><span class="st" style="color: var(--danger);">✗ 缺失 · 出审前必须产出（EP07 踩过的坑）</span></div>
+          </section>
+
+          <section class="card" data-od-id="dt-reader">
+            <header><h2>产物阅读器</h2><span class="right">md 渲染 · 只读</span></header>
+            <div class="doc-tabs">
+              <button data-pane="brief">1-brief</button>
+              <button data-pane="script" class="on">2-script 口播稿</button>
+              <button data-pane="review">3-review</button>
+            </div>
+
+            <div class="doc-pane" id="pane-brief">
+              <div class="reader doc" style="font-size: var(--text-sm); line-height: 1.8;">
+                <p><b>切入角度</b>：不讲概念，讲「三轮就失忆」这个所有人都撞过的现象，再给三层记忆结构的解法。</p>
+                <p><b>目标人群</b>：自己搭过 Agent、被上下文长度坑过的开发者。</p>
+                <p><b>差异点</b>：给出「什么该进长期记忆、什么留在会话内」的判断口径，而不是又一遍 RAG 科普。</p>
+              </div>
+            </div>
+
+            <div class="doc-pane on" id="pane-script">
+              <div class="hook">
+                <p class="eyebrow" style="margin-bottom: 4px;">钩子段 · 前 3 秒</p>
+                <p class="script-doc" style="margin: 0; font-weight: 600;">你的 Agent 聊三轮就失忆——问题不在模型，在你根本没给它记忆系统。</p>
+              </div>
+              <div class="script-doc">
+                <p>大部分人搭 Agent，把所有历史消息一股脑塞回上下文，塞满了就截断。这不叫记忆，这叫复读机加健忘症。</p>
+                <p>真正能用的记忆分三层：会话内的工作记忆，跨会话的事实库，还有一层最容易被忽略的——对「用户偏好」的沉淀。三层的写入时机和淘汰规则完全不同，混在一起就是灾难。</p>
+                <p>这期用一个真实的客服 Agent 例子，把三层怎么分、什么信息进哪层、多久清一次，一次讲清。看完你就知道自己的 Agent 缺的是哪一层。</p>
+              </div>
+            </div>
+
+            <div class="doc-pane" id="pane-review">
+              <div class="reader doc" style="font-size: var(--text-sm); line-height: 1.8;">
+                <p><b>dubbing-reviewer 结论（第 2 轮，通过）</b></p>
+                <ul>
+                  <li>第 1 轮：口播节奏偏快，第 2 段术语密度过高 → 已改写</li>
+                  <li>第 2 轮：钩子段重读位置正确，全文 2 分 40 秒，通过</li>
+                </ul>
+                <p><b>事实核查</b>：3 条 claim 全部有源（见右侧溯源链）。</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- ══ 右：封面 / 成片 / 终检 / 溯源 ══ -->
+        <div class="grid">
+          <section class="card" data-od-id="dt-cover">
+            <header><h2>封面</h2><span class="right" style="color: var(--success);">✓ 终检闸 E 通过</span></header>
+            <div class="ph-img" style="aspect-ratio: 3/4; max-width: 200px;">assets/cover.png<br>1080 × 1440</div>
+            <details class="fold"><summary>cover-prompt.md</summary>
+              <p class="muted" style="font-size: var(--text-xs); line-height: 1.7;">深色机房背景，一个发光的三层抽屉柜（工作记忆/事实库/偏好层），标题「Agent 为什么会失忆」大字居右，保留 20% 安全边距。</p>
+            </details>
+          </section>
+
+          <section class="card" data-od-id="dt-video">
+            <header><h2>成片</h2><span class="right">V1 只列文件 · 不内嵌播放</span></header>
+            <div class="file-row"><span>EP18-final-v2.mp4</span><span class="st">82.4 MB · 时长 —（ffprobe 未启用）</span></div>
+            <div class="file-row"><span>EP18-draft-v1.mp4</span><span class="st muted">79.1 MB · 已废弃</span></div>
+          </section>
+
+          <section class="card" data-od-id="dt-gates">
+            <header><h2>终检 A–G</h2><span class="right">解析自 meta.yaml 注释区</span></header>
+            <div class="gate">
+              <div class="pass"><b>✓</b>A 文案</div>
+              <div class="pass"><b>✓</b>B 事实</div>
+              <div class="pass" title="dubbing-reviewer 2 轮通过"><b>✓</b>C 配音</div>
+              <div class="pass"><b>✓</b>D 画面</div>
+              <div class="pass"><b>✓</b>E 封面</div>
+              <div class="warn-g" title="4-publish.md 未产出"><b>⚠</b>F 元信息</div>
+              <div class="pass"><b>✓</b>G 合规</div>
+            </div>
+            <p class="muted" style="margin-top: var(--space-2); font-size: 11px;">解析失败时原样展示注释文本，不硬结构化</p>
+          </section>
+
+          <section class="card" data-od-id="dt-trace">
+            <header><h2>溯源链</h2></header>
+            <div class="file-row"><span>meta.source = T-035</span><span class="st" style="color: var(--success);">↔ 双向指针 ✓</span></div>
+            <div class="file-row"><span>backlog T-035.content_path</span><span class="st mono muted">…/2026-07-04-agent-memory</span></div>
+            <details class="fold" open><summary>fact_check（3 条）</summary>
+              <ul class="muted" style="font-size: var(--text-xs); line-height: 1.8; margin: var(--space-1) 0; padding-left: 18px;">
+                <li>「三轮就失忆」= 8k 上下文 + 平均轮长实测 → 内部测试记录 06-30</li>
+                <li>三层记忆划分 → MemGPT 论文 §3（arxiv 2310.08560）</li>
+                <li>客服 Agent 案例数据 → 已获当事团队授权引用</li>
+              </ul>
+            </details>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+/* 产物阅读器 tab 切换 */
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".doc-tabs button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".doc-tabs button").forEach((b) => b.classList.toggle("on", b === btn));
+      document.querySelectorAll(".doc-pane").forEach((p) => p.classList.toggle("on", p.id === "pane-" + btn.dataset.pane));
+    });
+  });
+});
+</script>
+</body>
+</html>

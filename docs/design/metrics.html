@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数据复盘 · Pipeline Console</title>
+<link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="side-brand">
+      <span class="logo">PL</span>
+      <div><b>Pipeline Console</b><small>抖音内容流水线 · 本地看板</small></div>
+    </div>
+    <nav class="side-nav">
+      <a href="overview.html">总览 <span class="en">Overview</span><span class="dot-warn" title="有警报"></span></a>
+      <a href="kanban.html">生产看板 <span class="en">Kanban</span><span class="cnt">5</span></a>
+      <a href="backlog.html">选题池 <span class="en">Backlog</span><span class="cnt">8</span></a>
+      <a href="harness.html">治理线 <span class="en">Harness</span><span class="cnt" id="navUnread">3</span></a>
+      <a href="metrics.html" class="active">数据复盘 <span class="en">Metrics</span></a>
+    </nav>
+    <div class="side-foot">localhost:5170 · 只读派生视图<br>V1 · 权限 L0/L1<br>真相源：meta / backlog / logs</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="lights">
+        <span class="light ok" data-tip="飞书 server：进程运行中（ps 检查 server.py）"><i></i>飞书</span>
+        <span class="light ok" data-tip="抖音 cookie：有效 · 读 07-10 sau check 缓存，不主动外呼"><i></i>Cookie</span>
+        <span class="light bad" data-tip="TTS 余额：今日 daily-run 日志出现 1008 余额不足"><i></i>TTS</span>
+        <span class="light warn" data-tip="git 工作区：2 个未提交变更"><i></i>git</span>
+      </div>
+      <div class="gsearch">
+        <input id="gsearch" class="gsearch-input" type="search" placeholder="搜 slug / 标题 / backlog id（⌘K）" autocomplete="off">
+        <div class="gsearch-pop" id="gsearchPop" hidden></div>
+      </div>
+      <div class="refresh-wrap">
+        <button class="btn btn-sm" id="refreshBtn"><span class="spin">⟳</span> 刷新</button>
+        <span class="refresh-time" id="refreshTime"></span>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="page-head">
+        <h1>数据复盘</h1>
+        <span class="sub">V1 快照展示 · 数据由 douyin-retro 拉取落盘，看板不直连抖音；字段缺失是常态，空值不装有</span>
+      </div>
+
+      <!-- 汇总 -->
+      <section class="card" style="margin-bottom: var(--space-4); padding-block: var(--space-4);" data-od-id="mt-stats">
+        <div class="stats">
+          <div class="stat"><div class="v">10</div><div class="l">已发布</div></div>
+          <div class="stat"><div class="v">6</div><div class="l">有数据快照</div></div>
+          <div class="stat"><div class="v">27.8<small>%</small></div><div class="l">平均完播（仅 5 条有值）</div></div>
+          <div class="stat"><div class="v">91.3<small>k</small></div><div class="l">合计播放（有值条目）</div></div>
+          <div class="stat"><div class="v nil muted">—</div><div class="l">粉丝净增（retro 未拉取）</div></div>
+        </div>
+      </section>
+
+      <div class="grid" style="grid-template-columns: 3fr 2fr; align-items: start; margin-bottom: var(--space-4);">
+
+        <!-- 6.2 趋势小图 -->
+        <section class="card" data-od-id="mt-trend">
+          <header>
+            <h2>完播率趋势（按发布日期）</h2>
+            <span class="right">数据点 5 ≥ 5，绘制折线；不足时只显示表格</span>
+          </header>
+          <div class="chart" id="trendChart">
+            <svg viewBox="0 0 640 240" role="img" aria-label="近 5 条发布内容的完播率折线，最低 22%，最高 35%">
+              <!-- 网格 + y 轴刻度 -->
+              <line class="gridline" x1="40" y1="56"  x2="620" y2="56"/><text class="axis" x="34" y="60"  text-anchor="end">35%</text>
+              <line class="gridline" x1="40" y1="92"  x2="620" y2="92"/><text class="axis" x="34" y="96"  text-anchor="end">30%</text>
+              <line class="gridline" x1="40" y1="128" x2="620" y2="128"/><text class="axis" x="34" y="132" text-anchor="end">25%</text>
+              <line class="gridline" x1="40" y1="164" x2="620" y2="164"/><text class="axis" x="34" y="168" text-anchor="end">20%</text>
+              <!-- x 轴标签 -->
+              <text class="axis" x="60"  y="228" text-anchor="middle">06-27</text>
+              <text class="axis" x="240" y="228" text-anchor="middle">06-30</text>
+              <text class="axis" x="360" y="228" text-anchor="middle">07-02</text>
+              <text class="axis" x="480" y="228" text-anchor="middle">07-04</text>
+              <text class="axis" x="600" y="228" text-anchor="middle">07-06</text>
+              <!-- 十字线（悬停显示） -->
+              <line id="xhair" x1="60" y1="20" x2="60" y2="204" stroke="var(--border)" stroke-width="1" opacity="0"/>
+              <!-- 单序列折线：标题即图例 -->
+              <path d="M60,135.2 L240,56 L360,149.6 L480,113.6 L600,84.8" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>
+              <g id="pts">
+                <circle cx="60"  cy="135.2" r="3.5" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+                <circle cx="240" cy="56"    r="3.5" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+                <circle cx="360" cy="149.6" r="3.5" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+                <circle cx="480" cy="113.6" r="3.5" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+                <circle cx="600" cy="84.8"  r="3.5" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+              </g>
+              <!-- 选择性直接标注：仅峰值 -->
+              <text x="240" y="44" text-anchor="middle" style="font: 600 11px var(--font-mono); fill: var(--fg);">35%</text>
+            </svg>
+            <div class="chart-tip" id="tip"></div>
+          </div>
+        </section>
+
+        <!-- 6.3 漏斗归因摘要 -->
+        <section class="card" data-od-id="mt-funnel">
+          <header><h2>漏斗归因摘要</h2><span class="right">最近 retro 报告原文 · 展示不重算</span></header>
+          <p class="eyebrow" style="margin-bottom: var(--space-1);">retro EP14 · 7d</p>
+          <div class="logblock" style="margin-bottom: var(--space-3);">前 3 秒流失 <span class="hl">41%</span>（账号均值 33%）：
+钩子第 6 秒才出现，前 5 秒是 logo 动画。
+→ 提议：钩子强制首句（待人审）</div>
+          <p class="eyebrow" style="margin-bottom: var(--space-1);">retro EP15 · 72h</p>
+          <div class="logblock">晚 8 点发布撞娱乐高峰，首小时流速慢，
+次日午间二次起量，完播 31% 为深度 pillar 新高。
+→ 提议：深度选题试验 12:30 窗口（待人审）</div>
+          <p style="margin-top: var(--space-3); font-size: var(--text-xs);"><a href="harness.html">去治理线读整份报告 →</a></p>
+        </section>
+      </div>
+
+      <!-- 6.1 数据快照表 -->
+      <section class="card" data-od-id="mt-table">
+        <header><h2>数据快照</h2><span class="right mono">backlog.yaml metrics + retro 报告 · 有啥显啥</span></header>
+        <table class="table">
+          <thead><tr><th>内容</th><th>发布</th><th class="num">plays</th><th class="num">完播</th><th class="num">likes</th><th class="num">comments</th><th class="num">shares</th><th>最近窗口</th></tr></thead>
+          <tbody>
+            <tr><td><a href="detail.html">EP15 大模型降价战说明什么</a></td><td class="mono">07-06</td><td class="num">12,400</td><td class="num">31%</td><td class="num">486</td><td class="num">57</td><td class="num">112</td><td class="mono">72h</td></tr>
+            <tr><td><a href="detail.html">EP14 抖音算法喜欢什么视频</a></td><td class="mono">07-04</td><td class="num">45,200</td><td class="num">27%</td><td class="num">1,214</td><td class="num">203</td><td class="num">340</td><td class="mono">7d</td></tr>
+            <tr><td><a href="detail.html">EP13 AI 编程工具横评</a></td><td class="mono">07-02</td><td class="num">3,100</td><td class="num">22%</td><td class="num">98</td><td class="num">11</td><td class="num nil">—</td><td class="mono">7d</td></tr>
+            <tr><td><a href="detail.html">EP12 一人公司的内容流水线</a></td><td class="mono">06-30</td><td class="num">8,700</td><td class="num">35%</td><td class="num">312</td><td class="num">44</td><td class="num">89</td><td class="mono">7d</td></tr>
+            <tr><td><a href="detail.html">EP11 Sora 之后的视频行业</a></td><td class="mono">06-27</td><td class="num">21,900</td><td class="num">24%</td><td class="num">803</td><td class="num">156</td><td class="num nil">—</td><td class="mono">7d</td></tr>
+            <tr><td><a href="detail.html">EP10 AI 岗位真实薪资</a></td><td class="mono">06-25</td><td class="num nil">—</td><td class="num nil">—</td><td class="num nil">—</td><td class="num nil">—</td><td class="num nil">—</td><td class="mono nil">未拉取</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin-top: var(--space-2); font-size: 11px;">EP05–EP09 无 metrics 字段，未列入快照 · 补数据 = 跑 douyin-retro，看板不代拉</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+/* 折线悬停：十字线 + 最近点 tooltip */
+document.addEventListener("DOMContentLoaded", () => {
+  const DATA = [
+    { x: 60,  y: 135.2, label: "EP11 · 06-27", v: "完播 24% · 21.9k 播放" },
+    { x: 240, y: 56,    label: "EP12 · 06-30", v: "完播 35% · 8.7k 播放" },
+    { x: 360, y: 149.6, label: "EP13 · 07-02", v: "完播 22% · 3.1k 播放" },
+    { x: 480, y: 113.6, label: "EP14 · 07-04", v: "完播 27% · 45.2k 播放" },
+    { x: 600, y: 84.8,  label: "EP15 · 07-06", v: "完播 31% · 12.4k 播放" },
+  ];
+  const wrap = document.getElementById("trendChart");
+  const svg = wrap.querySelector("svg");
+  const xhair = document.getElementById("xhair");
+  const tip = document.getElementById("tip");
+  const pts = [...document.querySelectorAll("#pts circle")];
+
+  svg.addEventListener("mousemove", (e) => {
+    const rect = svg.getBoundingClientRect();
+    const sx = ((e.clientX - rect.left) / rect.width) * 640; /* 视口 → viewBox 坐标 */
+    let best = 0;
+    DATA.forEach((d, i) => { if (Math.abs(d.x - sx) < Math.abs(DATA[best].x - sx)) best = i; });
+    const d = DATA[best];
+    xhair.setAttribute("x1", d.x); xhair.setAttribute("x2", d.x);
+    xhair.setAttribute("opacity", "1");
+    pts.forEach((c, i) => c.setAttribute("r", i === best ? 5 : 3.5));
+    tip.innerHTML = `${d.label}<br>${d.v}`;
+    tip.style.left = (d.x / 640) * rect.width + "px";
+    tip.style.top = (d.y / 240) * rect.height + "px";
+    tip.classList.add("on");
+  });
+  svg.addEventListener("mouseleave", () => {
+    xhair.setAttribute("opacity", "0");
+    tip.classList.remove("on");
+    pts.forEach((c) => c.setAttribute("r", 3.5));
+  });
+});
+</script>
+</body>
+</html>
