@@ -10,11 +10,18 @@
 
 ## 执行步骤
 1. 读 `brain/` 全部 + `CLAUDE.md`。
-2. **取题**：读 `content/_backlog/backlog.yaml`：
-   - 顶部 `next_up:` 非空 → 取该 id（最高优先）；promote 后把 `next_up` 置回 `null`。
-   - 否则在 `status: idea` 中按 score 最高取一条（同分先 depth；`expired` 不取）。
-   - 无题可取 → **停产 + 按「阻塞即上报」推飞书**，不硬造题。
-   promote：该条 `status: idea→picked`、回填 `content_path: content/<今天>/<slug>/`，建该目录、`meta.yaml` 写 `source: <backlog id>`，据 backlog 条目写 `1-brief.md` 喂下一步（系列条目则用其 `plan_file` 当 brief）。
+2. **取题**：
+   ```
+   media next --json
+   ```
+   绝对路径兜底（无全局 PATH 时）：`node /Users/yedizhang/yedi-study/douyin-media/tools/console/packages/cli/dist/index.js next --json`
+   - `decision` 非 `empty` → 拿到 `id`（取题优先级——next_up 指针优先、否则 score 最高同分先 depth——已内置在命令里，不重复手判）。
+   - `decision=empty`（池中无 idea）→ **停产 + 按「阻塞即上报」推飞书**，不硬造题。
+   记账（backlog `idea→picked` + 回填 `content_path` + `next_up` 清空 + 建目录 + 写 meta 五处一次改齐）：
+   ```
+   media promote <id> --slug <slug> [--date <YYYY-MM-DD>]
+   ```
+   （或 `media promote --auto --slug <slug>` 一步做完取题+记账，同一套取题规则）；slug 命名是判断活，agent 定（kebab-case）。promote 完成后据 backlog 条目内容写 `1-brief.md` 喂下一步（系列条目则用其 `plan_file` 当 brief）。
 3. **创作**：按 `pipeline/2-create.md` 从 `plan_file`（脚本+源码导读）出口播成品；含 `dubbing-reviewer` 配音质检循环，过创作自检。
 4. **出审**：`meta.yaml` status=`review`，更新 `dashboard.md`，经 **`feishu-notify`** 推审核卡（见 `pipeline/3-review.md`）。前提：`pipeline/2-create.md` 成片终检闸 A–G 全过（G = ★出审前必产 `4-publish.md`，规则细节以那里为准，教训 L5/L6）。
 5. **不发布**：到此停。等人在飞书点过/打回。

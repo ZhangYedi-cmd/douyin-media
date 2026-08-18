@@ -73,10 +73,14 @@ cd "$SAU_DIR" && uv run sau douyin check --account main
 
 ### Step 5 · 留痕（★ 发布收尾 = 全流水线状态记账的唯一位置，见 pipeline/4-publish.md）
 - `4-publish.md`：回填 实际发布时间、（能拿到的）作品链接、用的账号。
-- `meta.yaml`：`status` = `published`(立即) / `scheduled`(定时)。
-- `backlog.yaml`：`meta.source` 指向的条目 `picked → published`（**本步必做**——历史上两次漏翻靠 daily-run 事后补，故收口在这，其它环节不代翻）。
-- `dashboard.md`：在制表移出该条。
-- 失败：写失败原因到 `4-publish.md`，`status` 不动，报警。
+- 状态记账（`meta.yaml` status→published/scheduled + `backlog.yaml` picked→published + `dashboard.md` 在制表移出该条，三处一次翻齐）**只走**：
+  ```
+  media publish-done <slug> [--scheduled "<YYYY-MM-DD HH:mm>"] [--url <作品链接>]
+  ```
+  绝对路径兜底（无全局 PATH 时）：`node /Users/yedizhang/yedi-study/douyin-media/tools/console/packages/cli/dist/index.js publish-done <slug> ...`
+  - 立即发布成功 → 不带 `--scheduled`；定时发布 → 带 `--scheduled "<时间>"`（meta→scheduled，backlog 保持 picked 待 CHK-03 盯守）。
+  - 能拿到作品链接就带 `--url`；拿不到就先不带（`media check` 会挂 CHK-05「链接待补」提醒），事后同一条命令补填：`media publish-done <slug> --url <url>`（`published` 状态下仅回填链接，不改状态）。
+- 失败：写失败原因到 `4-publish.md`，**不调用** `media publish-done`（status 不动），报警。
 
 ## 文件结构
 ```
