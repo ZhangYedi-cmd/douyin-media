@@ -29,7 +29,7 @@ AI 方向的工程提效实战 + 源码解读（技术深度为主），辅以 A
 - `pipeline/*.md` 是**阶段契约**（输入/输出/状态翻转/闸口），操作细节住对应 skill；同一规则只写一处，其余引用。
 - 踩坑教训的「故事」只登记 `pipeline/lessons.md`（SOP 里标 Lx 回指）；「打法」沉淀 `brain/benchmarks.md`。
 - `dashboard.md` 是派生视图非真相源；状态真相源 = 各 `meta.yaml` + `backlog.yaml`。
-- 状态记账唯一位置 = 发布收尾（douyin-publish Step 5：meta/backlog/dashboard 一次翻齐），其它环节不代翻。
+- 状态记账唯一入口 = `media`（发布收尾见 `media publish-done --help`；合法状态值唯一定义 = `tools/console/packages/core/src/state.ts`），其它环节不代翻。
 - `docs/` 是只读历史存档（纪要/ADR），现行规则不得只住那里。
 
 ## 流水线环节与核心 skill

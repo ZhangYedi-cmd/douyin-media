@@ -13,9 +13,9 @@
 3. 失败先原样重试一次（L7 慢渲染超时 / L8 UI 浮层，重跑常一次过），仍失败转人工。
 
 ## 发布收尾（★ 状态记账的唯一位置）
-发布成功后，由发布方（douyin-publish 执行侧）一次做完三件记账，**其它环节不代翻**：
-1. `meta.yaml` status=`published`（定时则 `scheduled`，到点确认后再翻 `published`）+ 回填实际时间/链接到 `4-publish.md`。
-2. `backlog.yaml` 对应条目 `picked → published`（漏翻曾发生两次，靠 daily-run 事后补——L 记账教训，故收口到这一处）。
+发布成功后，`media publish-done <slug>` 一次做完三件记账（合法状态值见 `media publish-done --help`，唯一定义 = `core/state.ts`），**其它环节不代翻**：
+1. `meta.yaml` 翻至终态 + 回填实际时间/链接到 `4-publish.md`。
+2. `backlog.yaml` 对应条目同步翻转（漏翻曾发生两次，靠 daily-run 事后补——L 记账教训，故收口到这一处）。
 3. `dashboard.md` 在制表移出该条。
 
 ## 发布时段参考（初版假设，按复盘修正）

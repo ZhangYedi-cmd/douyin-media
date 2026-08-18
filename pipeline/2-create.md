@@ -72,7 +72,7 @@
 - [ ] `4-publish.md` 已写，含可解析 bullet：`- **标题**：…`、`- **正文/简介**：…`、`- **话题标签**：#a #b…`（3–5 个）、`- **封面**：assets/cover.png`、`- **媒体文件**：assets/<slug>.mp4`
 - [ ] 字段键名严格匹配解析器（`tools/feishu-bot/meta.py` `_FIELD_RE`：`- **键**：值`）；**不写**可解析的「建议发布时段」（非 datetime 会被原样传给 sau `--schedule`，默认立即发布）
 
-全部过 → `meta.yaml` status=`review`，更新 `dashboard.md`，经 feishu 交审。
+全部过 → 状态与 dashboard 记账见 `media flip --help`（`daily-run.md` 出审步骤执行 `media flip <slug> review`），经 feishu 交审。
 
 ## 用到的 skill
 - **口播视频**：`web-video-presentation`（口播稿→网页演示→`npm run record` 无人录屏）

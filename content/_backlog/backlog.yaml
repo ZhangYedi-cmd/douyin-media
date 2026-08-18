@@ -2,12 +2,9 @@
 # 由 douyin-ideate 技能追加与维护。
 #
 # 【状态分两层，别混】★ 单一真相源规则
-#   backlog(本文件) 只管粗粒度三态：idea → picked → published ｜异常：rejected / expired / archived
-#     - idea      候选，未动工
-#     - picked    已 promote 进生产；content/<date>/<slug>/ 已建，细粒度状态看那里的 meta.yaml
-#     - published 已发布（保留做去重 + 复盘 metrics）
-#   生产中的细粒度状态（ideated→drafting→review→approved→scheduled→published）只写 content 的 meta.yaml，
-#   backlog 不镜像。backlog 只在两个时点翻动：promote(置 picked) 与 发布完成(置 published)。
+#   backlog(本文件) 管粗粒度三态 + 异常态，content 的 meta.yaml 管细粒度状态；backlog 不镜像细粒度状态。
+#   合法状态值与迁移规则唯一定义 = tools/console/packages/core/src/state.ts（活文档：`media flip --help` / `media st --help`）。
+#   backlog 只在两个时点翻动：promote(置 picked) 与 发布完成(置 published)，均经 `media` 命令记账。
 #   双向指针：backlog.content_path → 内容目录；content 的 meta.source → backlog id。
 #
 # 字段说明：

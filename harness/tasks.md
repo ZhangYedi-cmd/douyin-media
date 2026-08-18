@@ -34,6 +34,10 @@ tasks:
     enabled: true
     trigger: periodic:7d
 
+  - task: check
+    enabled: true
+    trigger: periodic:1d
+
   # ── 以下 TODO（disabled）。任务卡即接入规格：接入 = 按卡写执行 skill + 翻 enabled ──
   - task: retro-debt-collector
     enabled: false
@@ -99,6 +103,13 @@ tasks:
 - **干什么**：tags 归一化判同题，产合并/剔除提议（默认留分高者、并 tags）。步骤住 `backlog-gardener` skill。
 - **产物与记账**：提议清单落 `logs/<date>-backlog-gardener.md`；**不翻状态**——合并/剔除是判断性变更，人审后才应用（能自动翻状态的只有 ideate 规则化清扫和人挑题）。
 - **人审关注点**：合并方向留哪条；防误判"看似同题、实则不同角度"。
+
+### check（状态账本日巡）✅ 启用（0818 看板工作台 01 方案第 11 步注册）
+- **为什么**：状态漏翻此前只能靠人偶然发现（历史事故：EP04 scheduled 超时未翻、meta/backlog 双层不同步、published 条目无作品链接）；`media check` 是全仓状态一致性的机器判据，日巡把「人偶然发现」变成「治理线每日必报」。无 skill 依赖，纯 CLI，接入门槛最低。
+- **目标怎么选**：全仓状态账本（`content/*/meta.yaml` + `backlog.yaml` + `dashboard.md`），无筛选——每次全量跑。
+- **干什么**：直接执行 `media check --json`（不经 LLM/skill，规则唯一定义见 `tools/console/packages/core/src/alerts.ts`）；退出码非零或输出含 `error` 级问题 → 按「阻塞即上报」纪律处理（经 feishu-notify 推人说清事件/根因/需要人做什么；只写本地日志不算上报，见 CLAUDE.md 流程纪律）；`warn`/`info` 级不阻断，累积进日常报告即可。
+- **产物与记账**：check 结果摘要（errors/warns/infos 计数）随本次 dispatcher 执行记录一并 append 进 `logs/index.jsonl`；纯读，不改任何文件、不产变更提议。
+- **人审关注点**：`error` 级当天必须有人介入，不能带病继续跑生产线；`warn` 级按人力择期处理，别攒成噪音淹没真问题。
 
 ### retro-debt-collector 📋 TODO（建议最先接入）
 - **为什么**：retro 是窗口触发，错过即永久欠账、无人兜底，反哺断供——**当前实况：EP05 之后 7d 窗口欠了一串，大环断在这里**。这是把「发布→复盘→大脑」重新接上的任务。

@@ -17,7 +17,7 @@
    绝对路径兜底（无全局 PATH 时）：`node /Users/yedizhang/yedi-study/douyin-media/tools/console/packages/cli/dist/index.js next --json`
    - `decision` 非 `empty` → 拿到 `id`（取题优先级——next_up 指针优先、否则 score 最高同分先 depth——已内置在命令里，不重复手判）。
    - `decision=empty`（池中无 idea）→ **停产 + 按「阻塞即上报」推飞书**，不硬造题。
-   记账（backlog `idea→picked` + 回填 `content_path` + `next_up` 清空 + 建目录 + 写 meta 五处一次改齐）：
+   记账（backlog 状态迁移（合法值见 `media promote --help`）+ 回填 `content_path` + `next_up` 清空 + 建目录 + 写 meta 五处一次改齐）：
    ```
    media promote <id> --slug <slug> [--date <YYYY-MM-DD>]
    ```

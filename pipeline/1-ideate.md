@@ -12,8 +12,8 @@
 - `dashboard.md` 选题池小节：计数 + 最近报告链接
 
 ## 状态翻转
-- 入池：`(新条目) → idea`；清扫：`idea → expired`
-- promote（manual 模式人挑 / auto 模式自动 Top-N）：`idea → picked` + 回填 `content_path` + 建 `content/<日期>/<slug>/` 写 `1-brief.md`（meta status=`ideated`）→ 移交阶段 2
+- 合法状态值与迁移规则见 `media flip --help`（唯一定义 = `core/state.ts`）；入池/清扫经 `media backlog add` / `media backlog sweep`。
+- promote（manual 模式人挑 / auto 模式自动 Top-N）：`media promote` 回填 `content_path` + 建 `content/<日期>/<slug>/` 写 `1-brief.md` → 移交阶段 2
 - 取题优先级由 `daily-run.md` 定义（`next_up` 指针 → 按 score）
 
 ## 节奏与归属（2026-07-08 起）

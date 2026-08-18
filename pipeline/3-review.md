@@ -4,7 +4,7 @@
 
 ## 通道：飞书（`feishu-notify`）
 待审内容（口播稿 + 封面）经 **`feishu-notify`** skill 推一张审核卡到飞书，人在飞书点「过 / 打回」：
-- **过** → 驱动 `meta.yaml` status=`approved`，进发布。
+- **过** → 状态迁移见 `media flip --help`，进发布。
 - **打回** → 记意见回创作；可选「自动重做」（起 `claude -p` 走创作 SOP）或「挂待办」。
 （底层飞书官方 SDK 长连接，无需公网；`tools/feishu-bot/server.py` 收按钮就地驱动闭环。）
 
@@ -17,9 +17,10 @@
 - [ ] **观感**：封面/配图达标，字幕无误。
 
 ## 处置
-- **通过** → `meta.yaml` status=`approved`，进入发布。
+合法状态值见 `media flip --help`（唯一定义 = `core/state.ts`）。
+- **通过** → 进入发布。
 - **小改** → 标注意见写入 `3-review.md`，打回创作。
-- **拒绝** → status=`rejected`，记录原因（喂给复盘/选题迭代）。
+- **拒绝** → 记录原因（喂给复盘/选题迭代）。
 
 ## 产出
 `3-review.md` 记录：审核人、结论、修改意见、时间。更新 `dashboard.md`。
