@@ -53,11 +53,12 @@ description: >
 > **平台侧信号从哪来**：由发布后的 `douyin-retro` 复盘反向补足——哪类选题完播/涨粉好、评论区想看啥，回写 `brain/benchmarks.md` 影响下次打分。这是**自己受众**的真实信号，比爬通用平台热点更贴账号。
 
 ### Step 2 · 过滤去重
-0. **过期清扫（expiry sweep，每轮必做，先于去重）**：对池中现存 `status: idea` 逐条判：
-   - `timeliness ≥ 4` 且入池（`created`）超 7 天 → 置 `status: expired`（时效窗已关）。
-   - `urgency: today` 且入池超 2 天 → 置 `expired`（当天题隔天即废）。
-   - 深度常青题（`timeliness ≤ 2`）不清扫，可长期排队。
-   expired 条目**保留在池里**做去重比对，不删除；清扫结果（几条、哪几条）写进当次报告。
+0. **过期清扫（expiry sweep，每轮必做，先于去重）**：机械规则清扫，记账走 CLI（规则定义唯一活在 core，不在此复述）：
+   ```
+   media backlog sweep --apply
+   ```
+   绝对路径兜底（无全局 PATH 时）：`node /Users/yedizhang/yedi-study/douyin-media/tools/console/packages/cli/dist/index.js backlog sweep --apply`
+   深度常青题不在清扫规则命中范围，可长期排队；expired 条目**保留在池里**做去重比对，不删除。清扫结果（几条、哪几条）由命令输出，摘要写进当次报告。
 1. agent-reach 线索按主题合并去重。
 2. 对 `content/_backlog/backlog.yaml` + `content/` 已发历史做去重：按每条 `tags`（归一化主题标签）比对，**30 天内同主题直接丢**；无 tags 时退化为标题+链接比对。
 3. 砍掉不符定位 / 做不了 / 纯噪音的。
@@ -79,9 +80,13 @@ description: >
 
 ### Step 5 · 产出
 1. 写报告 `content/_research/research-{YYYY-MM-DD}.md`（用 report-template.md）。
-2. 候选**全部**追加进 `content/_backlog/backlog.yaml`，`status: idea`，每条带 `tags`（去重用）。
-3. 更新 `dashboard.md` 的「选题池」小节（计数 + 最近报告链接）；不碰「数据汇总」（那是复盘的）。
-4. **manual**：到此停，提示用户读报告挑题。
+2. 候选**全部**按字段契约写入候选文件（`title`/`alt_titles`/`track`/`format`/`score`/`tier`/`scores`{6 维}/`urgency`/`reason`/`links`/`tags`{去重用}/`created`——即 Step 3/4 已算好的字段，逐条 schema 见 `docs/Iterative-spec/0818-看板工作台/01-CLI执行方案.md` §2.8），入池记账走：
+   ```
+   media backlog add <候选文件路径>
+   ```
+   绝对路径兜底（无全局 PATH 时）：`node /Users/yedizhang/yedi-study/douyin-media/tools/console/packages/cli/dist/index.js backlog add <候选文件路径>`
+   撞车条目默认拒收，命令输出会列对照（撞谁/交集 tags）；确认是差异化新角度可 `--force <n>`（1-based）单条放行。
+3. **manual**：到此停，提示用户读报告挑题。
    **auto**：挑 Top-N（按分数+配比+urgency），其 `status` 置 `picked`，复制 `content/_template/` 成 `content/{发布日}/{slug}/` 并回填 `1-brief.md`，移交创作。
 
 ---

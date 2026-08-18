@@ -23,7 +23,11 @@ description: 治理线任务——理选题池的「撞题」维度：扫 conten
    - 与已发布撞 → 建议 `idea → rejected`，注明撞了哪条已发布。
    - 拿不准的标「存疑」，写清两种理解让人裁。
 4. 写报告落 `harness/logs/<今天>-backlog-gardener.md`（格式按 `harness/report-template.md`：现状/发现/变更提议/盲区）；无撞题也要写（记"全池干净"，这是有效结论）。
-5. 到此停。**不改 backlog.yaml**。人审通过后的应用动作要逐条可溯源（提议报告路径写进条目注释）。
+5. 到此停。**不改 backlog.yaml**。人审通过后的应用动作走：
+   ```
+   media backlog apply <id> --action merge|archive [--into <id2>] --proposal <本报告路径>
+   ```
+   （`--into` merge 必填；绝对路径兜底：`node /Users/yedizhang/yedi-study/douyin-media/tools/console/packages/cli/dist/index.js backlog apply ...`）——提议报告路径由命令写进被处置条目注释，逐条可溯源。
 
 ## 产物
 - `harness/logs/<date>-backlog-gardener.md` 提议报告（唯一产物）。

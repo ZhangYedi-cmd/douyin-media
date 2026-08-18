@@ -24,6 +24,26 @@ cd tools/social-auto-upload
 - 退出码 2 = cookie 失效 → 提示用户跑 `sau douyin login` 刷新,**停止,不要拿空数据硬分析**。
 - 产出 JSON:`{account:{peer_benchmark:[...]}, works:[{16字段}]}`。
 - 字段映射 + 通道细节见 `references/data-channel.md`。
+- **拉到数据即记账**(每条目标作品、当前窗口各调一次;记账与分析解耦,分析被打断数据也已留痕):
+  ```
+  media metrics record <slug> --window <24h|72h|7d> --json-data '<该条数据对象>'
+  ```
+  绝对路径兜底(无全局 PATH 时):`node /Users/yedizhang/yedi-study/douyin-media/tools/console/packages/cli/dist/index.js metrics record <slug> --window <窗口> --json-data '...'`
+  `--json-data` 建议键表(对齐创作者中心拉数字段,会漂移,CLI 不强 schema,故键表落在此处——Q9 拍板):
+
+  | 键 | 含义 |
+  |---|---|
+  | plays | 播放量 |
+  | completion_rate | 完播率 |
+  | avg_play_sec | 平均播放时长(秒) |
+  | likes | 点赞数 |
+  | comments | 评论数 |
+  | favorites | 收藏数 |
+  | fans_delta | 涨粉数 |
+  | profile_visits | 主页访问数 |
+  | audit | 分发状态备注(如"公开正常分发") |
+
+  7d 窗自动回填 `backlog.yaml` 对应条目 `metrics` 字段(唯一结构化数据源,看板 P6 用)。
 
 ### 2. 分析(逐条 + 横切)
 对每条目标作品(指定 slug 则该条;`all` 则全部 `status=published`):
@@ -35,8 +55,12 @@ cd tools/social-auto-upload
 
 ### 3. 产出
 - 每条:写该内容目录的 `5-retro.md`(用 `content/_template/5-retro.md`):数据快照 + 漏斗诊断 + 主漏点 + 归因 + 动作清单。
-- `meta.yaml`:status → `retro_done`,填 timestamps.retro_done。
-- `dashboard.md`:更新「数据汇总」表。
+- 收口记账(治理线唯一状态迁移):
+  ```
+  media flip <slug> retro_done
+  ```
+  绝对路径兜底(无全局 PATH 时):`node /Users/yedizhang/yedi-study/douyin-media/tools/console/packages/cli/dist/index.js flip <slug> retro_done`
+- `dashboard.md`:更新「数据汇总」表(人写区,仍手写,归因叙事不代 CLI 判断)。
 - 原始 xlsx 留 `content/_research/`(可追溯)。
 
 ### 4. 产「大脑变更提议」给人审(治理线铁律:不自动改 brain)
