@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>治理任务详情 · Pipeline Console</title>
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  .task-head { display: flex; align-items: flex-start; gap: var(--space-3); margin-bottom: var(--space-5); }
+  .task-head .back { margin-top: 2px; color: var(--muted); font: 500 var(--text-xs)/1 var(--font-mono); }
+  .task-head .back:hover { color: var(--accent); text-decoration: none; }
+  .task-title { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); }
+  .task-title h1 { font-family: var(--font-mono); letter-spacing: -.02em; }
+  .task-head .desc { margin-top: 4px; color: var(--muted); font-size: var(--text-xs); }
+  .task-head .actions { margin-left: auto; display: flex; gap: var(--space-2); }
+  .task-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: var(--space-4); align-items: start; }
+  .task-main { display: grid; gap: var(--space-4); }
+  .task-aside { display: grid; gap: var(--space-4); position: sticky; top: 0; }
+  .kv-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
+  .kv .k { color: var(--muted); font: 500 10px/1 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+  .kv .v { margin-top: 7px; font-size: var(--text-sm); font-weight: 550; }
+  .kv .v.mono { font-size: var(--text-xs); font-weight: 500; }
+  .section-note { margin-top: calc(var(--space-4) * -1 + 3px); margin-bottom: var(--space-4); color: var(--muted); font-size: 11px; }
+  .edit-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+  .edit-grid .wide { grid-column: 1 / -1; }
+  .form-stack label strong { color: var(--fg); font-weight: 550; }
+  .form-stack input[readonly], .form-stack textarea[readonly], .form-stack select:disabled { background: var(--bg); color: var(--muted); cursor: default; }
+  .prompt-shell { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+  .prompt-bar { display: flex; align-items: center; gap: var(--space-2); padding: 8px 10px; border-bottom: 1px solid var(--border); background: var(--bg); }
+  .prompt-bar .path { color: var(--muted); font: 500 11px/1 var(--font-mono); }
+  .prompt-bar .count { margin-left: auto; color: var(--muted); font: 400 10px/1 var(--font-mono); }
+  .prompt-editor { width: 100%; min-height: 248px; resize: vertical; border: 0; padding: var(--space-4); background: var(--surface); color: var(--fg); font: 400 12px/1.75 var(--font-mono); tab-size: 2; }
+  .prompt-editor:focus { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
+  .prompt-editor[readonly] { background: color-mix(in oklab, var(--fg), transparent 97%); color: color-mix(in oklab, var(--fg), transparent 20%); }
+  .var-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--space-3); }
+  .var-chip { padding: 4px 7px; border: 1px solid var(--border); border-radius: 5px; background: var(--bg); color: var(--muted); font: 500 10px/1 var(--font-mono); }
+  .preview-box { min-height: 160px; padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-sm); background: color-mix(in oklab, var(--fg), transparent 97%); font-size: var(--text-xs); line-height: 1.7; }
+  .preview-box .empty { color: var(--muted); }
+  .preview-box h3 { margin-bottom: var(--space-2); }
+  .source-list { display: grid; gap: 0; }
+  .source-row { display: grid; grid-template-columns: 1fr auto; gap: var(--space-2); padding: 9px 0; border-bottom: 1px solid var(--border-soft); align-items: center; }
+  .source-row:last-child { border-bottom: 0; }
+  .source-row .name { font: 500 11px/1.4 var(--font-mono); overflow-wrap: anywhere; }
+  .source-row small { color: var(--muted); font-size: 10px; }
+  .run-list { display: grid; gap: 0; }
+  .run-row { display: grid; grid-template-columns: 78px 1fr auto; gap: var(--space-2); padding: 10px 0; border-bottom: 1px solid var(--border-soft); align-items: start; }
+  .run-row:last-child { border-bottom: 0; }
+  .run-row time { color: var(--muted); font: 500 10px/1.5 var(--font-mono); }
+  .run-row b { font-size: var(--text-xs); font-weight: 550; }
+  .run-row p { color: var(--muted); font-size: 10px; margin-top: 2px; }
+  .change-strip { display: none; align-items: center; gap: var(--space-2); padding: 9px 12px; margin-bottom: var(--space-4); border: 1px solid color-mix(in oklab, var(--warn), transparent 55%); border-radius: var(--radius-sm); background: var(--tint-warn); font-size: var(--text-xs); }
+  .change-strip.on { display: flex; }
+  .change-strip .save-state { margin-left: auto; color: color-mix(in oklab, var(--warn), var(--fg) 40%); font: 600 10px/1 var(--font-mono); }
+  .switch-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: 10px 0; }
+  .switch { position: relative; width: 38px; height: 22px; flex: none; }
+  .switch input { position: absolute; opacity: 0; }
+  .switch span { position: absolute; inset: 0; border-radius: var(--radius-pill); background: var(--border); cursor: pointer; transition: background var(--motion-fast) var(--ease-standard); }
+  .switch span::after { content: ""; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; border-radius: 50%; background: var(--surface); box-shadow: var(--elev-raised); transition: transform var(--motion-fast) var(--ease-standard); }
+  .switch input:checked + span { background: var(--success); }
+  .switch input:checked + span::after { transform: translateX(16px); }
+  .switch input:disabled + span { cursor: default; opacity: .7; }
+  .danger-zone { border-color: color-mix(in oklab, var(--danger), transparent 72%); }
+  .danger-zone > header h2 { color: var(--danger); }
+  @media (max-width: 1100px) {
+    .task-layout { grid-template-columns: 1fr; }
+    .task-aside { position: static; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 760px) {
+    .task-head { flex-wrap: wrap; }
+    .task-head .actions { width: 100%; margin-left: 0; }
+    .task-head .actions .btn { flex: 1; justify-content: center; }
+    .kv-grid, .edit-grid, .task-aside { grid-template-columns: 1fr; }
+    .edit-grid .wide { grid-column: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="side-brand"><span class="logo">PL</span><div><b>Pipeline Console</b><small>抖音内容流水线 · 本地看板</small></div></div>
+    <nav class="side-nav">
+      <a href="overview.html">总览 <span class="en">Overview</span><span class="dot-warn" title="有警报"></span></a>
+      <a href="kanban.html">生产看板 <span class="en">Kanban</span><span class="cnt">5</span></a>
+      <a href="review.html">审核台 <span class="en">Review</span><span class="cnt">3</span></a>
+      <a href="backlog.html">选题池 <span class="en">Backlog</span><span class="cnt">8</span></a>
+      <a href="harness.html" class="active">治理线 <span class="en">Harness</span><span class="cnt" id="navUnread">3</span></a>
+      <a href="metrics.html">数据复盘 <span class="en">Metrics</span></a>
+    </nav>
+    <div class="side-foot">localhost:5170 · 审核发布闭环<br>V2 · 权限 L0/L1/L2<br>真相源：meta / logs / publish jobs</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="lights">
+        <span class="light ok" data-tip="飞书 server：进程运行中"><i></i>飞书</span>
+        <span class="light ok" data-tip="抖音 cookie：有效"><i></i>Cookie</span>
+        <span class="light bad" data-tip="TTS 余额不足"><i></i>TTS</span>
+        <span class="light warn" data-tip="git 工作区：2 个未提交变更"><i></i>git</span>
+      </div>
+      <div class="gsearch"><input id="gsearch" class="gsearch-input" type="search" placeholder="搜 slug / 标题 / backlog id（⌘K）" autocomplete="off"><div class="gsearch-pop" id="gsearchPop" hidden></div></div>
+      <div class="refresh-wrap"><button class="btn btn-sm" id="refreshBtn"><span class="spin">⟳</span> 刷新</button><span class="refresh-time" id="refreshTime"></span></div>
+    </header>
+
+    <main class="page">
+      <div class="task-head">
+        <a class="back" href="harness.html">← 任务注册表</a>
+        <div>
+          <div class="task-title"><h1 id="taskName">douyin-ideate</h1><span class="badge b-success" id="enabledBadge"><i></i>已启用</span><span class="badge b-warn" id="healthBadge"><i></i>运行逾期</span></div>
+          <p class="desc" id="taskDesc">定期补给选题池，并根据六维评分挑选可进入生产的内容。</p>
+        </div>
+        <div class="actions"><button class="btn" id="previewBtn">预览本次任务</button><button class="btn btn-primary" id="editBtn">编辑配置</button></div>
+      </div>
+
+      <div class="change-strip" id="changeStrip"><span>当前配置有未保存修改</span><span class="save-state">只影响任务配置，不改历史账本</span></div>
+
+      <div class="task-layout">
+        <div class="task-main">
+          <section class="card" data-od-id="task-overview">
+            <header><h2>任务概况</h2><span class="right mono" id="taskPath">harness/tasks.md#douyin-ideate</span></header>
+            <div class="kv-grid">
+              <div class="kv"><div class="k">Skill</div><div class="v mono" id="taskSkill">douyin-ideate</div></div>
+              <div class="kv"><div class="k">触发方式</div><div class="v mono" id="taskTrigger">periodic · 2d</div></div>
+              <div class="kv"><div class="k">上次运行</div><div class="v mono" id="lastRun">07-06 08:30</div></div>
+              <div class="kv"><div class="k">运行状态</div><div class="v" id="runHealth">5 天未运行 · 已逾期</div></div>
+            </div>
+          </section>
+
+          <section class="card" data-od-id="task-schedule">
+            <header><h2>执行计划</h2><span class="right">保存后由 dispatcher 重算下次执行时间</span></header>
+            <p class="section-note">支持周期任务和事件任务；时区固定为 Asia/Shanghai，避免跨环境漂移。</p>
+            <div class="form-stack edit-grid">
+              <label><strong>触发类型</strong><select id="triggerType" disabled><option value="periodic">周期触发</option><option value="event">事件触发</option></select></label>
+              <label><strong>启用状态</strong><span class="switch-row"><span id="enabledText">任务已启用</span><span class="switch"><input id="enabledInput" type="checkbox" checked disabled><span></span></span></span></label>
+              <label id="intervalField"><strong>执行周期</strong><div style="display:grid;grid-template-columns:1fr 110px;gap:8px"><input id="intervalValue" type="number" min="1" value="2" readonly><select id="intervalUnit" disabled><option value="day">天</option><option value="hour">小时</option></select></div></label>
+              <label id="timeField"><strong>执行时间</strong><input id="runTime" type="time" value="08:30" readonly></label>
+              <label id="eventField" class="wide" hidden><strong>触发事件</strong><select id="eventName" disabled><option value="published">内容发布完成</option><option value="approved">内容审核通过</option><option value="manual">仅手动触发</option></select></label>
+              <label class="wide"><strong>错过计划后的处理</strong><select id="missPolicy" disabled><option value="next">跳过本次，等待下个周期</option><option value="catchup">服务恢复后补跑一次</option><option value="manual">转为人工确认</option></select></label>
+            </div>
+          </section>
+
+          <section class="card" data-od-id="task-prompt">
+            <header><h2>提示词与关键指令</h2><span class="right">编辑时保留变量名，保存前自动检查缺失变量</span></header>
+            <div class="prompt-shell">
+              <div class="prompt-bar"><span class="path" id="promptPath">skills/douyin-ideate/prompt.md</span><span class="count" id="promptCount">0 字符</span></div>
+              <textarea class="prompt-editor" id="promptEditor" readonly spellcheck="false"></textarea>
+            </div>
+            <div class="var-list" id="variableList"></div>
+          </section>
+
+          <section class="card" data-od-id="task-runs">
+            <header><h2>最近运行</h2><span class="right mono">harness/logs/index.jsonl · 只读</span></header>
+            <div class="run-list" id="runList"></div>
+          </section>
+        </div>
+
+        <aside class="task-aside">
+          <section class="card" data-od-id="task-preview">
+            <header><h2>本次任务预览</h2><span class="right">不执行、不写仓库</span></header>
+            <div class="preview-box" id="previewBox"><p class="empty">点击“预览本次任务”，查看当前配置将读取哪些数据、生成什么产物。</p></div>
+          </section>
+
+          <section class="card" data-od-id="task-sources">
+            <header><h2>输入与产物</h2><span class="right" id="sourceCount">—</span></header>
+            <div class="source-list" id="sourceList"></div>
+          </section>
+
+          <section class="card danger-zone" data-od-id="task-danger">
+            <header><h2>运行控制</h2><span class="right">L2 操作</span></header>
+            <p class="muted" style="font-size:var(--text-xs);margin-bottom:var(--space-3);">手动运行会创建新的账本记录；不会覆盖已有报告。</p>
+            <button class="btn btn-danger" id="runNowBtn" style="width:100%;justify-content:center">确认后手动运行</button>
+          </section>
+        </aside>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="runModal" role="dialog" aria-modal="true" aria-labelledby="runModalTitle">
+  <div class="modal">
+    <header><h2 id="runModalTitle">确认手动运行</h2><button class="btn btn-sm modal-close" data-close>关闭</button></header>
+    <div class="modal-body"><p>将按当前已保存配置运行 <b class="mono" id="runTaskName">douyin-ideate</b>，并新增一条运行账本。</p><div class="alert a-warn" style="margin-top:var(--space-4)"><span class="sev"></span><div><b>未保存修改不会进入本次运行</b><p class="why">请先保存执行时间或提示词调整，再发起手动运行。</p></div></div></div>
+    <footer><button class="btn" data-close>取消</button><button class="btn btn-primary" id="confirmRun">确认并运行</button></footer>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+const TASKS = {
+  "douyin-ideate": {
+    desc: "定期补给选题池，并根据六维评分挑选可进入生产的内容。", skill: "douyin-ideate", trigger: "periodic", interval: 2, unit: "day", time: "08:30", miss: "catchup", health: "5 天未运行 · 已逾期", last: "07-06 08:30", warn: true,
+    promptPath: "skills/douyin-ideate/prompt.md", vars: ["{{backlog_path}}", "{{research_snapshot}}", "{{today}}", "{{target_count}}"],
+    prompt: `你负责为抖音内容流水线补给选题。\n\n读取 {{backlog_path}} 与 {{research_snapshot}}，先清理重复、过期和来源不足的条目，再按信息增量、受众匹配、时效性、可视化潜力、争议度、制作成本六个维度评分。\n\n本次目标：\n1. 新增不超过 {{target_count}} 条有可靠来源的候选选题；\n2. 对高分条目补齐切角、内容类型和来源链接；\n3. 不自动删除旧条目，只标记问题；\n4. 输出运行摘要与变更清单，日期使用 {{today}}。`,
+    sources: [["backlog/index.md", "读取 · 选题池"], ["research/latest.md", "读取 · 研究快照"], ["backlog/index.md", "写入 · 候选选题"], ["harness/logs/*.md", "写入 · 运行报告"]],
+    runs: [["07-06 08:30", "运行成功 · 新增 3 条 idea", "目标 backlog · findings 3", "ok"], ["07-04 08:30", "运行成功 · 新增 2 条 idea", "目标 backlog · findings 1", "ok"], ["07-02 08:30", "运行成功 · 无新增", "来源不足，保留原池", "ok"]]
+  },
+  "backlog-gardener": {
+    desc: "巡检选题池的数据质量，标记撞题、过期和来源缺失问题。", skill: "backlog-gardener", trigger: "periodic", interval: 7, unit: "day", time: "09:00", miss: "next", health: "4 天前运行 · 正常", last: "07-07 09:00", warn: false,
+    promptPath: "skills/backlog-gardener/prompt.md", vars: ["{{backlog_path}}", "{{stale_days}}", "{{similarity_threshold}}"],
+    prompt: `巡检 {{backlog_path}}，找出重复选题、超过 {{stale_days}} 天未推进的条目，以及缺少来源链接或关键字段的记录。\n\n相似度高于 {{similarity_threshold}} 的条目只做撞题标记，不自动删除。输出问题清单、建议动作和涉及的 backlog id。`,
+    sources: [["backlog/index.md", "读取 · 全量选题"], ["brain/ideate-rules.md", "读取 · 清扫规则"], ["harness/logs/*.md", "写入 · 巡检报告"]],
+    runs: [["07-07 09:00", "运行成功 · findings 4", "撞题 1 · 过期 1 · 缺字段 2", "ok"], ["06-30 09:00", "运行成功 · findings 2", "过期 2", "ok"]]
+  },
+  "skill-auditor": {
+    desc: "审计技能契约与 brain/ 规则的一致性，输出待人工处理的差异。", skill: "skill-auditor", trigger: "periodic", interval: 14, unit: "day", time: "10:00", miss: "manual", health: "9 天前运行 · 正常", last: "07-02 10:00", warn: false,
+    promptPath: "skills/skill-auditor/prompt.md", vars: ["{{skill_root}}", "{{brain_root}}", "{{contract_files}}"],
+    prompt: `对比 {{skill_root}}、{{brain_root}} 与 {{contract_files}} 中的状态定义、输入输出和权限边界。\n\n只报告不一致和潜在风险，不自动修改文件。每条 finding 必须给出证据路径、影响范围和建议的人工作业。`,
+    sources: [["skills/*/SKILL.md", "读取 · 技能契约"], ["brain/*.md", "读取 · 业务规则"], ["CLAUDE.md", "读取 · 全局约束"], ["harness/logs/*.md", "写入 · 审计报告"]],
+    runs: [["07-02 10:00", "运行成功 · findings 2", "契约差异 1 · 模板缺失 1", "ok"], ["06-18 10:00", "运行成功 · findings 1", "状态描述不一致", "ok"]]
+  },
+  "douyin-retro": {
+    desc: "在内容发布后的多个观察窗口拉取表现数据，生成复盘与变更提议。", skill: "douyin-retro", trigger: "event", event: "published", windows: "24h / 72h / 7d", miss: "catchup", health: "最近 07-10 22:00 · 正常", last: "07-10 22:00", warn: false,
+    promptPath: "skills/douyin-retro/prompt.md", vars: ["{{content_meta}}", "{{window}}", "{{metrics_snapshot}}", "{{account_baseline}}"],
+    prompt: `基于 {{content_meta}}、{{metrics_snapshot}} 与 {{account_baseline}}，分析发布后 {{window}} 窗口的表现。\n\n区分事实、归因和建议；所有建议只写入报告，不自动修改 brain/。对异常指标给出证据，对缺失数据明确标记为空。`,
+    sources: [["content/*/meta.yaml", "读取 · 内容元数据"], ["metrics/*.json", "读取 · 表现快照"], ["brain/*.md", "读取 · 账号基线"], ["harness/logs/*.md", "写入 · 复盘报告"]],
+    runs: [["07-10 22:00", "运行成功 · EP14 · 7d", "findings 3 · applied false", "ok"], ["07-09 21:30", "运行成功 · EP15 · 72h", "findings 2 · applied false", "ok"], ["07-07 20:00", "运行成功 · EP14 · 72h", "findings 1 · applied false", "ok"]]
+  }
+};
+
+const params = new URLSearchParams(location.search);
+const taskId = TASKS[params.get("task")] ? params.get("task") : "douyin-ideate";
+const base = TASKS[taskId];
+const storageKey = `pipeline.taskConfig.${taskId}`;
+let editing = false;
+let dirty = false;
+
+function savedConfig() { try { return JSON.parse(localStorage.getItem(storageKey) || "null"); } catch (_) { return null; } }
+function config() { return Object.assign({}, base, savedConfig() || {}); }
+function el(id) { return document.getElementById(id); }
+function setEditable(on) {
+  editing = on;
+  ["intervalValue", "runTime", "promptEditor"].forEach((id) => el(id).readOnly = !on);
+  ["triggerType", "intervalUnit", "eventName", "missPolicy"].forEach((id) => el(id).disabled = !on);
+  el("enabledInput").disabled = !on;
+  el("editBtn").textContent = on ? "保存更改" : "编辑配置";
+  el("editBtn").classList.toggle("btn-primary", !on || dirty);
+}
+function render() {
+  const d = config();
+  document.title = `${taskId} · 治理任务详情`;
+  el("taskName").textContent = taskId; el("runTaskName").textContent = taskId; el("taskDesc").textContent = d.desc;
+  el("taskPath").textContent = `harness/tasks.md#${taskId}`; el("taskSkill").textContent = d.skill;
+  el("taskTrigger").textContent = d.trigger === "event" ? `event · ${d.windows}` : `periodic · ${d.interval}${d.unit === "hour" ? "h" : "d"}`;
+  el("lastRun").textContent = d.last; el("runHealth").textContent = d.health;
+  el("healthBadge").style.display = d.warn ? "" : "none";
+  el("enabledInput").checked = d.enabled !== false; el("enabledText").textContent = d.enabled === false ? "任务已停用" : "任务已启用";
+  el("enabledBadge").className = `badge ${d.enabled === false ? "" : "b-success"}`; el("enabledBadge").innerHTML = `<i></i>${d.enabled === false ? "已停用" : "已启用"}`;
+  el("triggerType").value = d.trigger; el("intervalValue").value = d.interval || 1; el("intervalUnit").value = d.unit || "day"; el("runTime").value = d.time || "08:30"; el("eventName").value = d.event || "published"; el("missPolicy").value = d.miss || "next";
+  el("intervalField").hidden = d.trigger === "event"; el("timeField").hidden = d.trigger === "event"; el("eventField").hidden = d.trigger !== "event";
+  el("promptPath").textContent = d.promptPath; el("promptEditor").value = d.prompt; updateCount();
+  el("variableList").innerHTML = d.vars.map((v) => `<span class="var-chip">${v}</span>`).join("");
+  el("sourceCount").textContent = `${d.sources.length} 项`;
+  el("sourceList").innerHTML = d.sources.map((s) => `<div class="source-row"><span class="name">${s[0]}</span><small>${s[1]}</small></div>`).join("");
+  el("runList").innerHTML = d.runs.map((r) => `<div class="run-row"><time>${r[0]}</time><div><b>${r[1]}</b><p>${r[2]}</p></div><span class="badge b-success"><i></i>${r[3]}</span></div>`).join("");
+  setEditable(false);
+}
+function updateCount() { el("promptCount").textContent = `${el("promptEditor").value.length} 字符`; }
+function markDirty() { if (!editing) return; dirty = true; el("changeStrip").classList.add("on"); el("editBtn").classList.add("btn-primary"); }
+function collect() {
+  return { enabled: el("enabledInput").checked, trigger: el("triggerType").value, interval: Number(el("intervalValue").value) || 1, unit: el("intervalUnit").value, time: el("runTime").value, event: el("eventName").value, miss: el("missPolicy").value, prompt: el("promptEditor").value };
+}
+function save() {
+  const required = base.vars.filter((v) => !el("promptEditor").value.includes(v));
+  if (required.length) { odToast(`保存失败：提示词缺少变量 ${required.join("、")}`); el("promptEditor").focus(); return; }
+  localStorage.setItem(storageKey, JSON.stringify(collect())); dirty = false; el("changeStrip").classList.remove("on"); setEditable(false); render(); odToast("任务配置已保存，调度时间将重新计算");
+}
+function preview() {
+  const d = Object.assign({}, config(), editing ? collect() : {});
+  const trigger = d.trigger === "event" ? `事件触发：${d.event === "published" ? "内容发布完成" : "人工触发"}，窗口 ${d.windows || "按配置"}` : `周期触发：每 ${d.interval} ${d.unit === "hour" ? "小时" : "天"}，${d.time}`;
+  el("previewBox").innerHTML = `<h3>${taskId}</h3><p><b>触发：</b>${trigger}</p><p><b>读取：</b>${base.sources.filter((s) => s[1].startsWith("读取")).map((s) => s[0]).join("、")}</p><p><b>产物：</b>${base.sources.filter((s) => s[1].startsWith("写入")).map((s) => s[0]).join("、")}</p><p><b>提示词：</b>${d.prompt.length} 字符，${base.vars.length} 个变量均已声明</p><p class="muted" style="margin-top:8px">这是配置预览，不会调用 skill 或写入运行账本。</p>`;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  render();
+  el("editBtn").addEventListener("click", () => { if (!editing) { setEditable(true); odToast("已进入编辑模式"); } else save(); });
+  el("previewBtn").addEventListener("click", preview);
+  ["triggerType", "intervalValue", "intervalUnit", "runTime", "eventName", "missPolicy", "enabledInput", "promptEditor"].forEach((id) => el(id).addEventListener("input", () => { markDirty(); updateCount(); if (id === "triggerType") { el("intervalField").hidden = el(id).value === "event"; el("timeField").hidden = el(id).value === "event"; el("eventField").hidden = el(id).value !== "event"; } }));
+  el("runNowBtn").addEventListener("click", () => el("runModal").classList.add("on"));
+  document.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", () => el("runModal").classList.remove("on")));
+  el("confirmRun").addEventListener("click", () => { el("runModal").classList.remove("on"); el("runNowBtn").disabled = true; el("runNowBtn").textContent = "已进入运行队列"; odToast(`${taskId} 已进入运行队列`); });
+  window.addEventListener("beforeunload", (e) => { if (!dirty) return; e.preventDefault(); e.returnValue = ""; });
+});
+</script>
+</body>
+</html>

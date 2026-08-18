@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>生产看板 · Pipeline Console</title>
+<link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="side-brand">
+      <span class="logo">PL</span>
+      <div><b>Pipeline Console</b><small>抖音内容流水线 · 本地看板</small></div>
+    </div>
+    <nav class="side-nav">
+      <a href="overview.html">总览 <span class="en">Overview</span><span class="dot-warn" title="有警报"></span></a>
+      <a href="kanban.html" class="active">生产看板 <span class="en">Kanban</span><span class="cnt">5</span></a>
+      <a href="review.html">审核台 <span class="en">Review</span><span class="cnt">3</span></a>
+      <a href="backlog.html">选题池 <span class="en">Backlog</span><span class="cnt">8</span></a>
+      <a href="harness.html">治理线 <span class="en">Harness</span><span class="cnt" id="navUnread">3</span></a>
+      <a href="metrics.html">数据复盘 <span class="en">Metrics</span></a>
+    </nav>
+    <div class="side-foot">localhost:5170 · 审核发布闭环<br>V2 · 权限 L0/L1/L2<br>真相源：meta / logs / publish jobs</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="lights">
+        <span class="light ok" data-tip="飞书 server：进程运行中（ps 检查 server.py）"><i></i>飞书</span>
+        <span class="light ok" data-tip="抖音 cookie：有效 · 读 07-10 sau check 缓存，不主动外呼"><i></i>Cookie</span>
+        <span class="light bad" data-tip="TTS 余额：今日 daily-run 日志出现 1008 余额不足"><i></i>TTS</span>
+        <span class="light warn" data-tip="git 工作区：2 个未提交变更"><i></i>git</span>
+      </div>
+      <div class="gsearch">
+        <input id="gsearch" class="gsearch-input" type="search" placeholder="搜 slug / 标题 / backlog id（⌘K）" autocomplete="off">
+        <div class="gsearch-pop" id="gsearchPop" hidden></div>
+      </div>
+      <div class="refresh-wrap">
+        <button class="btn btn-sm" id="refreshBtn"><span class="spin">⟳</span> 刷新</button>
+        <span class="refresh-time" id="refreshTime"></span>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="page-head">
+        <h1>生产看板</h1>
+        <span class="sub">卡片不可拖拽；review / approved 可进入审核台，状态仍由 douyin-publish 统一记账</span>
+        <div class="right field">
+          <label>类型</label>
+          <select id="fType">
+            <option value="">全部</option>
+            <option value="口播">口播</option>
+            <option value="图文">图文</option>
+          </select>
+          <label>pillar</label>
+          <select id="fPillar">
+            <option value="">全部</option>
+            <option value="深度">深度</option>
+            <option value="流量">流量</option>
+          </select>
+          <label>系列</label>
+          <select id="fSeries">
+            <option value="">全部</option>
+            <option value="Agent 实战">Agent 实战</option>
+            <option value="行业观察">行业观察</option>
+          </select>
+          <label>日期</label>
+          <select id="fRange">
+            <option value="30">近 30 天 + 未完成</option>
+            <option value="all">全部</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="kb-board" data-od-id="kb-board">
+
+        <!-- ideated -->
+        <div class="kb-col c-ideated">
+          <header><i></i>ideated 已立项 <span class="cnt">1</span></header>
+          <div class="kb-cards">
+            <a class="kb-card" href="detail.html" data-type="口播" data-pillar="深度" data-series="Agent 实战">
+              <div class="t">EP20 上下文工程，比提示词工程重要在哪</div>
+              <div class="slug">2026-07-10-context-engineering</div>
+              <div class="meta"><span class="tag">口播</span><span class="tag t-deep">深度</span><span class="days">停留 1 天</span></div>
+            </a>
+          </div>
+        </div>
+
+        <!-- drafting -->
+        <div class="kb-col c-drafting">
+          <header><i></i>drafting 在写 <span class="cnt">1</span></header>
+          <div class="kb-cards">
+            <a class="kb-card" href="detail.html" data-type="口播" data-pillar="流量" data-series="">
+              <div class="t">EP19 MCP 三分钟讲明白</div>
+              <div class="slug">2026-07-09-mcp-explained</div>
+              <div class="meta"><span class="tag">口播</span><span class="tag">流量</span><span class="days">停留 2 天</span></div>
+            </a>
+          </div>
+        </div>
+
+        <!-- review -->
+        <div class="kb-col c-review">
+          <header><i></i>review 待审 <span class="cnt">1</span></header>
+          <div class="kb-cards">
+            <div class="kb-card stale" data-type="口播" data-pillar="深度" data-series="Agent 实战">
+              <div class="cover">assets/cover.png</div>
+              <div class="t"><a href="detail.html" style="color:inherit;">EP18 Agent 记忆系统怎么搭</a></div>
+              <div class="slug">2026-07-04-agent-memory</div>
+              <div class="meta"><span class="tag">口播</span><span class="tag t-deep">深度</span><span class="days hot">停留 3 天 ⚠</span></div>
+              <div class="card-actions"><a class="btn btn-sm" href="detail.html">查看详情</a><a class="btn btn-sm btn-primary" href="review.html">开始审核</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- approved -->
+        <div class="kb-col c-approved">
+          <header><i></i>approved 待发 <span class="cnt">1</span></header>
+          <div class="kb-cards">
+            <div class="kb-card" data-type="图文" data-pillar="流量" data-series="">
+              <div class="cover">assets/cover.png</div>
+              <div class="t"><a href="detail.html" style="color:inherit;">EP16 一条视频的自动化流水线</a></div>
+              <div class="slug">2026-07-03-pipeline-automation</div>
+              <div class="meta"><span class="tag">图文</span><span class="tag">流量</span><span class="days">停留 1 天</span></div>
+              <div class="card-actions"><a class="btn btn-sm" href="review.html">设置排期</a><a class="btn btn-sm btn-primary" href="review.html">发布</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- publishing -->
+        <div class="kb-col c-publishing">
+          <header><i></i>publishing 发布中 <span class="cnt">0</span></header>
+          <div class="kb-cards">
+            <div class="kb-empty">当前无执行中任务<br>发布作业启动后在此显示步骤进度</div>
+          </div>
+        </div>
+
+        <!-- scheduled -->
+        <div class="kb-col c-scheduled">
+          <header><i></i>scheduled 已排期 <span class="cnt">1</span></header>
+          <div class="kb-cards">
+            <a class="kb-card stale" href="detail.html" data-type="口播" data-pillar="深度" data-series="">
+              <div class="cover">assets/cover.png</div>
+              <div class="t">EP17 为什么你的 RAG 检索不准</div>
+              <div class="slug">2026-07-05-rag-retrieval</div>
+              <div class="meta"><span class="tag">口播</span><span class="tag t-deep">深度</span><span class="days hot">排期 07-09 20:00 已过 38h 未翻 ⚠</span></div>
+            </a>
+          </div>
+        </div>
+
+        <!-- published（默认折叠，只显示最近 5 条） -->
+        <div class="kb-col c-published">
+          <header><i></i>published 已发布 <span class="cnt">10</span></header>
+          <div class="kb-cards">
+            <a class="kb-card" href="detail.html" data-type="口播" data-pillar="深度" data-series="行业观察">
+              <div class="t">EP15 大模型降价战说明什么</div>
+              <div class="slug">2026-07-01-price-war · 发布 07-06</div>
+              <div class="meta"><span class="tag">口播</span><span class="tag t-deep">深度</span><span class="badge b-warn" style="font-size:10px;"><i></i>backlog 未同步</span></div>
+            </a>
+            <a class="kb-card" href="detail.html" data-type="口播" data-pillar="流量" data-series="">
+              <div class="t">EP14 抖音算法喜欢什么视频</div>
+              <div class="slug">2026-06-29-douyin-algo · 发布 07-04</div>
+              <div class="meta"><span class="tag">口播</span><span class="tag">流量</span></div>
+            </a>
+            <a class="kb-card" href="detail.html" data-type="口播" data-pillar="深度" data-series="">
+              <div class="t">EP13 AI 编程工具横评</div>
+              <div class="slug">2026-06-27-ai-coding-tools · 发布 07-02</div>
+              <div class="meta"><span class="tag">口播</span><span class="tag t-deep">深度</span></div>
+            </a>
+            <a class="kb-card" href="detail.html" data-type="图文" data-pillar="深度" data-series="行业观察">
+              <div class="t">EP12 一人公司的内容流水线</div>
+              <div class="slug">2026-06-25-solo-pipeline · 发布 06-30</div>
+              <div class="meta"><span class="tag">图文</span><span class="tag t-deep">深度</span></div>
+            </a>
+            <a class="kb-card" href="detail.html" data-type="口播" data-pillar="流量" data-series="">
+              <div class="t">EP11 Sora 之后的视频行业</div>
+              <div class="slug">2026-06-22-after-sora · 发布 06-27</div>
+              <div class="meta"><span class="tag">口播</span><span class="tag">流量</span></div>
+            </a>
+            <details class="fold" id="pubFold">
+              <summary>还有 5 条更早（EP06–EP10）</summary>
+              <div class="kb-cards" style="margin-top: var(--space-1);">
+                <a class="kb-card" href="detail.html" data-type="口播" data-pillar="流量" data-series=""><div class="t">EP10 AI 岗位真实薪资</div><div class="slug">2026-06-20-ai-salary · 发布 06-25</div></a>
+                <a class="kb-card" href="detail.html" data-type="口播" data-pillar="深度" data-series=""><div class="t">EP08 开源模型商用避坑</div><div class="slug">2026-06-15-oss-license · 发布 06-20</div></a>
+                <a class="kb-card" href="detail.html" data-type="图文" data-pillar="流量" data-series=""><div class="t">EP07 三个提示词习惯</div><div class="slug">2026-06-12-prompt-habits · 发布 06-17</div></a>
+                <a class="kb-card" href="detail.html" data-type="口播" data-pillar="深度" data-series="行业观察"><div class="t">EP06 大厂裁员与 AI 替代</div><div class="slug">2026-06-08-layoff-ai · 发布 06-13</div></a>
+                <a class="kb-card" href="detail.html" data-type="口播" data-pillar="流量" data-series=""><div class="t">EP05 AI 生成视频第一桶金</div><div class="slug">2026-06-05-ai-video-money · 发布 06-10</div></a>
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <!-- rejected -->
+        <div class="kb-col c-rejected">
+          <header><i></i>rejected 已否 <span class="cnt">1</span></header>
+          <div class="kb-cards">
+            <a class="kb-card" href="detail.html" data-type="口播" data-pillar="流量" data-series="">
+              <div class="t">EP09 蹭热点翻车复盘</div>
+              <div class="slug">2026-06-18-hotspot-fail · 否于 06-24</div>
+              <div class="meta"><span class="tag">口播</span><span class="tag">流量</span><span class="tag">原因：与 EP06 撞题</span></div>
+            </a>
+            <div class="kb-card parse-fail">
+              <div class="t muted">⚠ 1 条 meta.yaml 解析失败</div>
+              <div class="slug">content/2026-06-02-draft-x/meta.yaml:14 · 缩进错误</div>
+              <div class="meta"><span class="badge b-danger"><i></i>降级显示原文</span></div>
+              <details class="fold"><summary>原文</summary>
+                <div class="logblock">status: rejected
+title: 「AI 算命」灰产观察
+ pillar: 流量   <span class="hl">← 缩进多一格，js-yaml 报错</span></div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 2.5 状态机图例 -->
+      <p class="muted" style="margin-top: var(--space-4); font-size: var(--text-xs); line-height: 1.8;" data-od-id="kb-legend">
+        <b>状态机规则</b>：生产完成并通过自动质检后进入 review；人工可驳回至 drafting、仅通过至 approved，或审核并发布进入 publishing。发布失败保留 approved 便于重试；成功后由 douyin-publish Step 5 一次翻齐 meta / backlog / dashboard。
+        卡片描边琥珀 = 停留 &gt;48h（与总览警报联动）。解析失败条目降级显示原文，不吞掉、不崩页。
+      </p>
+    </main>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+/* 2.4 筛选器：类型 / pillar / 系列 / 日期范围，列头计数联动 */
+document.addEventListener("DOMContentLoaded", () => {
+  const selects = ["fType", "fPillar", "fSeries", "fRange"].map((id) => document.getElementById(id));
+  const [fType, fPillar, fSeries, fRange] = selects;
+
+  function apply() {
+    document.querySelectorAll(".kb-card[data-type]").forEach((card) => {
+      const okType = !fType.value || card.dataset.type === fType.value;
+      const okPillar = !fPillar.value || card.dataset.pillar === fPillar.value;
+      const okSeries = !fSeries.value || card.dataset.series === fSeries.value;
+      card.style.display = okType && okPillar && okSeries ? "" : "none";
+    });
+    /* 日期范围：选「全部」自动展开更早的 published */
+    const fold = document.getElementById("pubFold");
+    if (fold) fold.open = fRange.value === "all";
+    /* 列头计数只统计可见卡片 */
+    document.querySelectorAll(".kb-col").forEach((col) => {
+      const visible = [...col.querySelectorAll(".kb-card[data-type]")].filter((c) => c.style.display !== "none").length;
+      const cnt = col.querySelector("header .cnt");
+      if (cnt) cnt.textContent = visible;
+    });
+  }
+  selects.forEach((s) => s.addEventListener("change", apply));
+  apply();
+});
+</script>
+</body>
+</html>

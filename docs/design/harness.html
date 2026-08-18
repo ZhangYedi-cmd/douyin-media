@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>治理线 · Pipeline Console</title>
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  .unread-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-right: 4px; }
+  .read .unread-dot { background: var(--border); }
+  .task-link { color: var(--fg); font-weight: 600; }
+  .task-link:hover { color: var(--accent); text-decoration: none; }
+  .task-row { cursor: pointer; }
+  .task-row .row-go { color: var(--muted); font: 500 11px/1 var(--font-mono); white-space: nowrap; }
+  .task-row:hover .row-go { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="side-brand">
+      <span class="logo">PL</span>
+      <div><b>Pipeline Console</b><small>抖音内容流水线 · 本地看板</small></div>
+    </div>
+    <nav class="side-nav">
+      <a href="overview.html">总览 <span class="en">Overview</span><span class="dot-warn" title="有警报"></span></a>
+      <a href="kanban.html">生产看板 <span class="en">Kanban</span><span class="cnt">5</span></a>
+      <a href="review.html">审核台 <span class="en">Review</span><span class="cnt">3</span></a>
+      <a href="backlog.html">选题池 <span class="en">Backlog</span><span class="cnt">8</span></a>
+      <a href="harness.html" class="active">治理线 <span class="en">Harness</span><span class="cnt" id="navUnread">3</span></a>
+      <a href="metrics.html">数据复盘 <span class="en">Metrics</span></a>
+    </nav>
+    <div class="side-foot">localhost:5170 · 审核发布闭环<br>V2 · 权限 L0/L1/L2<br>真相源：meta / logs / publish jobs</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="lights">
+        <span class="light ok" data-tip="飞书 server：进程运行中（ps 检查 server.py）"><i></i>飞书</span>
+        <span class="light ok" data-tip="抖音 cookie：有效 · 读 07-10 sau check 缓存，不主动外呼"><i></i>Cookie</span>
+        <span class="light bad" data-tip="TTS 余额：今日 daily-run 日志出现 1008 余额不足"><i></i>TTS</span>
+        <span class="light warn" data-tip="git 工作区：2 个未提交变更"><i></i>git</span>
+      </div>
+      <div class="gsearch">
+        <input id="gsearch" class="gsearch-input" type="search" placeholder="搜 slug / 标题 / backlog id（⌘K）" autocomplete="off">
+        <div class="gsearch-pop" id="gsearchPop" hidden></div>
+      </div>
+      <div class="refresh-wrap">
+        <button class="btn btn-sm" id="refreshBtn"><span class="spin">⟳</span> 刷新</button>
+        <span class="refresh-time" id="refreshTime"></span>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="page-head">
+        <h1>治理线</h1>
+        <span class="sub">跑没跑 · 产了什么 · 人看了没　——　报告只展示 + 标记已读，应用提议必须人工改 brain/（铁律 3）</span>
+      </div>
+
+      <!-- 5.1 任务注册表 -->
+      <section class="card" style="margin-bottom: var(--space-4);" data-od-id="hn-tasks">
+        <header><h2>任务注册表</h2><span class="right mono">harness/tasks.md（yaml 解析失败时降级为原文展示）</span></header>
+        <table class="table">
+          <thead><tr><th>task</th><th>skill</th><th>enabled</th><th>trigger</th><th>windows</th><th class="num">距上次运行</th><th></th></tr></thead>
+          <tbody>
+            <tr class="task-row" data-href="harness-task-detail.html?task=douyin-ideate">
+              <td class="mono"><a class="task-link" href="harness-task-detail.html?task=douyin-ideate">douyin-ideate</a></td><td class="mono">douyin-ideate</td>
+              <td><span class="badge b-success"><i></i>enabled</span></td><td class="mono">periodic · 2d</td><td class="nil">—</td>
+              <td class="num" style="color: color-mix(in oklab, var(--warn), var(--fg) 40%);">5 天 ⚠ 逾期</td><td class="row-go">查看详情 →</td>
+            </tr>
+            <tr class="task-row" data-href="harness-task-detail.html?task=backlog-gardener">
+              <td class="mono"><a class="task-link" href="harness-task-detail.html?task=backlog-gardener">backlog-gardener</a></td><td class="mono">backlog-gardener</td>
+              <td><span class="badge b-success"><i></i>enabled</span></td><td class="mono">periodic · 7d</td><td class="nil">—</td>
+              <td class="num">4 天</td><td class="row-go">查看详情 →</td>
+            </tr>
+            <tr class="task-row" data-href="harness-task-detail.html?task=skill-auditor">
+              <td class="mono"><a class="task-link" href="harness-task-detail.html?task=skill-auditor">skill-auditor</a></td><td class="mono">skill-auditor</td>
+              <td><span class="badge b-success"><i></i>enabled</span></td><td class="mono">periodic · 14d</td><td class="nil">—</td>
+              <td class="num">9 天</td><td class="row-go">查看详情 →</td>
+            </tr>
+            <tr class="task-row" data-href="harness-task-detail.html?task=douyin-retro">
+              <td class="mono"><a class="task-link" href="harness-task-detail.html?task=douyin-retro">douyin-retro</a></td><td class="mono">douyin-retro</td>
+              <td><span class="badge b-success"><i></i>enabled</span></td><td class="mono">event · 发布后</td><td class="mono">24h / 72h / 7d</td>
+              <td class="num">最近 07-10 22:00</td><td class="row-go">查看详情 →</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 5.2 运行账本 + 5.3 报告阅读器 -->
+      <div class="grid cols-2" style="margin-bottom: var(--space-4); align-items: start;">
+        <section class="card" data-od-id="hn-ledger">
+          <header><h2>运行账本</h2><span class="right mono">harness/logs/index.jsonl · 逆序</span></header>
+          <table class="table" id="ledger">
+            <thead><tr><th>ts</th><th>task</th><th>target</th><th>result</th><th class="num">findings</th><th>applied</th></tr></thead>
+            <tbody>
+              <tr class="clickable" data-rpt="rpt-2026-07-10-retro-EP14">
+                <td class="mono">07-10 22:00</td><td class="mono"><span class="unread-dot"></span>douyin-retro</td><td>EP14 · 7d</td>
+                <td><span class="badge b-success"><i></i>ok</span></td><td class="num">3</td><td class="mono nil">false</td>
+              </tr>
+              <tr class="clickable" data-rpt="rpt-2026-07-09-retro-EP15">
+                <td class="mono">07-09 21:30</td><td class="mono"><span class="unread-dot"></span>douyin-retro</td><td>EP15 · 72h</td>
+                <td><span class="badge b-success"><i></i>ok</span></td><td class="num">2</td><td class="mono nil">false</td>
+              </tr>
+              <tr class="clickable" data-rpt="rpt-2026-07-07-backlog-gardener">
+                <td class="mono">07-07 09:00</td><td class="mono"><span class="unread-dot"></span>backlog-gardener</td><td>backlog</td>
+                <td><span class="badge b-success"><i></i>ok</span></td><td class="num">4</td><td class="mono nil">false</td>
+              </tr>
+              <tr class="clickable" data-rpt="rpt-2026-07-06-ideate">
+                <td class="mono">07-06 08:30</td><td class="mono"><span class="unread-dot"></span>douyin-ideate</td><td>backlog</td>
+                <td><span class="badge b-success"><i></i>ok</span></td><td class="num">3</td><td class="mono">true</td>
+              </tr>
+              <tr class="clickable" data-rpt="rpt-2026-07-02-skill-auditor">
+                <td class="mono">07-02 10:00</td><td class="mono"><span class="unread-dot"></span>skill-auditor</td><td>brain/</td>
+                <td><span class="badge b-success"><i></i>ok</span></td><td class="num">2</td><td class="mono">true</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="muted" style="margin-top: var(--space-2); font-size: 11px;">点行在右侧阅读报告 · 蓝点 = 本机未读（localStorage，不写仓库）</p>
+        </section>
+
+        <section class="card reader" data-od-id="hn-reader">
+          <header><h2 id="rdTitle">报告阅读器</h2><span class="right mono" id="rdPath">点左侧账本行打开报告</span></header>
+          <div id="rdBody" class="muted" style="font-size: var(--text-sm);">未选择报告。</div>
+          <div id="rdFoot" style="margin-top: var(--space-4); display: none;">
+            <button class="btn btn-sm" id="rdMark">标记已读</button>
+            <span class="muted" style="font-size: 11px; margin-left: var(--space-2);">无「应用提议」按钮：采纳 = 人工改 brain/，看板只给路径</span>
+          </div>
+        </section>
+      </div>
+
+      <div class="grid cols-2" style="align-items: start;">
+        <!-- 5.4 待审提议聚合 -->
+        <section class="card" data-od-id="hn-proposals">
+          <header><h2>待审提议聚合</h2><span class="right">applied=false 的报告 · <span id="aggCount">3</span> 份</span></header>
+          <div id="aggList">
+            <div class="proposal" data-agg="rpt-2026-07-10-retro-EP14">
+              <p class="eyebrow">retro EP14 · 7d</p>
+              <p style="font-size: var(--text-sm); margin-top: 4px;">钩子出现时间从第 6 秒前置到首句 → 建议改 <code class="mono">brain/templates/hooks.md</code></p>
+            </div>
+            <div class="proposal" data-agg="rpt-2026-07-09-retro-EP15">
+              <p class="eyebrow">retro EP15 · 72h</p>
+              <p style="font-size: var(--text-sm); margin-top: 4px;">深度选题发布时间 20:00 → 12:30 试验 → 建议改 <code class="mono">brain/publish-windows.md</code></p>
+            </div>
+            <div class="proposal" data-agg="rpt-2026-07-07-backlog-gardener">
+              <p class="eyebrow">backlog-gardener</p>
+              <p style="font-size: var(--text-sm); margin-top: 4px;">T-041 / T-038 撞题二选一；清扫口径建议收紧到 21 天 → 涉及 <code class="mono">brain/ideate-rules.md</code></p>
+            </div>
+          </div>
+          <p class="muted" id="aggEmpty" style="display: none; font-size: var(--text-sm);">没有待审提议，都读完了。</p>
+        </section>
+
+        <!-- 5.5 复盘窗口追踪 -->
+        <section class="card" data-od-id="hn-retro">
+          <header><h2>复盘窗口追踪</h2><span class="right">published × 24h / 72h / 7d · dispatcher 镜像</span></header>
+          <table class="mx" style="width: 100%;">
+            <thead><tr><th>内容</th><th>发布</th><th>24h</th><th>72h</th><th>7d</th></tr></thead>
+            <tbody>
+              <tr><td>EP15 大模型降价战</td><td>07-06</td><td class="ok">✓ 07-07</td><td class="ok">✓ 07-09</td><td class="pend">待 07-13</td></tr>
+              <tr><td>EP14 抖音算法</td><td>07-04</td><td class="ok">✓ 07-05</td><td class="ok">✓ 07-07</td><td class="ok">✓ 07-10</td></tr>
+              <tr><td>EP13 AI 编程工具横评</td><td>07-02</td><td class="ok">✓ 07-03</td><td class="miss">✗ 漏跑</td><td class="ok">✓ 07-09</td></tr>
+              <tr><td>EP12 一人公司流水线</td><td>06-30</td><td class="ok">✓ 07-01</td><td class="ok">✓ 07-03</td><td class="ok">✓ 07-07</td></tr>
+              <tr><td>EP11 Sora 之后</td><td>06-27</td><td class="ok">✓ 06-28</td><td class="ok">✓ 06-30</td><td class="ok">✓ 07-04</td></tr>
+            </tbody>
+          </table>
+          <p class="muted" style="margin-top: var(--space-2); font-size: 11px;">✗ = 该窗口无 retro 记录（meta 发布时间 × index.jsonl 交叉得出）</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+/* 5.3 报告阅读器：内容 + 变更提议置顶 + 标记已读（localStorage） */
+const REPORTS = {
+  "rpt-2026-07-10-retro-EP14": {
+    title: "retro · EP14 抖音算法喜欢什么视频 · 7d 窗口",
+    path: "harness/logs/2026-07-10-retro-EP14.md",
+    proposal: "钩子出现时间从第 6 秒前置到首句 → 建议改 brain/templates/hooks.md",
+    body: `<h4>数据</h4><ul><li>7 日累计 45.2k 播放 · 完播 27% · 互动率 3.9%（账号前 20%）</li><li>前 3 秒流失 41%，高于账号均值 33%</li></ul>
+           <h4>归因</h4><ul><li>钩子在第 6 秒才出现，前 5 秒是 logo 动画</li><li>投流未开，自然流量占 100%，说明选题自带势能</li></ul>
+           <h4>变更提议（待人审）</h4><ul><li>hooks.md 模板：钩子文案强制首句</li><li>片头 logo 动画从 5 秒压到 1.5 秒</li><li>同类算法向选题提权 +0.3</li></ul>`,
+  },
+  "rpt-2026-07-09-retro-EP15": {
+    title: "retro · EP15 大模型降价战 · 72h 窗口",
+    path: "harness/logs/2026-07-09-retro-EP15.md",
+    proposal: "深度选题发布时间 20:00 → 12:30 试验 → 建议改 brain/publish-windows.md",
+    body: `<h4>数据</h4><ul><li>72h 播放 12.4k · 完播 31%（深度 pillar 新高）· 收藏率 2.1%</li></ul>
+           <h4>归因</h4><ul><li>晚 8 点发布撞娱乐内容高峰，首小时流速慢；次日午间二次起量</li></ul>
+           <h4>变更提议（待人审）</h4><ul><li>深度 pillar 试验 12:30 发布窗口，连续 3 条对照</li></ul>`,
+  },
+  "rpt-2026-07-07-backlog-gardener": {
+    title: "backlog-gardener · 选题池巡检",
+    path: "harness/logs/2026-07-07-backlog-gardener.md",
+    proposal: "T-041 / T-038 撞题二选一；清扫口径建议收紧到 21 天 → 涉及 brain/ideate-rules.md",
+    body: `<h4>巡检结果（findings 4）</h4><ul><li>撞题：T-041 ↔ T-038 相似度 0.83，建议二选一或差异化切角</li><li>过期：T-028 已 30+ 天未动</li><li>字段：2 条缺 links 来源</li></ul>
+           <h4>变更提议（待人审）</h4><ul><li>ideate-rules.md 清扫口径 30 天 → 21 天</li></ul>`,
+  },
+  "rpt-2026-07-06-ideate": {
+    title: "douyin-ideate · 选题补给",
+    path: "harness/logs/2026-07-06-ideate.md",
+    proposal: null,
+    body: `<h4>产出</h4><ul><li>新增 3 条 idea：T-041 / T-042 / T-043（已按六维打分入池）</li><li>来源：research-2026-07-06.md + 热点快照</li></ul><p class="muted" style="font-size:12px;">无变更提议 · applied=true</p>`,
+  },
+  "rpt-2026-07-02-skill-auditor": {
+    title: "skill-auditor · brain/ 契约审计",
+    path: "harness/logs/2026-07-02-skill-auditor.md",
+    proposal: null,
+    body: `<h4>审计结果（findings 2）</h4><ul><li>1-ideate.md 与 CLAUDE.md 的 promote 描述不一致 → 已人工修正（07-03）</li><li>hooks.md 缺少图文类模板 → 已补</li></ul><p class="muted" style="font-size:12px;">提议均已人工应用 · applied=true</p>`,
+  },
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".task-row").forEach((row) => {
+    row.addEventListener("click", (event) => {
+      if (event.target.closest("a")) return;
+      location.href = row.dataset.href;
+    });
+  });
+  const UNREAD_IDS = ["rpt-2026-07-10-retro-EP14", "rpt-2026-07-09-retro-EP15", "rpt-2026-07-07-backlog-gardener"];
+  let current = null;
+
+  function syncReadUI() {
+    /* 账本行蓝点 */
+    document.querySelectorAll("#ledger tr.clickable").forEach((tr) => {
+      const id = tr.dataset.rpt;
+      const isUnreadable = UNREAD_IDS.includes(id);
+      tr.classList.toggle("read", !isUnreadable || odIsRead(id));
+    });
+    /* 侧边栏未读数 + 聚合卡 */
+    const unread = UNREAD_IDS.filter((id) => !odIsRead(id));
+    document.getElementById("navUnread").textContent = unread.length;
+    document.getElementById("aggCount").textContent = unread.length;
+    document.querySelectorAll("#aggList .proposal").forEach((p) => {
+      p.style.display = unread.includes(p.dataset.agg) ? "" : "none";
+    });
+    document.getElementById("aggEmpty").style.display = unread.length ? "none" : "";
+  }
+
+  function openReport(id) {
+    const r = REPORTS[id];
+    if (!r) return;
+    current = id;
+    document.getElementById("rdTitle").textContent = r.title;
+    document.getElementById("rdPath").textContent = r.path;
+    const proposal = r.proposal
+      ? `<div class="proposal"><p class="eyebrow">变更提议（置顶）</p><p style="font-size: var(--text-sm); margin-top: 4px;">${r.proposal}</p></div>`
+      : "";
+    const body = document.getElementById("rdBody");
+    body.classList.remove("muted");
+    body.innerHTML = `${proposal}<div class="doc">${r.body}</div>`;
+    const foot = document.getElementById("rdFoot");
+    foot.style.display = UNREAD_IDS.includes(id) ? "" : "none";
+    document.getElementById("rdMark").textContent = odIsRead(id) ? "标为未读" : "标记已读";
+    document.querySelectorAll("#ledger tr.clickable").forEach((tr) => tr.classList.toggle("sel", tr.dataset.rpt === id));
+  }
+
+  document.querySelectorAll("#ledger tr.clickable").forEach((tr) => {
+    tr.addEventListener("click", () => openReport(tr.dataset.rpt));
+  });
+
+  document.getElementById("rdMark").addEventListener("click", () => {
+    if (!current) return;
+    const nowRead = odToggleRead(current);
+    odToast(nowRead ? "已标记已读（仅存本机，不写仓库）" : "已标为未读");
+    document.getElementById("rdMark").textContent = nowRead ? "标为未读" : "标记已读";
+    syncReadUI();
+  });
+
+  syncReadUI();
+  openReport("rpt-2026-07-10-retro-EP14");
+});
+</script>
+</body>
+</html>

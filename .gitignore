@@ -24,3 +24,6 @@ __pycache__/
 tools/console/
 # media CLI 咨询锁
 .media.lock
+
+# IDE 元数据
+.idea/
