@@ -23,7 +23,7 @@
    ```
    （或 `media promote --auto --slug <slug>` 一步做完取题+记账，同一套取题规则）；slug 命名是判断活，agent 定（kebab-case）。promote 完成后据 backlog 条目内容写 `1-brief.md` 喂下一步（系列条目则用其 `plan_file` 当 brief）。
 3. **创作**：按 `pipeline/2-create.md` 从 `plan_file`（脚本+源码导读）出口播成品；含 `dubbing-reviewer` 配音质检循环，过创作自检。
-4. **出审**：`meta.yaml` status=`review`，更新 `dashboard.md`，经 **`feishu-notify`** 推审核卡（见 `pipeline/3-review.md`）。前提：`pipeline/2-create.md` 成片终检闸 A–G 全过（G = ★出审前必产 `4-publish.md`，规则细节以那里为准，教训 L5/L6）。
+4. **出审**：`media flip <slug> review`（一条命令完成记账，dashboard 机器区自动刷新；`media` 不可见时兜底 `node tools/console/packages/cli/dist/index.js flip <slug> review`），经 **`feishu-notify`** 推审核卡（见 `pipeline/3-review.md`）。前提：`pipeline/2-create.md` 成片终检闸 A–G 全过（G = ★出审前必产 `4-publish.md`，规则细节以那里为准，教训 L5/L6）。
 5. **不发布**：到此停。等人在飞书点过/打回。
 
 ## 阻塞即上报（铁律）
