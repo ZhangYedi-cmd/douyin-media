@@ -10,24 +10,56 @@
 
 ## 在制 / 待处理
 
-（空——grok-build-teardown 已于 2026-07-19 19:30 发布，移入「已发布」）
+<!-- auto:wip:begin -->
+| slug | status | since | blocker |
+|---|---|---|---|
+| open-weight-5 | scheduled | 2026-06-15 00:34 | 无 |
+| ep04-esc-abort-chain | scheduled | - | 无 |
+| hy3-moe-teardown | review | 2026-07-14 | 无 |
+<!-- auto:wip:end -->
 
 ## 待人确认 ⚠
+
+<!-- auto:alerts:begin -->
+**error**（3）：
+- [CHK-01] 2026-06-10-001: backlog.status=published 但对应内容 meta 未达 published（找不到对应 content 条目）
+- [CHK-03] open-weight-5: scheduled(2026-06-15 20:00) 超时 64 天未回填
+- [CHK-03] ep04-esc-abort-chain: scheduled(2026-06-19 20:00) 超时 60 天未回填
+
+**warn**（19）：
+- [CHK-04] hy3-moe-teardown: review 停留 860 小时，超过 48h 阈值
+- [CHK-05] ep02-17mb-memory-explosion: published 无作品链接
+- [CHK-05] ep03-token-economics: published 无作品链接
+- [CHK-05] ep05-permission-pipeline: published 无作品链接
+- [CHK-05] ep06-concurrent-tools: published 无作品链接
+- [CHK-05] ep07-context-compaction: published 无作品链接
+- [CHK-05] ep08-lazy-tool-discovery: published 无作品链接
+- [CHK-05] ep09-multi-provider-adapter: published 无作品链接
+- [CHK-05] ep10-sub-agent-orchestration: published 无作品链接
+- [CHK-05] ep11-zero-ms-startup: published 无作品链接
+- [CHK-05] ep12-ffi-native: published 无作品链接
+- [CHK-05] ep13-defensive-engineering: published 无作品链接
+- [CHK-05] ep14-cache-break-detection: published 无作品链接
+- [CHK-05] ep15-200-lines-mini-agent: published 无作品链接
+- [CHK-05] ponytail-lazy-senior-dev: published 无作品链接
+- [CHK-05] cc-safety-net: published 无作品链接
+- [CHK-05] kimi-k3-benchmark-check: published 无作品链接
+- [CHK-05] grok-build-teardown: published 无作品链接
+- [CHK-06] open-weight-5: meta.source=mer.vin 开源模型周报 2026-06-08（backlog 2026-06-14-003） 在 backlog 中查无此 id
+<!-- auto:alerts:end -->
+
+**人工调查记录**（机器区对同一事项另生成精简告警属预期重复；本表机器不碰）：
 
 | 事项 | 详情 |
 |---|---|
 | EP04 发布状态 | meta=`scheduled`（2026-06-19 20:00 定时已提交 sau），到点应已自动发但无人回填。**2026-07-08 复盘拉创作者中心投稿列表(29条,回溯至05-17)未见匹配条目**——倾向未真正发布，但非100%排除(标题/口播词不完全对得上是弱证据)，仍需人去创作者中心肉眼确认后回填 meta + backlog(2026-06-10-004) |
 | open-weight-5 发布状态 | 同类问题：meta=`scheduled`（2026-06-15 20:00 定时已提交），一直没人回填。**同一次投稿列表拉取同样未见匹配条目**，同上需人工确认 |
-| EP13/14/15 作品链接 | 已发布，链接待从创作者中心补进各自 `4-publish.md` |
-| spec-driven-development 作品链接 | 2026-07-08 23:36 已发布（main账号），sau 未返回链接，待从创作者中心补进 `4-publish.md` |
+| spec-driven-development 作品链接 | 2026-07-08 23:36 已发布（main账号），sau 未返回链接，待从创作者中心补进 `4-publish.md`（status=retro_done，CHK-05 现行不覆盖，人工追踪） |
 | ❗❗context-engineering 可见性异常（**复盘窗口已耗尽，此后无自动兜底**） | meta 记 2026-07-09 21:37「真发成功（飞书确认）」，但后台 **`audit=自见`、plays=0，发布 7.5 天持续零触达，第 6 轮确认**（07-10/07-11/07-13/07-14/07-16/07-17）。**24h/72h/7d 三窗 6 次拉数从未取到一个可归因数据点**——整条深度题制作成本 100% 白费。2026-07-17 已置 retro_done，但**该状态仅表示「复盘窗口走完」，非作品健康**。**需人工去创作者中心核可见性**：可恢复则改可见性/重提审（届时把 meta 翻回 `published` 重开复盘窗口），已废则删档止损。治理线未改其线上状态、此后不再自动拉它的数。详见 `harness/logs/2026-07-17-retro.md` |
 | ❗gemini-cli-teardown 限流未解（7d 死档收口） | 后台 `audit=需优化`，plays 112(07-13)→121(07-14)→136(07-16)→142(07-17)→**161(07-18,7d)**，第 5 轮冻结、7d 窗已耗尽翻 ⚠retro_done。同批 karpathy/cc-safety-net 公开正常兑现 → 发布侧限流非内容差。**需人工看后台优化提示项**判可整改（改标题/标签/重传高画质）/误判申诉/删档止损；此后无自动兜底。详见 `harness/logs/2026-07-18-retro.md` |
-| karpathy-autoresearch 作品链接 | 2026-07-10 20:55 已发布（main账号），sau 未返回链接，待从创作者中心补进 `4-publish.md` |
-| gemini-cli-teardown 作品链接 | 2026-07-11 21:52 已发布（main账号，飞书确认卡授权），sau 未返回链接，待从创作者中心补进 `4-publish.md` |
-| ponytail-lazy-senior-dev 作品链接 | 2026-07-13 21:04 已发布（main账号，飞书确认卡授权），sau 未返回链接，待从创作者中心补进 `4-publish.md` |
-| cc-safety-net 作品链接 | 2026-07-16 20:50 已发布（main账号，飞书确认卡授权），sau 未返回链接，待从创作者中心补进 `4-publish.md` |
+| karpathy-autoresearch 作品链接 | 2026-07-10 20:55 已发布（main账号），sau 未返回链接，待从创作者中心补进 `4-publish.md`（status=retro_done，CHK-05 现行不覆盖，人工追踪） |
+| gemini-cli-teardown 作品链接 | 2026-07-11 21:52 已发布（main账号，飞书确认卡授权），sau 未返回链接，待从创作者中心补进 `4-publish.md`（status=retro_done，CHK-05 现行不覆盖，人工追踪） |
 | kimi-k3-benchmark-check 作品链接 + 自主声明 | 2026-07-17 21:04 已发布（main账号，飞书确认卡授权），sau 未返回链接，待从创作者中心补进 `4-publish.md`；另「自主声明」设置步骤 sau 超时跳过，若平台要求 AI 生成声明需人工补 |
-| grok-build-teardown 作品链接 | 2026-07-19 19:30 已发布（main账号，飞书确认卡授权），sau 未返回链接，待从创作者中心补进 `4-publish.md` |
 
 ## 已发布
 
@@ -36,12 +68,25 @@
 
 ## 选题池（backlog.yaml）
 
-**21 idea ｜ 3 picked ｜ 9 expired ｜ 22 published**（2026-07-19 19:30 发布收尾：`2026-07-17-002` Grok Build picked→published。2026-07-19 ideate periodic:2d：+3 新 idea `2026-07-19-001~003`，清扫 0 条。2026-07-18 daily-run 取题：`2026-07-17-002` Grok Build promote idea→picked。2026-07-17 daily-run：`2026-07-17-001` Kimi K3 promote→picked→当日 21:04 发布 published；同日 ideate +4 新 idea、清扫 3 条 `2026-07-08-002/003/004`→expired）
-- 按分最高 idea：`2026-07-19-001` Claude Code AskUserQuestion 翻车/权限模型(S 4.15,接 EP05)、`2026-07-13-001` 脚手架>模型(3.90,★核实原帖)、`2026-07-15-002` Claude 隐藏思维空间(3.85)、`2026-07-17-003` Muse Spark 跑分口径(3.85)。**每条 reason 标注「★可诚实自动做完」与否**，帮人挑题避开需一手实测的红线题。
-- **取题指针**：next_up 空。下一条按 score 自动取的最高分＝`2026-07-19-001`(4.15，深度/口播，接已发 EP05 权限管线，★可诚实自动做完；热度窗约 1-2 周)。近 8 条取题几乎全 depth、traffic 已欠账，本批 `2026-07-19-002` Inkling(A 3.65) 是唯一流量题可补配比。人工挑题改 backlog 顶部 `next_up`。
+<!-- auto:backlog:begin -->
+选题池：9 expired | 3 picked | 22 published | 21 idea
+next_up：空
+
+按分最高 idea（前 4）：
+- `2026-07-19-001` Claude Code 自家工具翻车：一个提问框，怎么悄悄变成挡住你半夜任务的安全闸口（4.15）
+- `2026-07-13-001` 同一个模型，4 个 CLI coding agent 跑出来差 2 倍——脚手架才是分水岭（3.9）
+- `2026-07-13-004` SWE-1.7：用「RL 套 RL」把近前沿编码打到骨折价，还顺手挑战了 post-training 天花板（3.85）
+- `2026-07-13-005` 快手开源的国产 agentic 编码模型 KAT-Coder-Pro V2.5，敢说端到端跑完整个项目（3.85）
+
+临近过期：
+- （无）
+<!-- auto:backlog:end -->
+
+**人写区（运行记叙与人工观察，机器不碰）**：
+- 运行记叙：2026-07-19 19:30 发布收尾：`2026-07-17-002` Grok Build picked→published。2026-07-19 ideate periodic:2d：+3 新 idea `2026-07-19-001~003`，清扫 0 条。2026-07-18 daily-run 取题：`2026-07-17-002` Grok Build promote idea→picked。2026-07-17 daily-run：`2026-07-17-001` Kimi K3 promote→picked→当日 21:04 发布 published；同日 ideate +4 新 idea、清扫 3 条 `2026-07-08-002/003/004`→expired
+- 取题配比观察：近 8 条取题几乎全 depth、traffic 已欠账，本批 `2026-07-19-002` Inkling(A 3.65) 是唯一流量题可补配比。人工挑题改 backlog 顶部 `next_up`。
 - 本轮（07-19）清扫：**0 条**。无 idea 命中机械规则（无 today 题；timeliness≥4 中最老的 07-13-004/005 入池 6 天未满 7 天）。
 - ⚠**结构性观察（交人裁/account-audit，本任务不动）**：07-17 被清扫的 3 条入池即 S 级(4.55/4.50/4.30) 却全躺到过期，全是「亲手跑一天/对打/测账单」型——与复盘「评分引擎系统性高估需一手实测的题」同向。建议把「可诚实自动做完」升为硬字段或纳入打分，别只写 reason。
-- 临近过期：`2026-07-13-004` SWE-1.7、`-005` KAT-Coder（均 timeliness4/queue，07-20 满 7 天将自动 expired）；`2026-07-15-002` J-space、`-004` Grok4.5、`-005` OmniCoder（timeliness4，07-22 满 7 天）。
 - 撞题待人审：`2026-07-17-003`(Muse Spark 跑分口径) 与 `2026-07-10-002`(benchmark 祛魅清单)同域可并「案例篇」；`2026-07-17-004`(Ornith 自造脚手架) 与 `2026-07-13-001`/`2026-07-15-003` 同 harness 母题（池内已多条待精简）；`2026-07-19-003`(coding agent 隐藏状态探针) 与 `2026-07-15-002`(J-space)/`2026-07-10-003`(思考链) 同「认知内幕/可解释性」母题可串/择一。
 - 最近调研：`content/_research/research-2026-07-19.md`（治理线 ideate periodic:2d；抓 07-17 后增量：Claude Code AskUserQuestion 翻车/权限模型之辩、Thinking Machines Lab 开源 Inkling、coding agent 隐藏状态探针论文 Latent Programming Horizons）
 
