@@ -24,7 +24,7 @@ description: 抖音流水线的「人审闸口」与通知通道——把待审�
 tools/feishu-bot/
 ├── config.yaml      # app_id/secret/token/chat_id/ns/project_root（含 secret，勿提交）
 ├── feishu.py        # 飞书 API 客户端：token 自管 + send_card/update_card/send_text/upload_image/send_post
-├── meta.py          # 条目定位：find_slug_dir / set_status(正则保原貌) / read_publish_material / find_assets
+├── meta.py          # 条目定位（只读）：find_slug_dir / read_publish_material / find_assets（状态写入已切 `media flip`/`media publish-done`，见 server.py）
 ├── publish.py       # 确认卡物料的确定性拼装：build_payload(读 meta+4-publish+assets 拼 sau 命令+物料摘要)
 ├── cards.py         # 卡片模板：审核卡 / 打回原因卡(两出口) / 发布确认卡 / 终态卡（value 全带 ns）
 ├── prompts.py       # ★claude -p 委托的 prompt/命令单一真相源：rework_prompt(重做) / publish_command(发布)
@@ -57,7 +57,7 @@ cd tools/feishu-bot && .venv/bin/python notify.py --slug <slug> \
 
 ### 通过 → 发布
 ```
-通过 → set_status(approved) → build_payload 拼最终 sau 命令+物料 → 发「确认发布」卡
+通过 → media flip <slug> approved（subprocess，MEDIA_ACTOR=feishu-server） → build_payload 拼最终 sau 命令+物料 → 发「确认发布」卡
 确认发布 → claude -p /douyin-publish <slug> --publish（异步跑现成发布引擎）
          → 读 meta.status 判成败（变 published/scheduled = 成功）→ 更新卡为终态
 取消 → status 留 approved，可稍后重发起
@@ -110,7 +110,7 @@ bash tools/feishu-bot/start.sh start    # 幂等，没跑才起
                                     │ server.py │  ① 秒回 toast + resp.card（3秒内，零 HTTP）
                                     └─────┬─────┘  ② 重活甩 threading 异步
                                           ▼
-        通过 → set_status=approved → build_payload → 发「确认发布」卡
+        通过 → media flip approved（subprocess） → build_payload → 发「确认发布」卡
                                           │
                               📱人 点「确认发布」 ──▶ claude -p /douyin-publish --publish（异步）
                                           │              → 读 meta.status 判成败 → 更新终态卡

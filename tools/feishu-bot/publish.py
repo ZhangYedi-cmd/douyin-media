@@ -7,6 +7,7 @@
   - 不假装成功：以 sau 输出关键词为准
 """
 
+import os
 import re
 import shlex
 import subprocess
@@ -14,6 +15,12 @@ from datetime import datetime
 from pathlib import Path
 
 import meta
+
+# media CLI（状态记账唯一入口，见 0818-看板工作台 CLI 拍板 §6 融合表）。绝对路径兜底（拍板 §6.1）。
+MEDIA_CLI = [
+    "node",
+    "/Users/yedizhang/yedi-study/douyin-media/tools/console/packages/cli/dist/index.js",
+]
 
 SUCCESS_MARKERS = ("视频发布成功", "图文发布成功", "发布成功", "提交成功", "submitted")
 
@@ -125,9 +132,24 @@ def run_publish(project_root, slug, account="main", when=None, headed=False):
 
 
 def _writeback(slug_dir, schedule):
-    """成功后留痕：meta.status + 4-publish.md 回填实际发布时间。"""
-    new_status = "scheduled" if schedule else "published"
-    meta.set_status(slug_dir, new_status)
+    """成功后留痕：状态记账（meta→published/scheduled + backlog picked→published + dashboard 三翻齐）
+    走 `media publish-done`（Step 5 唯一记账入口，见 0818-看板工作台 CLI 拍板 §6 融合表第 3 行），
+    另回填 4-publish.md 实际发布时间。
+    注：本函数当前未被 server.py 调用（真发路径委托 `claude -p /douyin-publish`，其 Step 5 已同步
+    切到 `media publish-done`）；这里同步改掉是为了不留调用已删除函数的死代码。"""
+    slug_dir = Path(slug_dir)
+    slug = slug_dir.name
+    project_root = str(slug_dir.resolve().parents[2])  # content/<date>/<slug> 上三级 = 主仓根
+    args = [*MEDIA_CLI, "publish-done", slug, "--root", project_root]
+    if schedule:
+        args += ["--scheduled", schedule]
+    env = {**os.environ, "MEDIA_ACTOR": "feishu-server"}
+    proc = subprocess.run(args, env=env, capture_output=True, text=True, timeout=30)
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"media publish-done {slug} 失败(exit={proc.returncode}): "
+            f"{(proc.stdout or '') + (proc.stderr or '')}"
+        )
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
     f = Path(slug_dir) / "4-publish.md"
     if f.exists():

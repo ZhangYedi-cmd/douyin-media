@@ -4,7 +4,6 @@
 """
 
 import re
-from datetime import datetime
 from pathlib import Path
 
 VIDEO_EXTS = (".mp4", ".mov", ".m4v")
@@ -33,20 +32,6 @@ def load_meta(slug_dir):
     if not f.exists():
         return {}
     return yaml.safe_load(f.read_text(encoding="utf-8")) or {}
-
-
-def set_status(slug_dir, new_status, stamp=True):
-    """正则改 meta.yaml 的 status 行（保留注释/顺序）；best-effort 填对应 timestamps。"""
-    f = Path(slug_dir) / "meta.yaml"
-    text = f.read_text(encoding="utf-8")
-    text = re.sub(r"^(status:\s*)\S+(.*)$", rf"\g<1>{new_status}\g<2>",
-                  text, count=1, flags=re.M)
-    if stamp:
-        now = datetime.now().strftime("%Y-%m-%d %H:%M")
-        # 在 timestamps 下，把 "  <status>:" 这一行补上时间（仅当该行当前为空）
-        text = re.sub(rf"^(\s+{re.escape(new_status)}:)\s*$",
-                      rf"\g<1> {now}", text, count=1, flags=re.M)
-    f.write_text(text, encoding="utf-8")
 
 
 _FIELD_RE = re.compile(r"^\s*[-*]\s*\*\*(.+?)\*\*[：:]\s*(.*)$")

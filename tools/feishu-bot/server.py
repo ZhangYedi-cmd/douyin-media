@@ -64,6 +64,31 @@ REWORK_LIMIT = 2  # 同一条自动重做上限，超了转人工（主观反馈
 # 删掉后 claude CLI 回落到自己的 OAuth 登录凭证（~/.claude），与交互式会话同一套认证。
 CLAUDE_ENV = {k: v for k, v in os.environ.items() if k != "ANTHROPIC_API_KEY"}
 
+# media CLI（状态记账唯一入口，见 0818-看板工作台 CLI 拍板 §6 融合表第 4 行）。
+# 绝对路径兜底（拍板 §6.1 第 1 条）：server 是常驻进程，起时的 PATH 未必挂了 npm link。
+MEDIA_CLI = [
+    "node",
+    "/Users/yedizhang/yedi-study/douyin-media/tools/console/packages/cli/dist/index.js",
+]
+# 复用 CLAUDE_ENV 的处理（去 ANTHROPIC_API_KEY）+ 叠加 MEDIA_ACTOR，供 audit.jsonl 溯源写者身份。
+MEDIA_ENV = {**CLAUDE_ENV, "MEDIA_ACTOR": "feishu-server"}
+
+
+def _flip(slug, status, reason=None):
+    """状态记账唯一入口：subprocess 调 `media flip`（替代原 meta.py 里那套正则改行的第二套实现，
+    见 0818-看板工作台 CLI 拍板 §6 融合表第 4 行）。args 数组不经 shell。
+    冷启动 ~100ms 量级；本函数的全部调用方都在 threading 异步线程里跑，不占 3 秒回调窗口。
+    失败（非法迁移/条目不存在等）抛异常，交调用方既有 try/except 兜底报飞书。"""
+    args = [*MEDIA_CLI, "flip", slug, status, "--root", PROJECT_ROOT, "--json"]
+    if reason:
+        args += ["--reason", reason]
+    proc = subprocess.run(args, env=MEDIA_ENV, capture_output=True, text=True, timeout=30)
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"media flip {slug} {status} 失败(exit={proc.returncode}): {(proc.stdout or '') + (proc.stderr or '')}"
+        )
+
+
 # 发布幂等锁：同一条同时只允许一个 _async_publish 在跑。
 # 飞书会重投回调、人也可能连点，无锁则同条并发双发（不可逆外发，严重）。
 _publishing = set()
@@ -128,7 +153,7 @@ def _async_approve(slug):
     """过审：置 status=approved，拼发布物料，另发「确认发布」卡。"""
     try:
         sd = meta.find_slug_dir(PROJECT_ROOT, slug)
-        meta.set_status(sd, "approved")
+        _flip(slug, "approved")
         title = meta.load_meta(sd).get("title") or slug
         p = publish.build_payload(PROJECT_ROOT, slug)
         card = cards.publish_confirm_card(
@@ -180,7 +205,7 @@ def _async_rework(slug, reason, nth):
     与发布路径对称：subprocess.run 同步等 → 读 meta.status 判结果 → 回报飞书。"""
     try:
         sd = meta.find_slug_dir(PROJECT_ROOT, slug)
-        meta.set_status(sd, "drafting")
+        _flip(slug, "drafting")
         _append_review(sd, f"打回·重做(第{nth}次) — {reason}")
         _run_rework(slug, sd, reason, nth)  # 同步等重做跑完
         after = meta.load_meta(sd).get("status")
@@ -202,7 +227,7 @@ def _async_rework_limit(slug, reason, done):
     """达重做上限：落 rejected + 留痕 + 通知人介入。"""
     try:
         sd = meta.find_slug_dir(PROJECT_ROOT, slug)
-        meta.set_status(sd, "rejected")
+        _flip(slug, "rejected", reason=reason)
         _append_review(sd, f"打回·重做达上限({done}次)转人工 — {reason}")
         FeishuClient().send_text(
             CHAT_ID, f"⚠️ 重做上限：{_title_of(slug)} 已自动重做 {done} 次仍被打回，"
@@ -215,7 +240,7 @@ def _async_todo(slug, reason):
     """打回·挂待办：落 rejected + 留痕 + 发待办通知。"""
     try:
         sd = meta.find_slug_dir(PROJECT_ROOT, slug)
-        meta.set_status(sd, "rejected")
+        _flip(slug, "rejected", reason=reason)
         _append_review(sd, f"打回·待办 — {reason}")
         FeishuClient().send_text(
             CHAT_ID, f"📌 待办：{_title_of(slug)} 已打回挂起。\n原因：{reason}\n"
