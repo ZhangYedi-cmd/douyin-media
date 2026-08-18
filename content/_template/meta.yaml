@@ -3,8 +3,8 @@ slug:                      # 短标识，同目录名
 title:                     # 工作标题
 type:                      # kouban(口播) | tuwen(图文)
 pillar:                    # depth(技术深度) | traffic(流量型)
-status: ideated            # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
-                           # retro_done 由治理线(harness/)复盘后置位，非生产线状态
+status: ideated            # 合法状态与迁移见 `media flip --help`（唯一定义 = tools/console/packages/core/src/state.ts）
+                           # 状态只经 media 命令翻转，不手编
 source:                    # 选题来源（哪个信息源/热点）
 
 schedule:                  # 计划发布时间
