@@ -21,3 +21,12 @@ ns: "douyin"
 
 # 触发 Claude Code / sau 时的工作目录
 project_root: "/Users/yedi/douyin-media"
+
+# 看板 console job runner 开关（0818 看板工作台 02-后端执行方案.md S8）：
+# 场景 3(确认发布真发)/场景 4(打回重做) 走哪条路径。
+#   true(默认)  = POST 看板 console job runner（http://127.0.0.1:5170/api/actions/{publish,rework}）+
+#                 轮询 GET /api/jobs/:id 至终态；全系统一份 CC 进程台账、一份里程碑解析。
+#   false       = 回滚到旧路径：本地 spawn `claude -p` 直跑（S8 回滚开关）。
+# 回滚方式：改这一键 + `bash tools/console/start.sh restart`（或重启 feishu-bot server），不 revert commit。
+# 缺省值只活在代码里（server.py 读 CONFIG.get("console_api", True)）——本键缺失时按 true 处理。
+# console_api: true
