@@ -27,3 +27,4 @@ tools/console/
 
 # IDE 元数据
 .idea/
+.claude/settings.local.json
