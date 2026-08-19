@@ -28,3 +28,6 @@ tools/console/
 # IDE 元数据
 .idea/
 .claude/settings.local.json
+
+# 浏览器走查产物（Playwright MCP 的快照/日志落盘目录）
+.playwright-mcp/
