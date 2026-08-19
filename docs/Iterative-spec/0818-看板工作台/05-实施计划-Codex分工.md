@@ -144,7 +144,7 @@ server.py 两轮改动串行、各自独立 commit、各带回滚说明；S8 要
 | 验收 e2e | **Playwright 1.62 + @midscene/web 1.10**（`tools/console/e2e/` 工作区，chromium 已装）。AI 断言对照 v2 原型；报告落 `e2e/midscene_run/report/`（可回放 HTML） | ✅ 骨架可跑（用例池 skip 待 G3 启用） |
 | 模型配置 | 内部 OpenAI 兼容网关——域名、密钥、蓝本项目出处**全部只住** `tools/console/e2e/.env.e2e`（gitignored 本地文件，本机已配好并实测无缺失；新环境照 `.env.e2e.example` 填）。三条实战教训已固化进 env.ts/README：FAMILY 必填防定位偏移 / 请求级超时 60s 防挂死 / midscene 不支持 Claude 系模型 | ✅ 实测无缺失 |
 
-约定：各包占位 `src/index.ts` + 冒烟测试由负责 agent 以真实实现替换；e2e 用例按闸口/页面拆文件（详见 `e2e/README.md`）；`.env.e2e` 含密钥永不入库。
+约定：各包占位 `src/index.ts` + 冒烟测试由负责 agent 以真实实现替换；e2e 用例按闸口/页面拆文件（详见 `e2e/README.md`）；`.env.e2e` 含密钥永不入库；**单元测试文件不与功能文件同级，统一住各包 `src/__test__/`（镜像源码目录结构；独立测试辅助/fixtures 目录也命名 `__test__`）——2026-08-19 用户约定**。
 
 ## 8. 完成即验收：每包独立验收 subagent
 
