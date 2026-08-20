@@ -3,7 +3,7 @@ slug: hy3-moe-teardown
 title: "腾讯 Hy3 只有别人一半大，凭什么敢对标 2 倍参数旗舰：MoE 架构拆解"
 type: kouban
 pillar: depth
-status: review             # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
+status: approved             # 生产线: ideated→drafting→review→approved→scheduled→published | rejected
                            # retro_done 由治理线(harness/)复盘后置位，非生产线状态
 source: 2026-07-10-001     # backlog id；next_up 空按 score 取；top-3 实测题(4.55/4.50/4.30)红线跳过、3.90(Reddit 403 核不到)跳过，取 3.85 depth 架构拆解可溯源题
 # ★ 取题决策见 1-brief.md 文末 + 4-publish.md 备注。深度题（独立视觉，非 claude-code-source-series 系列）。
@@ -24,7 +24,7 @@ timestamps:
   ideated: 2026-07-14
   drafting: 2026-07-14
   review: 2026-07-14
-  approved:
+  approved: 2026-08-19 10:18
   published:
   retro_done:
 

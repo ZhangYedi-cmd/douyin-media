@@ -121,7 +121,8 @@ topics:
       - "Opus 4.8 省钱用法：effort 调度 + fast mode 实测"
     track: depth
     format: kouban
-    status: idea
+    status: picked # 2026-08-19 promote (media)
+    content_path: content/2026-08-19/opus-4-8-effort-fast-mode
     score: 3.75
     tier: A
     scores: {practical: 5, social: 3, emotion: 3, hook: 3, timeliness: 2, trigger: 4}
@@ -185,7 +186,8 @@ topics:
       - "Nemotron 3 Ultra 架构拆解：混合 Mamba–Transformer 怎么省"
     track: depth
     format: kouban
-    status: idea
+    status: picked # 2026-08-19 promote (media)
+    content_path: content/2026-08-19/nvidia-550b-mamba-moe-10
     score: 2.90
     tier: C
     scores: {practical: 2, social: 4, emotion: 4, hook: 3, timeliness: 3, trigger: 2}
@@ -717,7 +719,8 @@ topics:
       - "模型一样，Claude Code / Codex / Cursor 谁强？差距在 harness 不在模型"
     track: depth
     format: kouban
-    status: idea
+    status: picked # 2026-08-19 promote (media)
+    content_path: content/2026-08-19/4-cli-coding-agent-2
     score: 3.90
     tier: A
     scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 3, trigger: 4}
@@ -768,7 +771,7 @@ topics:
       - "Cognition 新模型 SWE-1.7 拆解：self-compaction 让 agent 自己压缩记忆跨越上下文窗"
     track: traffic
     format: kouban
-    status: idea
+    status: expired # 2026-08-19 过期清扫(机械规则): timeliness4超7天
     score: 3.85
     tier: A
     scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
@@ -785,7 +788,7 @@ topics:
       - "国产 coding agent 新选手 KAT-Coder：不只补代码，能自己跑完一个项目"
     track: traffic
     format: tuwen
-    status: idea
+    status: expired # 2026-08-19 过期清扫(机械规则): timeliness4超7天
     score: 3.85
     tier: A
     scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
@@ -824,7 +827,8 @@ topics:
       - "AI 到底在想什么？Anthropic 撬开 Claude 内部，MIT 泼了盆冷水"
     track: depth
     format: kouban
-    status: idea
+    status: picked # 2026-08-19 promote (media)
+    content_path: content/2026-08-19/anthropic-claude-panic
     score: 3.85
     tier: A
     scores: {practical: 2, social: 5, emotion: 5, hook: 4, timeliness: 4, trigger: 3}
@@ -861,7 +865,7 @@ topics:
       - "Grok 4.5 速览：80 TPS、2x token 效率、SWE Marathon 第一，官方图表怎么读"
     track: traffic
     format: tuwen
-    status: idea
+    status: expired # 2026-08-19 过期清扫(机械规则): timeliness4超7天
     score: 3.55
     tier: A
     scores: {practical: 2, social: 4, emotion: 4, hook: 3, timeliness: 4, trigger: 3}
@@ -878,7 +882,7 @@ topics:
       - "425K 条 agentic 轨迹微调出来的 9B 编码 agent，本地部署能省多少钱"
     track: traffic
     format: tuwen
-    status: idea
+    status: expired # 2026-08-19 过期清扫(机械规则): timeliness4超7天
     score: 3.40
     tier: B
     scores: {practical: 3, social: 4, emotion: 3, hook: 3, timeliness: 4, trigger: 3}
@@ -942,7 +946,7 @@ topics:
       - "跑分超了资源上限算不算作弊：一个具体到 task.toml 的案子"
     track: traffic
     format: kouban
-    status: idea
+    status: expired # 2026-08-19 过期清扫(机械规则): timeliness4超7天
     score: 3.85
     tier: A
     scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
@@ -983,7 +987,8 @@ topics:
       - "Anthropic 工程师 HN 公开认错：这次翻车暴露了 coding agent 最难的那道题"
     track: depth
     format: kouban
-    status: idea
+    status: picked # 2026-08-19 promote (media)
+    content_path: content/2026-08-19/claude-code
     score: 4.15
     tier: S
     scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 4}
@@ -1003,7 +1008,7 @@ topics:
       - "不做一个模型打天下：TML 的定制化路线，和旗舰军备竞赛有什么不一样"
     track: traffic
     format: tuwen
-    status: idea
+    status: expired # 2026-08-19 过期清扫(机械规则): timeliness4超7天
     score: 3.65
     tier: A
     scores: {practical: 2, social: 5, emotion: 4, hook: 3, timeliness: 4, trigger: 3}
@@ -1032,4 +1037,213 @@ topics:
       - "https://github.com/ASSERT-KTH/program-probes"
     tags: [coding-agent, interpretability, paper, latent-horizon, mechanistic-interpretability, demystify]
     created: 2026-07-19
+    metrics: {}
+  - id: 2026-08-19-001
+    title: "你让 Claude 写的每段字，都被悄悄打上了「暗号」——文本水印机制拆解"
+    alt_titles:
+      - "Anthropic 官宣给 Claude 全部文本加隐形水印：绿词红词怎么标记你的输出"
+      - "AI 文本水印是怎么藏进措辞里的：一个抛硬币比喻讲清 Anthropic 新机制"
+    track: depth
+    format: kouban
+    status: idea
+    score: 4.5
+    tier: S
+    scores: {practical: 3, social: 5, emotion: 5, hook: 5, timeliness: 5, trigger: 4}
+    urgency: today
+    reason: "HN 815 分本周最热 AI 事件：Anthropic 官宣为合规 EU 新规，所有 Claude 模型对超 200 token
+的生成文本做语义级隐形水印（绿/红词表+密钥概率检测）。机制可拆可演（抛硬币偏置比喻+declaude.org 交互式讲解）、切身利益强（受众全是 Claude
+用户）；争议面（Gruber 批其牺牲措辞精度）可做观点钩子。含 +0.15
+立身（机制拆解）软加成（4.35→4.50）。★可诚实自动做完：读官方博客+支持文档+第三方拆解讲机制，不臆造。★口径纪律：检测是概率性的、只有
+Anthropic 能验自家水印，勿说成「百分百可检测」；Gruber 的批评须归因为个人观点"
+    links:
+      - "https://www.anthropic.com/news/claude-text-watermark"
+      - "https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-\
+content"
+      - "https://daringfireball.net/2026/08/anthropics_watermark_text_adulteration_in_c\
+laude_is_a_perversion_of_writing"
+      - "https://declaude.org/watermarking/"
+    tags: [anthropic, claude, watermark, text-steganography, ai-policy]
+    created: 2026-08-19
+    metrics: {}
+  - id: 2026-08-19-002
+    title: "GPT-5.6 Sol 降价一半、视觉登顶：OpenAI 这波在抢谁的饭"
+    alt_titles:
+      - "OpenRouter 上 GPT-5.6 Sol 输入价直接砍半，还是 OpenAI 史上最强视觉模型"
+      - "旗舰打价格战了：GPT-5.6 Sol 降价 50% 速览"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 4.3
+    tier: S
+    scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 4}
+    urgency: today
+    reason: "两条 HN 高分帖合一：OpenRouter 上 GPT-5.6 Sol 定价砍 50%（624 分，08-17）+ Roboflow 实测其为 OpenAI
+史上最强视觉模型（361 分）。价格战+选型直接影响每个用 API 的工程师；图文速览成本低抢时效。★可诚实自动做完：读 OpenRouter
+定价页+Roboflow 评测报告，引用其数据并标注来源，不自测不臆造。★创作前核实：OpenRouter 当前实际价格与降价幅度、Roboflow
+评测的具体任务口径"
+    links:
+      - "https://openrouter.ai/openai/gpt-5.6-sol"
+      - "https://blog.roboflow.com/openai-gpt-5-6/"
+      - "https://news.ycombinator.com/item?id=49337602"
+    tags: [gpt-5.6, openai, openrouter, pricing, vision]
+    created: 2026-08-19
+    metrics: {}
+  - id: 2026-08-19-003
+    title: "GitHub 大宕机 12 小时，Cursor 当天甩出自家「GitHub」——Origin 是巧合还是伏击"
+    alt_titles:
+      - "Cursor 发布代码托管 Origin：repo/PR/GitHub 双向同步，agent 原生"
+      - "GitHub 挂掉的那天，Cursor 宣布替代它"
+    track: traffic
+    format: kouban
+    status: idea
+    score: 4.2
+    tier: S
+    scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 4}
+    urgency: today
+    reason: "08-17 GitHub 大规模宕机（HN 718/632/569 三帖霸榜，Ask HN 求替代品 632 分），同日 Cursor 官宣 Origin
+代码托管（repos/PR/代码浏览/GitHub 双向同步，agent-native）。戏剧性时点+每个工程师切身依赖=完播友好；「AI 编辑器开始抢
+GitHub 地盘」是行业地震级叙事。★可诚实自动做完：读 changelog+status page+HN
+讨论。★口径纪律：宕机与发布的时间先后须按事实陈述（Origin 为既定发布），「伏击」只能作调侃不能作断言"
+    links:
+      - "https://cursor.com/changelog/origin-code-hosting"
+      - "https://www.githubstatus.com/incidents/zkxwbgr0cnmx"
+      - "https://news.ycombinator.com/item?id=49334209"
+      - "https://news.ycombinator.com/item?id=49331033"
+    tags: [cursor, origin, github, code-hosting, outage]
+    created: 2026-08-19
+    metrics: {}
+  - id: 2026-08-19-004
+    title: "AI 检查过的 PR 埋了个洞，另一个 AI 五天后把 Snowflake 内网 Jira 打穿了"
+    alt_titles:
+      - "Wiz 的 AI 红队 agent 实战：一个 GitHub Issue 标题就能在别人的 CI 里跑命令"
+      - "Copilot 说 all-clear、安全扫描也放行——这个 GitHub Actions 注入是怎么漏网的"
+    track: depth
+    format: kouban
+    status: idea
+    score: 4.25
+    tier: S
+    scores: {practical: 4, social: 4, emotion: 5, hook: 4, timeliness: 4, trigger: 3}
+    urgency: queue
+    reason: "破案叙事满分的真实安全事件（Wiz 官方披露，08-17）：Snowflake 公开仓一个 Copilot 参与检查的 PR 引入 GitHub
+Actions 脚本注入（issue 标题直接插进 run: 块），GitHub Advanced Security 扫过未报，5 天后被 Wiz 自主 AI
+红队 agent 发现并利用、拿到内部 Jira 凭证；当天修复。「AI 埋的雷 AI 来挖」对攻结构+GitHub Actions
+防注入即学即用（untrusted input 别进 run: 块）。含 +0.15 立身（安全机制拆解）软加成（4.10→4.25）。★可诚实自动做完：读
+Wiz 官方 blog（含 workflow 源码细节）+涉事 PR。★口径纪律：Wiz 更新声明「代码变更是否 AI 写的不确定，Copilot
+是复查方」——勿说成「Copilot 写出漏洞」"
+    links:
+      - "https://www.wiz.io/blog/red-agent-snowflake-copilot-cicd-bug"
+      - "https://github.com/snowflakedb/snowflake-connector-net/pull/1218"
+      - "https://news.ycombinator.com/item?id=49331423"
+    tags: [wiz, red-agent, github-actions, security, copilot, supply-chain]
+    created: 2026-08-19
+    metrics: {}
+  - id: 2026-08-19-005
+    title: "你的 Claude Code 周额度 9 月 1 号起缩水 1/3——现在还没用完的抓紧"
+    alt_titles:
+      - "很多人不知道：现在的 Claude Code 周限额是限时加过 50% 的，8 月底到期"
+      - "Claude Code 限额促销倒计时：9 月起回到标准线，怎么规划用量"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 3.85
+    tier: A
+    scores: {practical: 5, social: 3, emotion: 3, hook: 3, timeliness: 5, trigger: 4}
+    urgency: queue
+    reason: "官方支持文档坐实：5/13-8/31 Claude Code 周限额上浮 50%（Pro/Max/Team 自动生效），9/1
+起回落标准线——绝大多数人不知道自己在用促销额度（HN 279 分帖印证认知缺口）。倒计时+切身用量规划=实用满分；/usage
+查限额可演示。★时效硬约束：8/31 前发出才有意义，逾期作废。★可诚实自动做完：读官方 support 文档"
+    links:
+      - "https://support.claude.com/en/articles/15910845-claude-code-may-august-2026-we\
+ekly-limits-promotion"
+      - "https://news.ycombinator.com/item?id=49348751"
+    tags: [claude-code, usage-limits, anthropic, quota]
+    created: 2026-08-19
+    metrics: {}
+  - id: 2026-08-19-006
+    title: "厂商不给 Mac 出驱动的打印机，Claude 直接给它写了一个"
+    alt_titles:
+      - "一台只支持 Windows 的 HP 打印机，被 Claude Code 教会了在 macOS 上打印"
+      - "AI 写驱动这事成了：从抓 USB 协议到能打印，全程对话记录公开"
+    track: traffic
+    format: kouban
+    status: idea
+    score: 3.85
+    tier: A
+    scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
+    urgency: queue
+    reason: "HN 两帖合计 360+ 分的病毒故事（08-18）：网友用 Claude 给仅支持 Windows 的 HP Laser 1008a 写出 macOS
+驱动，完整对话记录公开可查。「AI 干成了厂商不肯干的事」情绪点+硬件驱动这种「AI 不该会」的领域=惊奇；可提炼「让 AI
+啃硬骨头」的可复用工作流。★可诚实自动做完：读原推+公开 chat log 转述，标注为他人实测。★创作前核实：通读 cdn.kuber.studio
+完整记录，确认关键步骤与结果边界，勿夸大成「所有打印机都行」"
+    links:
+      - "https://twitter.com/kuberwastaken/status/2089377982536388964"
+      - "https://cdn.kuber.studio/chat/hp-laser-1008a-driver"
+      - "https://news.ycombinator.com/item?id=49344643"
+    tags: [claude-code, hp-printer, driver, ai-capability, macos]
+    created: 2026-08-19
+    metrics: {}
+  - id: 2026-08-19-007
+    title: "新模型正在「故意变笨」：砍掉记忆换推理，这笔交易你该知道"
+    alt_titles:
+      - "为什么 9B 小模型数学吊打 GPT-4，问个冷知识却一本正经胡说"
+      - "事实放外面、推理留脑内：大模型正在变成「只带脑子不带百科」"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.8
+    tier: A
+    scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 3, trigger: 4}
+    urgency: queue
+    reason: "HN 334 分深度雄文（08-16）：推理分暴涨与参数暴减并行（GLM-5.2 40B 激活 AIME
+99.2%），代价是事实性知识被刻意砍掉（Qwen3.5 9B 知识幻觉率 80%+）——「拿世界知识换推理」是行业级 deliberate
+trade，知识改由 harness/检索在运行时供给。正中账号已验证的 demystify+harness
+双母题（脚手架>模型的下一章）；反直觉标题天然钩子。含 +0.2 立身（行业机制/原理拆解）软加成（3.60→3.80）。★可诚实自动做完：读原文+引用的
+benchmark 页转述，数字全部标来源。★口径纪律：「频率派预测」部分是作者观点，须归因"
+    links:
+      - "https://w4g1.dev/blog/models-are-getting-dumber-on-purpose"
+      - "https://news.ycombinator.com/item?id=49322695"
+    tags: [llm-economics, reasoning-vs-knowledge, hallucination, harness, demystify]
+    created: 2026-08-19
+    metrics: {}
+  - id: 2026-08-19-008
+    title: "字节开源的 OpenViking 拆解：把 Agent 的记忆、RAG、技能塞进同一个「自演化」数据库"
+    alt_titles:
+      - "30k star 的 Agent 上下文数据库：OpenViking 想统一 memory / knowledge / skills"
+      - "Agent 记忆基建卷起来了：字节 OpenViking 架构速读"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.7
+    tier: A
+    scores: {practical: 4, social: 4, emotion: 3, hook: 3, timeliness: 3, trigger: 4}
+    urgency: queue
+    reason: "GitHub 日榜在榜、~30k star：字节 volcengine 开源的「Self-evolving Context Database」，统一
+agent memory + knowledge RAG + skills 三件事。正中账号 context-engineering 心智（已发上下文工程
+4k+ 播放、EP07 compaction），「上下文基建」赛道宽口径工程题（benchmarks 打法：宽口径破圈）。含 +0.2
+立身（架构拆解）软加成（3.50→3.70）。★可诚实自动做完：读 repo/docs 拆架构。★创作前核实：「自演化」具体指什么机制、与
+mem0/LangMem 等既有方案差异，勿把 README 宣称当实测"
+    links:
+      - "https://github.com/volcengine/OpenViking"
+    tags: [openviking, bytedance, agent-memory, context-database, rag, source-teardown]
+    created: 2026-08-19
+    metrics: {}
+  - id: 2026-08-19-009
+    title: "智谱 GLM-5.3 上线独立评测榜：国产旗舰这次卷到哪了"
+    alt_titles:
+      - "GLM-5.3 第三方跑分速览：Artificial Analysis 九项评测怎么读"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 3.4
+    tier: B
+    scores: {practical: 3, social: 4, emotion: 3, hook: 3, timeliness: 4, trigger: 3}
+    urgency: queue
+    reason: "GLM-5.3 上线 Artificial Analysis 独立评测（HN 132 分，08-18），国产旗舰迭代对中文受众有天然关注度；账号有 GLM
+系列前情（hy3 对比 GLM-5.2）可串。B 级原因：本轮抓取只坐实「已上榜」，具体分数/排名/定价未核到（AA 页面 JS
+渲染抓不全）。★创作前必核：AA 具体各项分数与排名、智谱官方发布说明，核不到就弃；一切数字标注来源，红线：不臆造 benchmark"
+    links:
+      - "https://artificialanalysis.ai/models/glm-5-3"
+      - "https://news.ycombinator.com/item?id=49353407"
+    tags: [glm-5.3, zhipu, new-model, benchmark]
+    created: 2026-08-19
     metrics: {}

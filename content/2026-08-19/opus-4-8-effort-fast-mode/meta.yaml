@@ -1,0 +1,19 @@
+# 内容条目元数据 / 状态机
+slug:                      opus-4-8-effort-fast-mode # 短标识，同目录名
+title:                     Opus 4.8 的 effort 控制 + fast mode，怎么让我账单降一半 # 工作标题
+type:                      kouban # kouban(口播) | tuwen(图文)
+pillar:                    depth # depth(技术深度) | traffic(流量型)
+status: drafting            # 合法状态与迁移见 `media flip --help`（唯一定义 = tools/console/packages/core/src/state.ts）
+                           # 状态只经 media 命令翻转，不手编
+source:                    2026-06-14-006 # 选题来源（哪个信息源/热点）
+
+schedule:                  # 计划发布时间
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-14
+  drafting: 2026-08-19 17:31
+  review:
+  approved:
+  published:
+  retro_done:

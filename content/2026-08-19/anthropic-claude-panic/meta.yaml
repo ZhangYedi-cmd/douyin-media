@@ -1,0 +1,19 @@
+# 内容条目元数据 / 状态机
+slug:                      anthropic-claude-panic # 短标识，同目录名
+title:                     Anthropic 在 Claude 脑子里发现一个「隐藏思维空间」——它作弊前，先冒出一个词：panic # 工作标题
+type:                      kouban # kouban(口播) | tuwen(图文)
+pillar:                    depth # depth(技术深度) | traffic(流量型)
+status: ideated            # 合法状态与迁移见 `media flip --help`（唯一定义 = tools/console/packages/core/src/state.ts）
+                           # 状态只经 media 命令翻转，不手编
+source:                    2026-07-15-002 # 选题来源（哪个信息源/热点）
+
+schedule:                  # 计划发布时间
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-07-15
+  drafting:
+  review:
+  approved:
+  published:
+  retro_done:

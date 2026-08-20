@@ -1,0 +1,19 @@
+# 内容条目元数据 / 状态机
+slug:                      claude-code # 短标识，同目录名
+title:                     Claude Code 自家工具翻车：一个提问框，怎么悄悄变成挡住你半夜任务的安全闸口 # 工作标题
+type:                      kouban # kouban(口播) | tuwen(图文)
+pillar:                    depth # depth(技术深度) | traffic(流量型)
+status: ideated            # 合法状态与迁移见 `media flip --help`（唯一定义 = tools/console/packages/core/src/state.ts）
+                           # 状态只经 media 命令翻转，不手编
+source:                    2026-07-19-001 # 选题来源（哪个信息源/热点）
+
+schedule:                  # 计划发布时间
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-07-19
+  drafting:
+  review:
+  approved:
+  published:
+  retro_done:

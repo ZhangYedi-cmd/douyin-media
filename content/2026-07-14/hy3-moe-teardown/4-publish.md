@@ -25,3 +25,13 @@
 - **实际发布时间**：
 - **账号**：
 - **链接**：
+
+## 发布失败记录（2026-08-19，douyin-publish --publish）
+人已在看板确认发布并授权直发，但 **Step 0 物料校验未过，未执行任何 sau 命令，status 保持 approved（未调用 `media publish-done`）**。
+
+- **阻断 1（硬阻断）· 成片 mp4 不存在**：`deliverables.video` 声明 `assets/hy3-moe-teardown.mp4`，实际 `assets/` 只有 `cover-prompt.md` + `cover.png`。全仓 + home 目录扫描均无该文件（`.gitignore:5 *.mp4`，故 git 里本就没有，属本地产物丢失/从未落盘）。无视频文件则 `sau douyin upload-video --file` 无从谈起。
+- **阻断 2 · cookie 失效**：`uv run sau douyin check --account yedi` → `invalid`。按铁律 4 不自动登录，需人工扫码：
+  `cd /Users/yedizhang/tools/social-auto-upload && uv run sau douyin login --account yedi --headed`
+- **附带发现（文档漂移）**：SKILL.md 写 `SAU_DIR=/Users/yedi/douyin-media/tools/social-auto-upload`、默认 `--account main`；实际引擎在 `/Users/yedizhang/tools/social-auto-upload`，cookie 只有 `douyin_yedi.json`（账号名 `yedi`）。
+
+**解阻路径**：先重跑 `web-video-presentation` 的 `npm run record` + `tts-dub` 复现成片（2-script.md 为唯一真相源，配音/字幕/终检 A–G 需重走），落盘到 `assets/hy3-moe-teardown.mp4`；再人工扫码刷 cookie；两者齐了重跑 `/douyin-publish hy3-moe-teardown --publish`。

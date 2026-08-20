@@ -1,0 +1,19 @@
+# 内容条目元数据 / 状态机
+slug:                      nvidia-550b-mamba-moe-10 # 短标识，同目录名
+title:                     NVIDIA 550B 的 Mamba-MoE 架构，为什么只激活 10% 参数还能打 # 工作标题
+type:                      kouban # kouban(口播) | tuwen(图文)
+pillar:                    depth # depth(技术深度) | traffic(流量型)
+status: ideated            # 合法状态与迁移见 `media flip --help`（唯一定义 = tools/console/packages/core/src/state.ts）
+                           # 状态只经 media 命令翻转，不手编
+source:                    2026-06-14-010 # 选题来源（哪个信息源/热点）
+
+schedule:                  # 计划发布时间
+publish_url:               # 发布后回填
+
+timestamps:
+  ideated: 2026-06-14
+  drafting:
+  review:
+  approved:
+  published:
+  retro_done:
