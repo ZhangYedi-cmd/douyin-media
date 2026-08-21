@@ -31,7 +31,15 @@
 | douyin-publish（sau 真发） | 模拟发布：保留 `--dry-run`/`--publish` 两档 + 二次确认交互；`--publish` 只写本地发布记录 | 不可逆操作双闸（过审 ≠ 发布授权） |
 | 创作者中心真实数据 | **mock-metrics 生成器**：仿真播放/完播/评论数据，**故意埋规律**（如强 CTA→评论显著高、知识点堆砌→完播低） | 完整大环：复盘→归因→提议→人审→改 brain；学员复盘能真「挖出打法」（教学彩蛋） |
 | dubbing-reviewer（配音质检子代理） | **script-reviewer 子代理**：审口播稿（冷开/钩子/口语化），只判不改（无写权限）、限 3 轮、超限升级人审 | AI 审 AI + 职责分离 + 有限重试 |
-| media CLI（TS monorepo 六包） | **单文件 `tools/media.mjs`**（几百行）：next / promote / flip / publish-done / check 五命令 | 状态唯一记账 + 确定性交代码、判断交 AI；源码本身即教学材料 |
+| media CLI（TS monorepo 六包） | **单文件 `tools/media.mjs`**（几百行）：next / promote / flip / publish-done / check / **doctor** 六命令 | 状态唯一记账 + 确定性交代码、判断交 AI；源码本身即教学材料 |
+
+**doctor（产物格式 lint，2026-08-21 人审补充）**：与 `check` 分工——`check` 验**状态账本一致性**（meta/backlog/dashboard 三处对不对得上），`doctor` 验**各阶段产物格式**是否符合标准，供每个阶段出口和出审前调用（`media doctor <slug>` 按当前状态验对应产物；`media doctor --all` 全仓扫）：
+- `meta.yaml`：必填字段齐全、status 合法、timestamps 与 status 匹配；
+- `1-brief.md`：promote 后必须存在且非空；
+- `2-script.md`：有钩子段、第一句冷开自成立的结构标记、分段完整；
+- `4-publish.md`：可解析 bullet 字段（`- **标题**：…`/正文/话题标签 3–5 个/封面路径/媒体文件）逐项验、引用的文件路径真实存在——把原仓 L5/L6「发布时才发现缺标题」的坑前移到机器闸；
+- `backlog.yaml`：条目 schema（id 格式/track/score/tags/status 合法值）。
+教学价值：示范「格式标准写成 lint 规则，闸口从人眼检查升级为机器判据」——这本身就是 Harness 心法的一课。
 
 ## 四、目录结构
 
@@ -81,7 +89,7 @@ webvideo-loop/
 2. **生产线跑通**：`media next` 取题 → promote → Claude Code 按 daily-run 创作（写稿→script-reviewer 质检→edge-tts 配音→录屏出 mp4）→ `media flip review` 停线，`3-review.md` 出现待审记录。
 3. **人闸闭环**：学员写「通过」→ 模拟发布二次确认 → `media publish-done` 三处记账（meta/backlog/dashboard）。
 4. **治理线跑通**：mock-metrics 生成数据 → retro skill 产出含「大脑变更提议」的报告 → 学员人审后手动应用到 benchmarks.md；埋入的规律可被归因发现。
-5. `media check` 全绿；仓内无任何脱敏黑名单词（corp 关键词/邮箱/key/音色 ID）。
+5. `media check` 与 `media doctor --all` 全绿；仓内无任何脱敏黑名单词（corp 关键词/邮箱/key/音色 ID）。
 6. 示例内容条目完整呈现五件套终态，可当「标准答案」对照。
 
 ## 未决项
