@@ -1050,17 +1050,11 @@ topics:
     tier: S
     scores: {practical: 3, social: 5, emotion: 5, hook: 5, timeliness: 5, trigger: 4}
     urgency: today
-    reason: "HN 815 分本周最热 AI 事件：Anthropic 官宣为合规 EU 新规，所有 Claude 模型对超 200 token
-的生成文本做语义级隐形水印（绿/红词表+密钥概率检测）。机制可拆可演（抛硬币偏置比喻+declaude.org 交互式讲解）、切身利益强（受众全是 Claude
-用户）；争议面（Gruber 批其牺牲措辞精度）可做观点钩子。含 +0.15
-立身（机制拆解）软加成（4.35→4.50）。★可诚实自动做完：读官方博客+支持文档+第三方拆解讲机制，不臆造。★口径纪律：检测是概率性的、只有
-Anthropic 能验自家水印，勿说成「百分百可检测」；Gruber 的批评须归因为个人观点"
+    reason: "HN 815 分本周最热 AI 事件：Anthropic 官宣为合规 EU 新规，所有 Claude 模型对超 200 token 的生成文本做语义级隐形水印（绿/红词表+密钥概率检测）。机制可拆可演（抛硬币偏置比喻+declaude.org 交互式讲解）、切身利益强（受众全是 Claude 用户）；争议面（Gruber 批其牺牲措辞精度）可做观点钩子。含 +0.15 立身（机制拆解）软加成（4.35→4.50）。★可诚实自动做完：读官方博客+支持文档+第三方拆解讲机制，不臆造。★口径纪律：检测是概率性的、只有 Anthropic 能验自家水印，勿说成「百分百可检测」；Gruber 的批评须归因为个人观点"
     links:
       - "https://www.anthropic.com/news/claude-text-watermark"
-      - "https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-\
-content"
-      - "https://daringfireball.net/2026/08/anthropics_watermark_text_adulteration_in_c\
-laude_is_a_perversion_of_writing"
+      - "https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content"
+      - "https://daringfireball.net/2026/08/anthropics_watermark_text_adulteration_in_claude_is_a_perversion_of_writing"
       - "https://declaude.org/watermarking/"
     tags: [anthropic, claude, watermark, text-steganography, ai-policy]
     created: 2026-08-19
@@ -1077,10 +1071,7 @@ laude_is_a_perversion_of_writing"
     tier: S
     scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 4}
     urgency: today
-    reason: "两条 HN 高分帖合一：OpenRouter 上 GPT-5.6 Sol 定价砍 50%（624 分，08-17）+ Roboflow 实测其为 OpenAI
-史上最强视觉模型（361 分）。价格战+选型直接影响每个用 API 的工程师；图文速览成本低抢时效。★可诚实自动做完：读 OpenRouter
-定价页+Roboflow 评测报告，引用其数据并标注来源，不自测不臆造。★创作前核实：OpenRouter 当前实际价格与降价幅度、Roboflow
-评测的具体任务口径"
+    reason: "两条 HN 高分帖合一：OpenRouter 上 GPT-5.6 Sol 定价砍 50%（624 分，08-17）+ Roboflow 实测其为 OpenAI 史上最强视觉模型（361 分）。价格战+选型直接影响每个用 API 的工程师；图文速览成本低抢时效。★可诚实自动做完：读 OpenRouter 定价页+Roboflow 评测报告，引用其数据并标注来源，不自测不臆造。★创作前核实：OpenRouter 当前实际价格与降价幅度、Roboflow 评测的具体任务口径"
     links:
       - "https://openrouter.ai/openai/gpt-5.6-sol"
       - "https://blog.roboflow.com/openai-gpt-5-6/"
@@ -1100,10 +1091,7 @@ laude_is_a_perversion_of_writing"
     tier: S
     scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 4}
     urgency: today
-    reason: "08-17 GitHub 大规模宕机（HN 718/632/569 三帖霸榜，Ask HN 求替代品 632 分），同日 Cursor 官宣 Origin
-代码托管（repos/PR/代码浏览/GitHub 双向同步，agent-native）。戏剧性时点+每个工程师切身依赖=完播友好；「AI 编辑器开始抢
-GitHub 地盘」是行业地震级叙事。★可诚实自动做完：读 changelog+status page+HN
-讨论。★口径纪律：宕机与发布的时间先后须按事实陈述（Origin 为既定发布），「伏击」只能作调侃不能作断言"
+    reason: "08-17 GitHub 大规模宕机（HN 718/632/569 三帖霸榜，Ask HN 求替代品 632 分），同日 Cursor 官宣 Origin 代码托管（repos/PR/代码浏览/GitHub 双向同步，agent-native）。戏剧性时点+每个工程师切身依赖=完播友好；「AI 编辑器开始抢 GitHub 地盘」是行业地震级叙事。★可诚实自动做完：读 changelog+status page+HN 讨论。★口径纪律：宕机与发布的时间先后须按事实陈述（Origin 为既定发布），「伏击」只能作调侃不能作断言"
     links:
       - "https://cursor.com/changelog/origin-code-hosting"
       - "https://www.githubstatus.com/incidents/zkxwbgr0cnmx"
@@ -1124,12 +1112,7 @@ GitHub 地盘」是行业地震级叙事。★可诚实自动做完：读 change
     tier: S
     scores: {practical: 4, social: 4, emotion: 5, hook: 4, timeliness: 4, trigger: 3}
     urgency: queue
-    reason: "破案叙事满分的真实安全事件（Wiz 官方披露，08-17）：Snowflake 公开仓一个 Copilot 参与检查的 PR 引入 GitHub
-Actions 脚本注入（issue 标题直接插进 run: 块），GitHub Advanced Security 扫过未报，5 天后被 Wiz 自主 AI
-红队 agent 发现并利用、拿到内部 Jira 凭证；当天修复。「AI 埋的雷 AI 来挖」对攻结构+GitHub Actions
-防注入即学即用（untrusted input 别进 run: 块）。含 +0.15 立身（安全机制拆解）软加成（4.10→4.25）。★可诚实自动做完：读
-Wiz 官方 blog（含 workflow 源码细节）+涉事 PR。★口径纪律：Wiz 更新声明「代码变更是否 AI 写的不确定，Copilot
-是复查方」——勿说成「Copilot 写出漏洞」"
+    reason: "破案叙事满分的真实安全事件（Wiz 官方披露，08-17）：Snowflake 公开仓一个 Copilot 参与检查的 PR 引入 GitHub Actions 脚本注入（issue 标题直接插进 run: 块），GitHub Advanced Security 扫过未报，5 天后被 Wiz 自主 AI 红队 agent 发现并利用、拿到内部 Jira 凭证；当天修复。「AI 埋的雷 AI 来挖」对攻结构+GitHub Actions 防注入即学即用（untrusted input 别进 run: 块）。含 +0.15 立身（安全机制拆解）软加成（4.10→4.25）。★可诚实自动做完：读 Wiz 官方 blog（含 workflow 源码细节）+涉事 PR。★口径纪律：Wiz 更新声明「代码变更是否 AI 写的不确定，Copilot 是复查方」——勿说成「Copilot 写出漏洞」"
     links:
       - "https://www.wiz.io/blog/red-agent-snowflake-copilot-cicd-bug"
       - "https://github.com/snowflakedb/snowflake-connector-net/pull/1218"
@@ -1149,12 +1132,9 @@ Wiz 官方 blog（含 workflow 源码细节）+涉事 PR。★口径纪律：Wiz
     tier: A
     scores: {practical: 5, social: 3, emotion: 3, hook: 3, timeliness: 5, trigger: 4}
     urgency: queue
-    reason: "官方支持文档坐实：5/13-8/31 Claude Code 周限额上浮 50%（Pro/Max/Team 自动生效），9/1
-起回落标准线——绝大多数人不知道自己在用促销额度（HN 279 分帖印证认知缺口）。倒计时+切身用量规划=实用满分；/usage
-查限额可演示。★时效硬约束：8/31 前发出才有意义，逾期作废。★可诚实自动做完：读官方 support 文档"
+    reason: "官方支持文档坐实：5/13-8/31 Claude Code 周限额上浮 50%（Pro/Max/Team 自动生效），9/1 起回落标准线——绝大多数人不知道自己在用促销额度（HN 279 分帖印证认知缺口）。倒计时+切身用量规划=实用满分；/usage 查限额可演示。★时效硬约束：8/31 前发出才有意义，逾期作废。★可诚实自动做完：读官方 support 文档"
     links:
-      - "https://support.claude.com/en/articles/15910845-claude-code-may-august-2026-we\
-ekly-limits-promotion"
+      - "https://support.claude.com/en/articles/15910845-claude-code-may-august-2026-weekly-limits-promotion"
       - "https://news.ycombinator.com/item?id=49348751"
     tags: [claude-code, usage-limits, anthropic, quota]
     created: 2026-08-19
@@ -1171,10 +1151,7 @@ ekly-limits-promotion"
     tier: A
     scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
     urgency: queue
-    reason: "HN 两帖合计 360+ 分的病毒故事（08-18）：网友用 Claude 给仅支持 Windows 的 HP Laser 1008a 写出 macOS
-驱动，完整对话记录公开可查。「AI 干成了厂商不肯干的事」情绪点+硬件驱动这种「AI 不该会」的领域=惊奇；可提炼「让 AI
-啃硬骨头」的可复用工作流。★可诚实自动做完：读原推+公开 chat log 转述，标注为他人实测。★创作前核实：通读 cdn.kuber.studio
-完整记录，确认关键步骤与结果边界，勿夸大成「所有打印机都行」"
+    reason: "HN 两帖合计 360+ 分的病毒故事（08-18）：网友用 Claude 给仅支持 Windows 的 HP Laser 1008a 写出 macOS 驱动，完整对话记录公开可查。「AI 干成了厂商不肯干的事」情绪点+硬件驱动这种「AI 不该会」的领域=惊奇；可提炼「让 AI 啃硬骨头」的可复用工作流。★可诚实自动做完：读原推+公开 chat log 转述，标注为他人实测。★创作前核实：通读 cdn.kuber.studio 完整记录，确认关键步骤与结果边界，勿夸大成「所有打印机都行」"
     links:
       - "https://twitter.com/kuberwastaken/status/2089377982536388964"
       - "https://cdn.kuber.studio/chat/hp-laser-1008a-driver"
@@ -1194,11 +1171,7 @@ ekly-limits-promotion"
     tier: A
     scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 3, trigger: 4}
     urgency: queue
-    reason: "HN 334 分深度雄文（08-16）：推理分暴涨与参数暴减并行（GLM-5.2 40B 激活 AIME
-99.2%），代价是事实性知识被刻意砍掉（Qwen3.5 9B 知识幻觉率 80%+）——「拿世界知识换推理」是行业级 deliberate
-trade，知识改由 harness/检索在运行时供给。正中账号已验证的 demystify+harness
-双母题（脚手架>模型的下一章）；反直觉标题天然钩子。含 +0.2 立身（行业机制/原理拆解）软加成（3.60→3.80）。★可诚实自动做完：读原文+引用的
-benchmark 页转述，数字全部标来源。★口径纪律：「频率派预测」部分是作者观点，须归因"
+    reason: "HN 334 分深度雄文（08-16）：推理分暴涨与参数暴减并行（GLM-5.2 40B 激活 AIME 99.2%），代价是事实性知识被刻意砍掉（Qwen3.5 9B 知识幻觉率 80%+）——「拿世界知识换推理」是行业级 deliberate trade，知识改由 harness/检索在运行时供给。正中账号已验证的 demystify+harness 双母题（脚手架>模型的下一章）；反直觉标题天然钩子。含 +0.2 立身（行业机制/原理拆解）软加成（3.60→3.80）。★可诚实自动做完：读原文+引用的 benchmark 页转述，数字全部标来源。★口径纪律：「频率派预测」部分是作者观点，须归因"
     links:
       - "https://w4g1.dev/blog/models-are-getting-dumber-on-purpose"
       - "https://news.ycombinator.com/item?id=49322695"
@@ -1217,11 +1190,7 @@ benchmark 页转述，数字全部标来源。★口径纪律：「频率派预�
     tier: A
     scores: {practical: 4, social: 4, emotion: 3, hook: 3, timeliness: 3, trigger: 4}
     urgency: queue
-    reason: "GitHub 日榜在榜、~30k star：字节 volcengine 开源的「Self-evolving Context Database」，统一
-agent memory + knowledge RAG + skills 三件事。正中账号 context-engineering 心智（已发上下文工程
-4k+ 播放、EP07 compaction），「上下文基建」赛道宽口径工程题（benchmarks 打法：宽口径破圈）。含 +0.2
-立身（架构拆解）软加成（3.50→3.70）。★可诚实自动做完：读 repo/docs 拆架构。★创作前核实：「自演化」具体指什么机制、与
-mem0/LangMem 等既有方案差异，勿把 README 宣称当实测"
+    reason: "GitHub 日榜在榜、~30k star：字节 volcengine 开源的「Self-evolving Context Database」，统一 agent memory + knowledge RAG + skills 三件事。正中账号 context-engineering 心智（已发上下文工程 4k+ 播放、EP07 compaction），「上下文基建」赛道宽口径工程题（benchmarks 打法：宽口径破圈）。含 +0.2 立身（架构拆解）软加成（3.50→3.70）。★可诚实自动做完：读 repo/docs 拆架构。★创作前核实：「自演化」具体指什么机制、与 mem0/LangMem 等既有方案差异，勿把 README 宣称当实测"
     links:
       - "https://github.com/volcengine/OpenViking"
     tags: [openviking, bytedance, agent-memory, context-database, rag, source-teardown]
@@ -1238,9 +1207,7 @@ mem0/LangMem 等既有方案差异，勿把 README 宣称当实测"
     tier: B
     scores: {practical: 3, social: 4, emotion: 3, hook: 3, timeliness: 4, trigger: 3}
     urgency: queue
-    reason: "GLM-5.3 上线 Artificial Analysis 独立评测（HN 132 分，08-18），国产旗舰迭代对中文受众有天然关注度；账号有 GLM
-系列前情（hy3 对比 GLM-5.2）可串。B 级原因：本轮抓取只坐实「已上榜」，具体分数/排名/定价未核到（AA 页面 JS
-渲染抓不全）。★创作前必核：AA 具体各项分数与排名、智谱官方发布说明，核不到就弃；一切数字标注来源，红线：不臆造 benchmark"
+    reason: "GLM-5.3 上线 Artificial Analysis 独立评测（HN 132 分，08-18），国产旗舰迭代对中文受众有天然关注度；账号有 GLM 系列前情（hy3 对比 GLM-5.2）可串。B 级原因：本轮抓取只坐实「已上榜」，具体分数/排名/定价未核到（AA 页面 JS 渲染抓不全）。★创作前必核：AA 具体各项分数与排名、智谱官方发布说明，核不到就弃；一切数字标注来源，红线：不臆造 benchmark"
     links:
       - "https://artificialanalysis.ai/models/glm-5-3"
       - "https://news.ycombinator.com/item?id=49353407"
