@@ -1,0 +1,95 @@
+# 选题池 fixture（server 测试专用，独立于 core 的 fixture）。
+next_up: null
+
+topics:
+  - id: 2030-01-01-001
+    title: "Idea A（最高分）"
+    alt_titles: []
+    track: depth
+    format: kouban
+    status: idea
+    content_path:
+    score: 4.20
+    tier: S
+    scores:
+      practical: 4
+      social: 4
+      emotion: 4
+      hook: 4
+      timeliness: 4
+      trigger: 4
+    urgency: queue
+    reason: "测试用最高分 idea"
+    links: []
+    tags: [test]
+    created: 2030-01-01
+    metrics: {}
+
+  - id: 2030-01-01-002
+    title: "Idea B"
+    alt_titles: []
+    track: traffic
+    format: kouban
+    status: idea
+    content_path:
+    score: 3.00
+    tier: B
+    scores:
+      practical: 3
+      social: 3
+      emotion: 3
+      hook: 3
+      timeliness: 3
+      trigger: 3
+    urgency: queue
+    reason: "测试用次高分 idea"
+    links: []
+    tags: [test]
+    created: 2030-01-01
+    metrics: {}
+
+  - id: 2030-01-02-001
+    title: "Picked 条目"
+    alt_titles: []
+    track: depth
+    format: kouban
+    status: picked
+    content_path: content/2030-01-06/review-sample
+    score: 3.50
+    tier: A
+    scores:
+      practical: 3
+      social: 3
+      emotion: 3
+      hook: 4
+      timeliness: 3
+      trigger: 3
+    urgency: queue
+    reason: "已 promote"
+    links: []
+    tags: [test]
+    created: 2030-01-02
+    metrics: {}
+
+  - id: 2030-01-03-001
+    title: "已发布条目"
+    alt_titles: []
+    track: depth
+    format: kouban
+    status: published
+    content_path: content/2030-01-05/published-sample
+    score: 3.80
+    tier: A
+    scores:
+      practical: 4
+      social: 3
+      emotion: 3
+      hook: 4
+      timeliness: 3
+      trigger: 3
+    urgency: queue
+    reason: "已发布"
+    links: []
+    tags: [test]
+    created: 2030-01-03
+    metrics: {}

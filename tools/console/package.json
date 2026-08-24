@@ -1,0 +1,22 @@
+{
+  "name": "console",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "e2e"
+  ],
+  "scripts": {
+    "guard": "node scripts/guard-keywords.mjs",
+    "pretest": "npm run build",
+    "test": "npm run guard && vitest run",
+    "test:watch": "vitest",
+    "e2e": "npm --workspace e2e run e2e",
+    "build": "tsc -b"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}

@@ -1,0 +1,93 @@
+/* 对照 docs/design/detail.html 的 .detail-layout（1fr:360px），原型用内联 <style> 定义，
+   这里改成模块类；颜色/间距仍走 var(--token)，不新增色值（AI 约定 3）。 */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.decisionPanel {
+  position: sticky;
+  top: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+/* 原型 .review-note 在 theme.css 里其实没有对应规则（只在 detail.html 内联引用了这个类名、
+   靠浏览器默认 textarea 样式撑着）——这里补一份真正的样式，字段全部取自既有 token（对照
+   theme.css .form-stack textarea 同款做法，不是新色值，是把已有规则套到审核意见输入框上）。 */
+.reasonTextarea {
+  width: 100%;
+  min-height: 84px;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--fg);
+  font: 400 var(--text-sm) / 1.4 var(--font-body);
+  resize: vertical;
+}
+
+.reasonTextarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+/* A1（P0）：MetaHeader 的 <header> 是一行 flex（h1 + StatusTag + 命令条），h1 默认
+   min-width:auto——中文允许逐字断行，所以「自动最小宽度」只有一个汉字那么窄，窗口一收窄，
+   不换行的命令条（nowrap）把宽度全占走，标题被压成竖条（<1200px 时最夸张达到约 500px 高）。
+   给标题 flex:1 1 auto + min-width:0，让它按实际可用宽度正常换行，不再被挤到内容最小宽度。 */
+.title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* 命令条容器：默认不换行会反过来把标题挤爆，允许换行到下一行；chip 自身仍单行 + ellipsis
+   收敛（见下方 .commands > button），两层配合：装不下就换行，单条命令本身不断字。 */
+.commands {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.commands > button {
+  max-width: 260px;
+}
+
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .decisionPanel {
+    position: static;
+  }
+}
+
+/* R2（第三波修复，2026-08-19）：StageTimeline.tsx 的 antd Steps 横向挤在窄屏（≤1024）会把
+   「已排期」「复盘完成」这类多字标签逐字挤断（如「已排/期」）。给它一层横向可滚动容器，容器内
+   Steps 保持内容原生宽度（不被压缩）、标题禁止内部换行——装不下就横向滚动，不断字。
+   `:global()` 用法对照 HealthLights.module.css / MarkdownView.module.css 的既有先例
+   （选中的是 antd/第三方库的字面 className，不是本模块的局部类，需要 :global 才能选中）。 */
+.timelineScroll {
+  overflow-x: auto;
+  margin-top: var(--space-4);
+}
+
+.timelineScroll :global(.ant-steps) {
+  min-width: max-content;
+}
+
+.timelineScroll :global(.ant-steps-item-title) {
+  white-space: nowrap;
+}

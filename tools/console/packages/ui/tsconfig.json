@@ -1,0 +1,19 @@
+{
+  // 继承仓库基线（strict / verbatimModuleSyntax 等），但覆盖模块解析策略：
+  // core/cli/server 面向 Node 运行时用 NodeNext；ui 面向 Vite/浏览器打包目标，
+  // 用 Bundler 解析（Vite 官方 React+TS 模板同款），避免相对导入被迫写 .js 后缀。
+  // verbatimModuleSyntax 继续从基线继承 = true，负责焊死 core 的 type-only import。
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "types": ["vite/client"],
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "allowJs": false
+  },
+  "include": ["src"]
+}

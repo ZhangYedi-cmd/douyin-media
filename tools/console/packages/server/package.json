@@ -1,0 +1,24 @@
+{
+  "name": "@console/server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "console-server": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./api-types": {
+      "types": "./dist/api-types.d.ts",
+      "default": "./dist/api-types.js"
+    }
+  },
+  "dependencies": {
+    "@console/cc-stream": "*",
+    "@console/core": "*",
+    "@hono/node-server": "^2.1.1",
+    "chokidar": "^5.0.0",
+    "hono": "^4.13.2"
+  }
+}

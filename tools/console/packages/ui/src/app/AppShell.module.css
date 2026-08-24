@@ -1,0 +1,100 @@
+/* 全局壳布局：复刻原型 .app 网格（docs/design/css/theme.css .app/.sidebar/.topbar）。
+   颜色/圆角/间距全部走 var(--token)，不写死值（AI 约定 3）。*/
+
+.app {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sider {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4) var(--space-3);
+  gap: var(--space-4);
+  border-right: 1px solid var(--border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-2);
+}
+
+.logo {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--accent-on);
+  display: grid;
+  place-items: center;
+  font: 700 var(--text-xs)/1 var(--font-mono);
+  flex: none;
+}
+
+.brandText b {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  display: block;
+}
+
+.brandText small {
+  color: var(--muted);
+  font-size: 11px;
+  display: block;
+}
+
+.menu {
+  flex: 1;
+  border-inline-end: none !important;
+  background: transparent !important;
+}
+
+/* 侧栏「纯统计」数字（E2：生产看板在制数/选题池库存量——是现状，不是待办）。
+   原型 .side-nav a .cnt 是一个灰色圆角徽标，与「要我处理」的警示徽标（见下方 .navBadgeActionable，
+   复用全局 .badge.b-warn）长得一模一样，三个数字分不出该着急哪个。这里主动弱化：去掉边框/底色，
+   只留一个比正文更淡的数字，悬停靠 title 说明「它是什么」。 */
+.navCount {
+  margin-left: auto;
+  font: 500 11px/1 var(--font-mono);
+  color: var(--muted);
+  opacity: 0.72;
+  padding: 2px 4px;
+}
+
+/* 侧栏「要我处理」徽标（E2：目前只有治理线的待审提议数够格）——直接叠加全局 .badge.b-warn，
+   本类只负责把它推到菜单项最右侧，颜色/形状不重复定义。 */
+.navBadgeActionable {
+  margin-left: auto;
+}
+
+.foot {
+  margin-top: auto;
+  padding: var(--space-2);
+  font: 400 11px/1.6 var(--font-mono);
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: 52px;
+  line-height: normal;
+  padding: var(--space-2) var(--space-6);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbarRight {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.content {
+  overflow: auto;
+  background: var(--bg);
+}

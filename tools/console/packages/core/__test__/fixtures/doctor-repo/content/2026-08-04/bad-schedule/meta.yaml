@@ -1,0 +1,19 @@
+slug: bad-schedule
+title: "写了可解析建议发布时段的样例（L6 回归）"
+type: kouban
+pillar: depth
+status: scheduled
+source: 2026-08-04-001
+
+schedule: 2026-08-10 20:00
+publish_url:
+
+timestamps:
+  ideated: 2026-08-04
+  drafting: 2026-08-04
+  review: 2026-08-04
+  approved: 2026-08-04 20:00
+  published:
+  retro_done:
+
+blocker: {}

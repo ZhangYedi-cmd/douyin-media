@@ -1,0 +1,19 @@
+slug: missing-publish
+title: "出审时没产 4-publish.md 的样例（L5 回归）"
+type: kouban
+pillar: depth
+status: review
+source: 2026-08-02-001
+
+schedule:
+publish_url:
+
+timestamps:
+  ideated: 2026-08-02
+  drafting: 2026-08-02
+  review: 2026-08-02
+  approved:
+  published:
+  retro_done:
+
+blocker: {}

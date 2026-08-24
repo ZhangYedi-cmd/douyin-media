@@ -1,0 +1,24 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.runtime/
+logs/
+test-results/
+playwright-report/
+midscene_run/
+.env.e2e
+
+# 上面的裸 `logs/` 是给各包运行时日志用的（如 tools/console/logs/），但它不带路径分隔前缀，
+# 会连带把测试 fixture 里同名目录也吞掉——真实踩到的坑：packages/core/test/fixtures/repo/harness/logs/
+# 与本次新增的 packages/server/test/fixtures/repo/{harness,pipeline}/logs/ 全部被静默排除在仓库之外，
+# 在本机能跑通只是因为工作区里还留着未被 git 追踪的本地文件；换一个真正 fresh clone 就会因为
+# `harness/logs/index.jsonl` 不存在而让 buildSnapshot 的 harness 断言失败。下面两条把 fixture 内的
+# logs/ 目录及其内容重新收进仓库（发现于 2026-08-18 工作包 C 验证阶段，影响面不止本包，一并修）。
+!packages/*/test/fixtures/**/logs/
+!packages/*/test/fixtures/**/logs/**
+
+# packages/ui/dist/ 是构建产物但按拍板需要进 git（03-前端执行方案.md §2.12 / 前端技术方案 §6：
+# server clone 即跑，不强制前端工具链；约定「改 ui 必须重 build，同一 commit 含 src 与重建后的
+# dist」，写进 packages/ui/CLAUDE.md）——上面的裸 `dist/` 规则会把它连带吞掉，这里同法解除。
+!packages/ui/dist/
+!packages/ui/dist/**

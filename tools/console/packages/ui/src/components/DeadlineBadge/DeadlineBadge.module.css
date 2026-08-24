@@ -1,0 +1,18 @@
+/* 对照 docs/design/css/theme.css 的 .kb-card .days / .days.hot：同样的 mono 小字 + 色档，
+   但不依赖 .kb-card 祖先选择器（DeadlineBadge 要能用在 P1/P2/P3 多处），改成独立类。 */
+
+.badge {
+  font: 500 10px/1 var(--font-mono);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.warn {
+  color: color-mix(in oklab, var(--warn), var(--fg) 40%);
+  font-weight: 600;
+}
+
+.danger {
+  color: var(--danger);
+  font-weight: 600;
+}

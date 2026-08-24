@@ -1,0 +1,19 @@
+slug: archived-published
+title: "已发布、成片被清理的历史归档样例"
+type: kouban
+pillar: depth
+status: published
+source: 2026-08-05-001
+
+schedule:
+publish_url: https://v.douyin.com/archived
+
+timestamps:
+  ideated: 2026-08-05
+  drafting: 2026-08-05
+  review: 2026-08-05
+  approved: 2026-08-05 20:00
+  published: 2026-08-05 20:05
+  retro_done:
+
+blocker: {}

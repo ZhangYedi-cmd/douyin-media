@@ -1,0 +1,199 @@
+/* MarkdownView：口播稿/治理报告/仓内 md 文件三处共用的富渲染排版。
+   颜色/间距/圆角一律引 theme.css 的 var(--token)（AI 约定 3），字号用 em 相对 .body 自身
+   font-size 缩放，这样同一套规则能同时撑住 .bodySm（对齐 .reader .doc）与
+   .bodyBase（对齐原型 .script-doc）两档密度，不用为每档重写一遍元素规则。 */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  /* 调用方常把本组件塞进 grid/flex 容器（如 harness .grid.cols-2）——grid/flex item 默认
+     min-width:auto 会按内容最小宽度撑父容器，GFM 宽表格（.tableWrap 内部虽已 overflow-x:auto，
+     但那只对"直接充当 flex/grid item"的盒子生效，深层嵌套并不会自动截断这条链路）会把整条
+     祖先链一路撑宽，导致整页而不是表格自己出现横向滚动。显式清零 min-width 掐断这条传导链，
+     真正把横向溢出收敛到 .tableWrap 自己头上（实测：不加这行，harness 报告阅读器里一张宽
+     GFM 表格会把 .page 撑到 4500px+ 宽，用户要横向滚整个页面才能看到表格右侧）。 */
+  min-width: 0;
+}
+
+/* ─── 预览/源码切换 ─────────────────────────────────────────────── */
+.toggle {
+  display: flex;
+  gap: var(--space-1);
+  align-self: flex-start;
+}
+
+.toggleBtn,
+.toggleBtnOn {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font: 500 var(--text-xs) / 1 var(--font-mono);
+  color: var(--muted);
+}
+
+.toggleBtnOn {
+  background: var(--tint-accent);
+  border-color: color-mix(in oklab, var(--accent), transparent 60%);
+  color: var(--accent);
+}
+
+/* ─── 正文密排尺度 ──────────────────────────────────────────────── */
+/* .body 是 .root（flex column）的直接子项，同样要清零 min-width，否则宽表格会把它撑到
+   内容全宽——见 .root 规则处的详细说明。 */
+.body {
+  min-width: 0;
+}
+
+.bodySm {
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+
+.bodyBase {
+  font-size: var(--text-base);
+  line-height: 1.9;
+}
+
+/* ─── 元素级排版（em 相对 .body 自身 font-size，两档尺度共用同一份规则）─── */
+.body :global(h1),
+.body :global(h2),
+.body :global(h3),
+.body :global(h4),
+.body :global(h5),
+.body :global(h6) {
+  margin: 1.2em 0 0.5em;
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  color: var(--fg);
+}
+
+.body :global(h1) { font-size: 1.5em; }
+.body :global(h2) { font-size: 1.3em; }
+.body :global(h3) { font-size: 1.15em; }
+.body :global(h4),
+.body :global(h5),
+.body :global(h6) { font-size: 1em; }
+
+.body :global(h1):first-child,
+.body :global(h2):first-child,
+.body :global(h3):first-child {
+  margin-top: 0;
+}
+
+.body :global(p) {
+  margin: 0 0 0.85em;
+}
+
+.body :global(p):last-child {
+  margin-bottom: 0;
+}
+
+.body :global(strong) {
+  font-weight: 600;
+}
+
+.body :global(a) {
+  color: var(--accent);
+}
+
+.body :global(blockquote) {
+  margin: 0.85em 0;
+  padding: var(--space-1) var(--space-4);
+  border-left: 3px solid var(--border);
+  color: var(--muted);
+}
+
+.body :global(blockquote) :global(p):last-child {
+  margin-bottom: 0;
+}
+
+.body :global(ul),
+.body :global(ol) {
+  margin: 0.6em 0;
+  padding-left: 1.4em;
+}
+
+.body :global(li) {
+  margin: 0.2em 0;
+}
+
+.body :global(li) > :global(p) {
+  margin: 0;
+}
+
+.body :global(.contains-task-list) {
+  list-style: none;
+  padding-left: 0;
+}
+
+.body :global(.task-list-item) {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.body :global(hr) {
+  margin: 1.2em 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+.body :global(code) {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: color-mix(in oklab, var(--fg), transparent 94%);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.body :global(pre) {
+  margin: 0.85em 0;
+  font: 400 0.85em/1.6 var(--font-mono);
+  background: color-mix(in oklab, var(--fg), transparent 96%);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  overflow-x: auto;
+}
+
+.body :global(pre) :global(code) {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: 1em;
+}
+
+.body :global(img) {
+  max-width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+/* ─── 表格（GFM）：容器内横向滚动，不撑破外层布局 ─────────────── */
+.tableWrap {
+  overflow-x: auto;
+  margin: 0.85em 0;
+  min-width: 0;
+}
+
+.tableWrap :global(table) {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.tableWrap :global(th),
+.tableWrap :global(td) {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.tableWrap :global(th) {
+  color: var(--muted);
+  font-weight: 600;
+}

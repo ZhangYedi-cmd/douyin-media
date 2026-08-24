@@ -1,0 +1,19 @@
+slug: series-episode
+title: "系列剧集样例（无 1-brief.md，用 backlog plan_file 当等价物）"
+type: kouban
+pillar: depth
+status: ideated
+source: 2026-08-01-900
+
+schedule:
+publish_url:
+
+timestamps:
+  ideated: 2026-08-06
+  drafting:
+  review:
+  approved:
+  published:
+  retro_done:
+
+blocker: {}

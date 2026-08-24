@@ -1,0 +1,19 @@
+slug: legal-entry
+title: "一个体检全绿的样例条目"
+type: kouban
+pillar: depth
+status: published
+source: 2026-08-01-001
+
+schedule:
+publish_url: https://v.douyin.com/legal
+
+timestamps:
+  ideated: 2026-08-01
+  drafting: 2026-08-01
+  review: 2026-08-01
+  approved: 2026-08-01
+  published: 2026-08-01
+  retro_done:
+
+blocker: {}

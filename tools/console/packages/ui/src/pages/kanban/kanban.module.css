@@ -1,0 +1,102 @@
+/* P2 生产看板（瘦身列表）：对照 docs/design/kanban.html 的 .kb-col 头部圆点语义色，
+   但本页是按状态分组的列表而非板列（03 §2.4「拍板已瘦身」），故不复用 .kb-col 的板列 DOM 结构，
+   只挪它的语义色约定，取色仍走 var(--token)。 */
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex: none;
+}
+
+.dotAccent {
+  background: var(--accent);
+}
+
+.dotWarn {
+  background: var(--warn);
+}
+
+.dotSuccess {
+  background: var(--success);
+}
+
+.dotDanger {
+  background: var(--danger);
+}
+
+.count {
+  color: var(--muted);
+  font-weight: 500;
+  margin-left: auto;
+}
+
+.row {
+  display: grid;
+  /* 同 theme.css .grid.cols-2 的根因修复：minmax(0, 1fr) 防止 .rowMain 里不可断的长 slug/
+     标题撑破这一列、把整行乃至整页顶宽（.rowMain 自身虽已设 min-width:0，这里在轨道定义上
+     再加一层保险，两处都不冲突）。 */
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--border-soft);
+  cursor: pointer;
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row:hover {
+  background: var(--bg);
+}
+
+.rowMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  font-weight: 600;
+  font-size: var(--text-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.slug {
+  font: 400 11px/1.4 var(--font-mono);
+  color: var(--muted);
+  word-break: break-all;
+}
+
+.tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.rowRight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.parseFail {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  background: var(--bg);
+  margin-bottom: var(--space-2);
+}

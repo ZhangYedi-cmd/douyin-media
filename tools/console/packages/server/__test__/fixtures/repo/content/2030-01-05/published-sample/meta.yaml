@@ -1,0 +1,24 @@
+slug: published-sample
+title: "已发布测试条目"
+type: kouban
+pillar: depth
+status: published
+source: 2030-01-03-001
+
+schedule:
+publish_url: https://example.com/works/1
+
+timestamps:
+  ideated: 2030-01-03
+  drafting: 2030-01-03
+  review: 2030-01-04
+  approved: 2030-01-04 10:00
+  published: 2030-01-04 20:00
+
+blocker: {}
+
+deliverables:
+  video: assets/published-sample.mp4
+  cover: assets/cover.png
+  script: 2-script.md
+  publish: 4-publish.md

@@ -1,0 +1,3 @@
+{"ts": "2030-01-09T09:00:00", "task": "retro", "target": "2030-01-05/published-sample", "window": "24h", "result": "report", "report": "harness/logs/2030-01-09-retro.md", "findings": 2, "applied": false}
+{"ts": "2030-01-08T09:00:00", "task": "ideate", "target": "content/_backlog/backlog.yaml", "window": "periodic:2d", "result": "report+pooled", "report": "harness/logs/2030-01-08-ideate.md", "findings": 0, "applied": false}
+{"ts": "2030-01-01T09:00:00", "task": "backlog-gardener", "target": "content/_backlog/backlog.yaml", "window": "periodic:7d", "result": "report", "report": "harness/logs/2030-01-01-backlog-gardener.md", "findings": 1, "applied": true}

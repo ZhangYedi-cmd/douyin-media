@@ -1,0 +1,14 @@
+{
+  "name": "e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@midscene/web": "^1.10.12",
+    "@playwright/test": "^1.62.1",
+    "dotenv": "^16.6.1",
+    "playwright": "^1.62.1"
+  }
+}

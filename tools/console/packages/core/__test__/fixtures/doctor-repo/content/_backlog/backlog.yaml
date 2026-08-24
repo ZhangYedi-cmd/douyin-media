@@ -1,0 +1,19 @@
+next_up: null
+topics:
+  - id: 2026-08-01-900
+    title: "系列样例条目"
+    alt_titles: []
+    track: depth
+    format: kouban
+    status: picked
+    content_path: content/2026-08-06/series-episode
+    score: null
+    tier: null
+    scores: null
+    urgency: queue
+    reason: "doctor 系列豁免测试专用"
+    links: []
+    tags: []
+    created: 2026-08-06
+    metrics: {}
+    plan_file: "/plan/doctor-fixture-series/episodes/ep-x.md"

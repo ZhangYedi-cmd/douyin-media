@@ -1,0 +1,2 @@
+{"ts": "2030-01-05T09:00:00Z", "slug": "published-sample", "window": "24h", "actor": "test", "data": {"plays": 1000, "completion": 0.35, "likes": 20, "comments": 3, "shares": 1}}
+{"ts": "2030-01-06T09:00:00Z", "slug": "published-sample", "window": "72h", "actor": "test", "data": {"plays": 2400, "completion": 0.4, "likes": 55, "comments": 6, "shares": 2}}

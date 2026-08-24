@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  看板 server 常驻注册（02-后端执行方案.md §2.8 / 上游拍板 §11）。
+  红线（05-实施计划-Codex分工.md §3 第7条）：本文件只写好放在这里，S5 验收跑稳之前
+  不 `launchctl load`——防止半成品常驻。启用步骤（由编排方在 G2 后执行）：
+    cp tools/console/com.yedi.douyin-console.plist ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/com.yedi.douyin-console.plist
+  停用：launchctl unload ~/Library/LaunchAgents/com.yedi.douyin-console.plist
+  与 start.sh 互斥使用：launchd 接管 RunAtLoad/KeepAlive 后，start.sh 只留 status/stop 应急。
+  下面的绝对路径是本机（yedizhang 的开发机）路径，换机器需要相应改写——launchd plist 没有
+  跨机模板机制，这是已知限制，不是本文件的疏漏。
+-->
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.yedi.douyin-console</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/Users/yedizhang/.nvm/versions/node/v24.14.0/bin/node</string>
+      <string>/Users/yedizhang/yedi-study/douyin-media/tools/console/packages/server/dist/index.js</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/yedizhang/yedi-study/douyin-media/tools/console</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>PIPELINE_REPO_ROOT</key>
+      <string>/Users/yedizhang/yedi-study/douyin-media</string>
+      <key>CONSOLE_PORT</key>
+      <string>5170</string>
+      <key>PATH</key>
+      <string>/Users/yedizhang/.nvm/versions/node/v24.14.0/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/yedizhang/yedi-study/douyin-media/tools/console/logs/server.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/yedizhang/yedi-study/douyin-media/tools/console/logs/server.log</string>
+  </dict>
+</plist>

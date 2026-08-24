@@ -1,0 +1,40 @@
+/* 视觉对照 docs/design/backlog.html / detail.html 的「复制命令」按钮，但按「chip」形态
+   把命令原文露出（mono），而不是只给一个通用标签——方便审核前先读懂会跑什么命令。 */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+  padding: 5px var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklab, var(--fg), transparent 96%);
+  cursor: pointer;
+  font: inherit;
+  transition: background var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard);
+}
+
+.chip:hover {
+  background: var(--bg);
+  border-color: color-mix(in oklab, var(--accent), transparent 60%);
+}
+
+.chip:focus-visible {
+  box-shadow: var(--focus-ring);
+  outline: none;
+}
+
+.command {
+  font: 400 var(--text-xs)/1.4 var(--font-mono);
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copyIcon {
+  color: var(--muted);
+  font-size: var(--text-xs);
+  flex: none;
+}

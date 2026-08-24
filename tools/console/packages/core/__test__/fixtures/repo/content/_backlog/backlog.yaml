@@ -1,0 +1,1038 @@
+# 选题池总账 —— 候选选题的唯一真相来源（粗粒度生命周期 + 去重 + 复盘留痕）
+# 由 douyin-ideate 技能追加与维护。
+#
+# 【状态分两层，别混】★ 单一真相源规则
+#   backlog(本文件) 只管粗粒度三态：idea → picked → published ｜异常：rejected / expired / archived
+#     - idea      候选，未动工
+#     - picked    已 promote 进生产；content/<date>/<slug>/ 已建，细粒度状态看那里的 meta.yaml
+#     - published 已发布（保留做去重 + 复盘 metrics）
+#   生产中的细粒度状态（ideated→drafting→review→approved→scheduled→published）只写 content 的 meta.yaml，
+#   backlog 不镜像。backlog 只在两个时点翻动：promote(置 picked) 与 发布完成(置 published)。
+#   双向指针：backlog.content_path → 内容目录；content 的 meta.source → backlog id。
+#
+# 字段说明：
+#   id        唯一标识 YYYY-MM-DD-NNN
+#   title     建议标题
+#   alt_titles 备选标题
+#   track     depth(深度) | traffic(流量)
+#   format    kouban(口播) | tuwen(图文)
+#   status    见上（粗粒度三态 + 异常）
+#   content_path  promote 后回填，指向 content/<date>/<slug>/（picked/published 必填）
+#   score     总分（系列题免引擎打分，留空）
+#   tier      S/A/B/C/D
+#   scores    六维原始分 {practical,social,emotion,hook,timeliness,trigger}
+#   urgency   queue(可排队) | today(当天必发)
+#   reason    一句话推荐理由
+#   links     素材链接
+#   tags      归一化主题标签（30天去重比对用，如 [claude-code, agent]）
+#   created   入池日期
+#   metrics   发布后回填 {plays,完播率,likes,...}
+
+# ── 取题指针（daily-run 读）──
+# 人钦点下一条要做的选题：填 id，daily-run 最高优先取它，promote 后置回 null。
+# 为 null 时 daily-run 在 status:idea 中按 score 取最高（同分先 depth）。
+# 人挑题 = 只改这一个字段，不靠条目在文件里的物理位置。
+next_up: null
+
+topics:
+  - id: 2026-06-14-001
+    title: "Claude Code 新的 dynamic workflows 我跑了一周，这才是它跟 Cursor 拉开差距的地方"
+    alt_titles:
+      - "Claude Code dynamic workflows 实测：攻大规模问题它强在哪"
+    track: depth
+    format: kouban
+    status: expired        # 2026-07-08 过期清扫(人审通过): today超2天+timeliness4超7天；内核常青，可由 ideate 以「工作流实战」角度重新入池
+    score: 4.25
+    tier: S
+    scores: {practical: 5, social: 4, emotion: 3, hook: 4, timeliness: 4, trigger: 5}
+    urgency: today
+    reason: "蓝海+实用+触发都顶，旗舰热度叠工程落地实测"
+    links:
+      - "https://www.anthropic.com/news/claude-opus-4-8"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-002
+    title: "Kimi 2.7-code 对打 Opus 4.8 修同一个 bug，结果有点意外"
+    alt_titles:
+      - "99 元的 Kimi code-plan 真能替代 Opus 4.8 吗：一手实测"
+    track: traffic
+    format: tuwen
+    status: expired        # 2026-07-08 过期清扫(人审通过): 对打热点时效窗已关
+    score: 4.25
+    tier: S
+    scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 3}
+    urgency: today
+    reason: "一手实测对比，悬念+性价比，时效正热"
+    links:
+      - "https://x.com/lmz2423/status/2066120281916150141"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-003
+    title: "一周 25 个开源模型砸下来，工程师真正该装的就这 5 个"
+    alt_titles:
+      - "2026 开源模型大爆发周速览：LLM/图像/语音怎么挑"
+    track: traffic
+    format: tuwen
+    status: picked          # 已进生产，细粒度状态见 meta.yaml（现 scheduled）
+    content_path: content/2026-06-15/open-weight-5
+    score: 4.15
+    tier: S
+    scores: {practical: 2, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 3}
+    urgency: today
+    reason: "信息过载下的筛选刚需，中文速览蓝海"
+    links:
+      - "https://mer.vin/2026/06/open-weight-ai-release-week-25-models-across-llms-image-audio-video-and-3d-june-2026/"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-004
+    title: "LLM 上下文工程：我是怎么把 10 万 token 压到 2 万还不丢信息的"
+    alt_titles:
+      - "上下文工程实战：压缩、记忆、长会话优化"
+    track: depth
+    format: kouban
+    status: published        # 2026-07-09 21:37 真发成功（飞书确认发布，main账号）；细粒度见 meta.yaml
+    content_path: content/2026-07-09/context-engineering
+    score: 4.05
+    tier: S
+    scores: {practical: 5, social: 4, emotion: 3, hook: 4, timeliness: 2, trigger: 4}
+    urgency: queue
+    reason: "实用爆表、每天写代码都撞到，长尾沉淀"
+    links:
+      - "https://github.com/Siddhant-K-code/ContextLab"
+      - "https://github.com/leorod123/llm-context-engineering-playbook"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-005
+    title: "Gemma 4 12B 我塞进笔记本跑多模态，离线能干这些活"
+    alt_titles:
+      - "笔记本级多模态：Gemma 4 12B 实测能不能替代云端"
+    track: traffic
+    format: kouban
+    status: expired        # 2026-07-08 过期清扫(人审通过): 新模型鲜度已过
+    score: 3.95
+    tier: A
+    scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
+    urgency: today
+    reason: "笔记本级多模态够惊奇，可演示完播好"
+    links:
+      - "https://huggingface.co/google/gemma-4-12B"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-006
+    title: "Opus 4.8 的 effort 控制 + fast mode，怎么让我账单降一半"
+    alt_titles:
+      - "Opus 4.8 省钱用法：effort 调度 + fast mode 实测"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.75
+    tier: A
+    scores: {practical: 5, social: 3, emotion: 3, hook: 3, timeliness: 2, trigger: 4}
+    urgency: queue        # 2026-07-08 清扫例外保留(人拍板)：Opus4.8仍现旗舰，时效重标4→2，总分未重算
+    reason: "省钱即实用，落地角度差异化"
+    links:
+      - "https://www.anthropic.com/news/claude-opus-4-8"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-007
+    title: "MCP 到底是不是\"新 API\"？一个比喻讲清它的本质"
+    alt_titles:
+      - "MCP 是传输与发现契约：function calling 和它差在哪"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.75
+    tier: A
+    scores: {practical: 4, social: 4, emotion: 3, hook: 4, timeliness: 2, trigger: 4}
+    urgency: queue
+    reason: "概念科普蓝海，触发高，立身型内容"
+    links:
+      - "https://x.com/search?q=MCP%20server%20protocol"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-008
+    title: "JetBrains 头一回开源编码模型 Mellum2，我拆了它的 MoE 怎么省算力"
+    alt_titles:
+      - "Mellum2-12B-A2.5B 源码拆解：8/64 专家怎么近 Qwen3-14B"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.70
+    tier: A
+    scores: {practical: 4, social: 4, emotion: 3, hook: 4, timeliness: 3, trigger: 3}
+    urgency: queue
+    reason: "源码/设计拆解，符合立身支柱"
+    links:
+      - "https://huggingface.co/JetBrains/Mellum2-12B-A2.5B-Thinking"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-009
+    title: "Ideogram 4 第一次开源权重，做带文字的海报终于不糊了"
+    alt_titles:
+      - "Ideogram 4 开源实测：文字排版图为什么它最强"
+    track: traffic
+    format: tuwen
+    status: expired        # 2026-07-08 过期清扫(人审通过): today+时效4，score最低档
+    score: 3.50
+    tier: A
+    scores: {practical: 3, social: 3, emotion: 4, hook: 3, timeliness: 4, trigger: 2}
+    urgency: today
+    reason: "时效+开源惊奇，文字排版痛点"
+    links:
+      - "https://ideogram.ai/blog/ideogram-4.0/"
+    created: 2026-06-14
+    metrics: {}
+  - id: 2026-06-14-010
+    title: "NVIDIA 550B 的 Mamba-MoE 架构，为什么只激活 10% 参数还能打"
+    alt_titles:
+      - "Nemotron 3 Ultra 架构拆解：混合 Mamba–Transformer 怎么省"
+    track: depth
+    format: kouban
+    status: idea
+    score: 2.90
+    tier: C
+    scores: {practical: 2, social: 4, emotion: 4, hook: 3, timeliness: 3, trigger: 2}
+    urgency: queue
+    reason: "架构有料但偏窄众、实用低，暂缓找切入点"
+    links:
+      - "https://huggingface.co/nvidia/Nemotron-3-Ultra"
+    created: 2026-06-14
+    metrics: {}
+
+  # ─────────────────────────────────────────────────────────────
+  # 系列：Claude Code 源码解读（claude-code-source-series）
+  # 【日更计划 ★ 2026-06-15 起】每天出 1 期，按 episode 升序 EP02→EP15 顺序日更，约 3 周清完。
+  #   清系列期间流量辅线（traffic 题）暂停产出，仅人工攒池子。daily-run 每天取「队首」=
+  #   本系列 status:idea 中 episode 最小的一条。系列清完后恢复双赛道选题驱动。
+  # 这些是已规划好的成系列选题（含脚本/源码导读），不是引擎现抓的。
+  # 规划总目录：/Users/yedi/yedi-medias/plan/claude-code-source-series/README.md
+  # 源码仓库：  /Users/yedi/yedi-study/yedi-ai-study/claude-code-source/claude-code-main（生产前先读 codebase-map.md）
+  # 约定：不补 6 维引擎分（未走打分流程）→ scores 留空，排序按 priority/tier。
+  #       tier 由 plan 的 priority 映射：P0→S, P1→A, P2→B。
+  #       生产某一集前读 plan_file 取脚本+导读，行号需用 Grep 重新定位。
+  # 【路由 ★ 固定】系列剧集走本仓统一 pipeline：开做时 promote→picked，
+  #       建 content/<发布日>/<slug>/（slug 用 ep 文件名，如 ep02-17mb-memory-explosion），
+  #       plan_file 当作 1-brief 等价物喂给 2-create，产物落本仓 content/，**不落外部 plan repo**。
+  #       外部 plan repo 仅作脚本/导读来源（其 README 里的 videos/ 产物路径对本仓不生效）。
+  # ─────────────────────────────────────────────────────────────
+  - id: 2026-06-10-001
+    title: "AI Agent 的本质，其实就是一个 while 循环"
+    track: depth
+    format: kouban
+    status: published
+    content_path: ""        # 建池前已发布于规划 repo，本仓无生产目录（历史例外）
+    series: {slug: claude-code-source-series, season: 1, episode: 1}
+    priority: P0
+    tier: S
+    scores: {}
+    hook_type: 祛魅/争议
+    urgency: queue
+    reason: "系列第一期，已发布（首集祛魅钩子引流）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep01-agent-while-loop.md"
+    tags: [claude-code, 源码解读, agent-loop]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-002
+    title: "一个 17MB 的 JS 文件，让内存从 35MB 暴涨到 1GB"
+    alt_titles:
+      - "内存降 27 倍：Claude Code 打包踩的坑"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-16 21:50 真发成功（飞书确认发布）；细粒度见 content_path 下 meta.yaml
+    series: {slug: claude-code-source-series, season: 1, episode: 2}
+    priority: P0
+    tier: S
+    scores: {}
+    hook_type: 数字反差/破案叙事
+    urgency: today
+    reason: "★ 队首 = 下一个要做（EP01 已发）；P0 数字反差破案，承接引流"
+    content_path: content/2026-06-15/ep02-17mb-memory-explosion   # 2026-06-15 promote 进生产，细粒度状态见 meta.yaml
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep02-17mb-memory-explosion.md"
+    tags: [claude-code, 源码解读, bun, 打包内存]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-003
+    title: "你每月给 Claude 充的钱，一半花在它\"记性太好\"上"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-18 19:05 真发成功（飞书确认发布）；细粒度见 meta.yaml
+    content_path: content/2026-06-18/ep03-token-economics
+    series: {slug: claude-code-source-series, season: 1, episode: 3}
+    priority: P0
+    tier: S
+    scores: {}
+    hook_type: 金钱
+    urgency: queue
+    reason: "P0 金钱钩子，token 成本拆解（队首 = 今天要做，EP02 已发）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep03-token-economics.md"
+    tags: [claude-code, 源码解读, token成本]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-004
+    title: "你按下 Esc 的那 0.1 秒，Claude Code 内部发生了什么"
+    track: depth
+    format: kouban
+    status: picked          # 2026-06-18 promote 进生产；细粒度状态见 meta.yaml（现 review）
+    content_path: content/2026-06-18/ep04-esc-abort-chain
+    series: {slug: claude-code-source-series, season: 1, episode: 4}
+    priority: P1
+    tier: A
+    scores: {}
+    hook_type: 微观链路
+    urgency: queue
+    reason: "P1 微观链路，中断/abort 链路拆解（队首 = 今天要做，EP01-03 已发）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep04-esc-abort-chain.md"
+    tags: [claude-code, 源码解读, 中断链路]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-005
+    title: "Claude Code 凭什么敢让 AI 在你电脑上跑命令？"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-19 21:09 真发成功（飞书人审通过→重发；首发慢渲染超时失败、重试即过）
+    content_path: content/2026-06-19/ep05-permission-pipeline   # 2026-06-19 promote 进生产
+    series: {slug: claude-code-source-series, season: 1, episode: 5}
+    priority: P0
+    tier: S
+    scores: {}
+    hook_type: 安全焦虑
+    urgency: queue
+    reason: "P0 安全焦虑钩子，权限管线拆解（队首 = 今天要做，EP01-04 已发/在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep05-permission-pipeline.md"
+    tags: [claude-code, 源码解读, 权限安全]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-006
+    title: "10 个工具同时跑，为什么不会把你的文件写坏"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-20 21:40 飞书授权后真发成功（账号 main，立即发布）；细粒度见 meta.yaml
+    content_path: content/2026-06-20/ep06-concurrent-tools
+    series: {slug: claude-code-source-series, season: 2, episode: 6}
+    priority: P1
+    tier: A
+    scores: {}
+    hook_type: 悬念/机制
+    urgency: queue
+    reason: "P1 并发工具调度机制，收藏向（队首 = 今天要做，EP01-03/05 已发，EP04 在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep06-concurrent-tools.md"
+    tags: [claude-code, 源码解读, 并发工具]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-007
+    title: "Claude 是怎么\"假装\"记得你三小时前说的话的"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-21 20:56 真发成功（飞书确认发布，账号 main）；细粒度见 meta.yaml。2026-06-22 由 EP08 run 据 meta.yaml 据实对齐（昨日发布侧漏翻）
+    content_path: content/2026-06-21/ep07-context-compaction
+    series: {slug: claude-code-source-series, season: 2, episode: 7}
+    priority: P1
+    tier: A
+    scores: {}
+    hook_type: 拟人/好奇
+    urgency: queue
+    reason: "P1 上下文压缩/compaction，源码视角（区别于 2026-06-14-004 上下文工程实战）（队首 = 今天要做，EP01-03/05/06 已发，EP04 在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep07-context-compaction.md"
+    tags: [claude-code, 源码解读, 上下文压缩]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-008
+    title: "60 个工具只告诉 AI 27 个，剩下的让它自己搜"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-22 20:45 真发成功（飞书确认发布，账号 main）；细粒度见 meta.yaml
+    content_path: content/2026-06-22/ep08-lazy-tool-discovery
+    series: {slug: claude-code-source-series, season: 2, episode: 8}
+    priority: P1
+    tier: A
+    scores: {}
+    hook_type: 新奇概念
+    urgency: queue
+    reason: "P1 工具懒发现（lazy tool discovery），新奇概念"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep08-lazy-tool-discovery.md"
+    tags: [claude-code, 源码解读, 工具发现]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-009
+    title: "同一份代码，怎么同时支持 Claude、GPT、Gemini"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-23 21:40:55 真发成功（飞书「确认发布」授权直发）；细粒度见 meta.yaml
+    content_path: content/2026-06-23/ep09-multi-provider-adapter
+    series: {slug: claude-code-source-series, season: 2, episode: 9}
+    priority: P2
+    tier: B
+    scores: {}
+    hook_type: 工程美学
+    urgency: queue
+    reason: "P2 多 provider 适配器，工程美学（队首 = 今天要做，EP01-03/05-08 已发，EP04 在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep09-multi-provider-adapter.md"
+    tags: [claude-code, 源码解读, 多模型适配]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-010
+    title: "Claude Code 里的子 Agent，就是 AI 给 AI 打工"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-24 21:33:55 真发成功（人清 UI 浮层后重跑 sau 一次过，账号 main）；细粒度见 meta.yaml
+    content_path: content/2026-06-24/ep10-sub-agent-orchestration   # 2026-06-24 promote 进生产
+    series: {slug: claude-code-source-series, season: 2, episode: 10}
+    priority: P1
+    tier: A
+    scores: {}
+    hook_type: 拟人/自指
+    urgency: queue
+    reason: "P1 子 agent 编排，拟人钩子（队首 = 今天要做，EP01-03/05-09 已发，EP04 在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep10-sub-agent-orchestration.md"
+    tags: [claude-code, 源码解读, 子agent]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-011
+    title: "claude --version 为什么 0 毫秒出结果"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-25 21:49 飞书「确认发布」授权→sau 立即真发成功，账号 main
+    content_path: content/2026-06-25/ep11-zero-ms-startup
+    series: {slug: claude-code-source-series, season: 2, episode: 11}
+    priority: P2
+    tier: B
+    scores: {}
+    hook_type: 小切口性能
+    urgency: queue
+    reason: "P2 启动性能小切口（队首 = 今天做，EP01-03/05-10 已发，EP04 在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep11-zero-ms-startup.md"
+    tags: [claude-code, 源码解读, 启动性能]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-012
+    title: "为了检测你按没按 Shift，它直接调了 macOS 系统底层"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-26 21:20 真发成功（飞书「确认发布」授权直发，账号 main）；细粒度见 meta.yaml。2026-06-30 据 meta.yaml 据实从 picked 补翻 published（发布侧当日漏翻）
+    content_path: content/2026-06-26/ep12-ffi-native   # 2026-06-26 promote 进生产
+    series: {slug: claude-code-source-series, season: 3, episode: 12}
+    priority: P2
+    tier: B
+    scores: {}
+    hook_type: 认知颠覆
+    urgency: queue
+    reason: "P2 FFI/native 调用，认知颠覆"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep12-ffi-native.md"
+    tags: [claude-code, 源码解读, ffi-native]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-013
+    title: "Anthropic 工程师的防御性编程，变态到什么程度"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-27 21:42 真发成功（飞书「确认发布」授权 --publish 直发，账号 main）；细粒度见 meta.yaml。2026-06-30 据 meta.yaml 据实从 picked 补翻 published（发布侧当日漏翻）
+    content_path: content/2026-06-27/ep13-defensive-engineering   # 2026-06-27 promote 进生产
+    series: {slug: claude-code-source-series, season: 3, episode: 13}
+    priority: P1
+    tier: A
+    scores: {}
+    hook_type: 盘点
+    urgency: queue
+    reason: "P1 防御性编程盘点，专业人设（队首 = 今天做，EP01-11 已发、EP04/12 在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep13-defensive-engineering.md"
+    tags: [claude-code, 源码解读, 防御性编程]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-014
+    title: "Prompt 缓存崩了，它能告诉你是哪个工具干的"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-28 22:38 真发成功（飞书「确认发布」授权 --publish 直发，账号 main）；细粒度见 meta.yaml。2026-06-30 据 meta.yaml 据实从 picked 补翻 published（发布侧当日漏翻）
+    content_path: content/2026-06-28/ep14-cache-break-detection   # 2026-06-28 promote 进生产
+    series: {slug: claude-code-source-series, season: 3, episode: 14}
+    priority: P2
+    tier: B
+    scores: {}
+    hook_type: 精准干货
+    urgency: queue
+    reason: "P2 缓存失效检测，精准干货（队首 = 今天做，EP01-11 已发，EP04/12/13 在审）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep14-cache-break-detection.md"
+    tags: [claude-code, 源码解读, prompt缓存]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-06-10-015
+    title: "200 行代码，手写一个迷你 Claude Code（完结篇）"
+    track: depth
+    format: kouban
+    status: published       # 2026-06-29 21:00:30 真发成功（飞书「确认发布」授权 --publish 直发，账号 main，sau 一次过）；系列 15 集全清完
+    content_path: content/2026-06-29/ep15-200-lines-mini-agent
+    series: {slug: claude-code-source-series, season: 3, episode: 15}
+    priority: P0
+    tier: S
+    scores: {}
+    hook_type: 实战/变现
+    urgency: queue
+    reason: "P0 系列完结实战，变现出口（手写 mini-agent）"
+    plan_file: "/Users/yedi/yedi-medias/plan/claude-code-source-series/episodes/ep15-200-lines-mini-agent.md"
+    tags: [claude-code, 源码解读, mini-agent实战]
+    created: 2026-06-10
+    metrics: {}
+  - id: 2026-07-08-001
+    title: "AI圈突然都在说的 Spec Coding，到底在解决什么问题"
+    alt_titles:
+      - "写代码前先写「说明书」：Spec Coding 是不是智商税"
+      - "GitHub/AWS/Tessl扎堆推的Spec-Driven Development，我扒了一遍"
+    track: depth
+    format: kouban
+    status: published       # 2026-07-08 23:36 已发布抖音（main账号）
+    content_path: content/2026-07-08/spec-driven-development
+    score: 4.2
+    tier: A
+    scores: {practical: 4, social: 4, emotion: 3, hook: 4, timeliness: 4, trigger: 4}
+    urgency: today
+    reason: "GitHub Spec Kit/AWS Kiro/Tessl三家近期扎堆推Spec-Driven Development，工程提效实战+认知反转（先夸后拆台）双buff，系列刚清完适合接双赛道深度题"
+    links:
+      - "https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html"
+      - "https://github.com/github/spec-kit"
+      - "https://kiro.dev/blog/introducing-kiro/"
+      - "https://tessl.io/blog/how-tessls-products-pioneer-spec-driven-development/"
+      - "https://developer.microsoft.com/blog/spec-driven-development-ai-native-engineering"
+    tags: [spec-driven-development, ai编程, spec-kit, kiro, agentic-engineering]
+    created: 2026-07-08
+    metrics: {}
+
+
+  # ── 2026-07-08 调研批（双赛道恢复后首轮，report: research-2026-07-08.md）──
+  - id: 2026-07-08-002
+    title: "Claude Fable 5 上手实测：新 Mythos 级模型在 Claude Code 里跑一天，和 Opus 4.8 差在哪"
+    alt_titles:
+      - "Anthropic 憋的大招 Fable 5 实测：贵没贵、强没强、值不值得切"
+    track: depth
+    format: kouban
+    status: expired        # 2026-07-17 过期清扫(规则): urgency today 超2天 + timeliness5 超7天(入池9天)。07-15 曾转人审续期未获回应，按钉死规则清扫；Fable5 已非最新旗舰(K3/Grok4.5 已出)，如仍要做需 ideate 以新角度重新入池
+    score: 4.55
+    tier: S
+    scores: {practical: 5, social: 5, emotion: 4, hook: 4, timeliness: 5, trigger: 4}
+    urgency: today
+    reason: "旗舰发布趁热做深度实测（深度题破例today）；账号Claude Code系列刚完结，受众精准衔接；X上已有Codex vs Claude抉择焦虑=需求实证"
+    links:
+      - "https://www.anthropic.com/news/claude-fable-5-mythos-5"
+    tags: [claude, fable-5, anthropic, model-review, claude-code]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-003
+    title: "GPT-5.6 vs Opus 4.8 vs Fable 5：同一个真实开发任务，三家旗舰对打"
+    alt_titles:
+      - "三大旗舰同题实测：GPT-5.6 首发日我拿真项目试了试"
+    track: traffic
+    format: kouban
+    status: expired        # 2026-07-17 过期清扫(规则): urgency today 超2天 + timeliness5 超7天(入池9天)。07-15 曾转人审续期未获回应；GPT-5.6 已 7/9 发布、首发日时效窗已关，三家旗舰阵容也已变(K3 入局)，重做需重新立题
+    score: 4.50
+    tier: S
+    scores: {practical: 4, social: 4, emotion: 4, hook: 5, timeliness: 5, trigger: 4}
+    urgency: today
+    reason: "GPT-5.6 官宣 7/9 公开（多源一致），发布当天做对打实测=时效峰值+悬念完播；一手实测可溯源不踩红线。★依赖：7/9 发布后才能做"
+    links:
+      - "https://www.straitstimes.com/business/companies-markets/openai-says-powerful-new-model-to-launch-publicly-on-july-9"
+      - "https://www.neowin.net/news/openai-to-release-gpt-56-sol-terra-and-luna-on-july-9/"
+    tags: [gpt-5.6, openai, model-comparison, benchmark, claude]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-004
+    title: "GLM-5 免费接进 Claude Code：NVIDIA NIM 这波白嫖实测，账单能不能归零"
+    alt_titles:
+      - "不花一分钱跑 Claude Code？GLM-5 on NIM 实测"
+    track: depth
+    format: kouban
+    status: expired        # 2026-07-17 过期清扫(规则): urgency today 超2天 + timeliness4 超7天(入池9天)。07-15 曾转人审续期未获回应；「白嫖省钱」内核常青，可由 ideate 以省钱系列角度重新入池
+    score: 4.30
+    tier: S
+    scores: {practical: 5, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 4}
+    urgency: today
+    reason: "省钱+实操双高，r/LocalLLaMA 热帖；与池内 006(Opus省钱)同域不同法可成'省钱系列'。★创作时先核实 NIM 免费条款/限速"
+    links:
+      - "https://www.reddit.com/r/LocalLLaMA/comments/1r5nnhz/glm5_is_officially_on_nvidia_nim_and_you_can_now/"
+    tags: [glm-5, claude-code, cost-saving, nvidia-nim]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-005
+    title: "GPT-5.6 明天就来：Sol/Terra/Luna 三版本怎么选，agent 记忆还要单独收费"
+    alt_titles:
+      - "GPT-5.6 发布前瞻速览：三个版本 + agent memory 定价"
+    track: traffic
+    format: tuwen
+    status: expired        # 2026-07-13 过期清扫(规则化自动)：urgency today+入池超2天命中机械规则；且前提已废(GPT-5.6 已 07-09 发布,"前瞻速览"无存在意义)。GPT-5.6 内容由 -003 对打实测承接
+    score: 4.15
+    tier: S
+    scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 3}
+    urgency: today
+    reason: "发布日热搜词，速览图文抢时效；只讲产品与定价、不碰政策争议（红线）。与 -003 对打实测错开：这条发布日当天出，实测隔天出"
+    links:
+      - "https://www.straitstimes.com/business/companies-markets/openai-says-powerful-new-model-to-launch-publicly-on-july-9"
+      - "https://economictimes.indiatimes.com/news/international/business/openai-gpt-5-6-rollout-begins-july-9-new-features-models-and-everything-else-to-know/articleshow/132257449.cms"
+    tags: [gpt-5.6, openai, new-model, pricing]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-006
+    title: "karpathy 新玩具 autoresearch 拆解：AI agent 自动在单卡上跑训练研究"
+    alt_titles:
+      - "AI 自己做 AI 研究？karpathy/autoresearch 源码速读"
+    track: depth
+    format: kouban
+    status: published       # 2026-07-10 promote 进生产（双赛道按 score 自动取，能诚实自动做完里最高分 4.00）→ 2026-07-10 20:55 已发布；细粒度状态见 meta.yaml
+    content_path: content/2026-07-10/karpathy-autoresearch
+    score: 4.00
+    tier: S
+    scores: {practical: 3, social: 5, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
+    urgency: queue
+    reason: "karpathy 出品=社交货币满格；源码/设计拆解立身题（+0.2 立身加成已含）；agent 自动做研究是'卧槽'点"
+    links:
+      - "https://github.com/karpathy/autoresearch"
+    tags: [karpathy, agent, research-automation, source-reading]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-007
+    title: "gemini-cli 源码速读：Google 版 Claude Code 抄了什么、改了什么"
+    alt_titles:
+      - "拆完 Claude Code 再拆 Gemini CLI：同一道题两家怎么答"
+    track: depth
+    format: kouban
+    status: published       # 2026-07-11 21:52 已发布（飞书确认卡授权→sau 立即发布成功）；07-11 promote 进生产（双赛道按 score 自动取，4.00=能诚实自动做完里最高分）；细粒度状态见 meta.yaml
+    content_path: content/2026-07-11/gemini-cli-teardown
+    score: 4.00
+    tier: S
+    scores: {practical: 4, social: 4, emotion: 3, hook: 4, timeliness: 3, trigger: 4}
+    urgency: queue
+    reason: "GitHub trending 在榜；接续源码解读心智（+0.25 立身加成已含）。★刚发完 15 集 Claude Code 源码，隔 1-2 周再排避免审美疲劳（今 07-11 距 06-29 收官 12 天已过 1 周窗）"
+    links:
+      - "https://github.com/google-gemini/gemini-cli"
+    tags: [gemini-cli, google, source-reading, agent]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-008
+    title: "ponytail：让你的 AI agent 学会'最好的代码是不写的代码'"
+    alt_titles:
+      - "给 AI 装上'最懒高级工程师'人格，代码质量反而上去了"
+    track: depth
+    format: kouban
+    status: published     # 2026-07-13 21:04 发布（飞书确认卡授权，douyin-publish Step 5 记账）；此前 2026-07-13 daily-run 按 score 取（next_up 空；top-3 实测题无法无人如实做，红线跳过）
+    content_path: content/2026-07-13/ponytail-lazy-senior-dev/
+    score: 3.90
+    tier: A
+    scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 3, trigger: 4}
+    urgency: queue
+    reason: "反直觉理念（少写代码=好）+可直接套用的 agent 提示工程，观点型口播好做钩子"
+    links:
+      - "https://github.com/DietrichGebert/ponytail"
+    tags: [agent, code-quality, prompt-engineering, github]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-009
+    title: "工程师的身份危机：Claude Code 之父对谈 DoorDash 创始人，'放下写代码的执念'"
+    alt_titles:
+      - "'人对写代码这门手艺有执念，你得放下'——这话你服吗"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.30
+    tier: B
+    scores: {practical: 2, social: 4, emotion: 4, hook: 4, timeliness: 3, trigger: 4}
+    urgency: queue
+    reason: "观点/情绪题，评论区易吵=互动高；实用低拉低总分。★创作前先找到访谈原片核实引语出处（现仅见 X 转述）"
+    links:
+      - "https://x.com/search?q=Andy%20Fang%20Claude%20Code%20identity%20crisis"
+    tags: [claude-code, industry-opinion, career, ai-coding]
+    created: 2026-07-08
+    metrics: {}
+  - id: 2026-07-08-010
+    title: "NVIDIA Audex 30B：一个模型同时把音频听懂、把话说清"
+    alt_titles:
+      - "音频+文本统一模型 Audex 速览：不牺牲文本智商的听说合一"
+    track: traffic
+    format: tuwen
+    status: expired        # 2026-07-15 过期清扫(规则化自动)：timeliness4/created 07-08 满7天，命中「timeliness≥4 超7天」机械规则；research-2026-07-13.md 已预告本轮到点。非人工保留场，自动 expired
+    score: 3.15
+    tier: B
+    scores: {practical: 2, social: 3, emotion: 3, hook: 3, timeliness: 4, trigger: 2}
+    urgency: queue
+    reason: "7/7 刚发的多模态开源，速览图文成本低；受众偏窄故 B 级"
+    links:
+      - "https://www.marktechpost.com/2026/07/07/nvidia-releases-audex-nemotron-labs-audex-30b-a3b-a-unified-audio-text-llm-that-preserves-the-text-intelligence-of-its-backbone/"
+    tags: [nvidia, audio-llm, multimodal, new-model]
+    created: 2026-07-08
+    metrics: {}
+
+  # ── 2026-07-10 调研批（治理线 ideate periodic:2d，report: research-2026-07-10.md）──
+  - id: 2026-07-10-001
+    title: "腾讯混元 Hy3 开源：一半大小打赢 GLM-5.2，MoE 架构怎么做到的"
+    alt_titles:
+      - "295B Apache 开源模型 Hy3 架构拆解：省一半参数还全面胜出"
+    track: depth
+    format: kouban
+    status: picked          # 2026-07-14 promote 进生产（双赛道按 score 取：next_up 空；top-3 实测题 4.55/4.50/4.30 红线跳过、3.90 Reddit 正文 403 核不到，取最高可溯源解读题 3.85=depth 并列 tie-break 先 depth）；细粒度状态见 meta.yaml
+    content_path: content/2026-07-14/hy3-moe-teardown
+    score: 3.85
+    tier: A
+    scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
+    urgency: queue        # 趁 2 周内新鲜做；含 +0.2 立身(架构拆解)软加成
+    reason: "数字反差钩子(一半大小打赢GLM-5.2)+国产开源社交货币+MoE架构拆解接源码解读心智=立身；GitHub/HF/腾讯官网/VentureBeat 四源坐实可溯源。★创作时修正角度：Hy3 盲测赢的是旧版 GLM-5.1，GLM-5.2 编码仍领先(SWE-bench 84.2 vs 78.0)——真故事是'一半体量换性价比+割舍仓库级编码'的取舍，非标题党'打赢'"
+    links:
+      - "https://github.com/Tencent-Hunyuan/Hy3"
+      - "https://huggingface.co/tencent/Hy3"
+      - "https://venturebeat.com/technology/tencents-apache-licensed-hy3-takes-on-glm-5-2-at-half-the-size-and-wins-everywhere-except-coding"
+    tags: [tencent, hunyuan, hy3, open-weights, moe, agentic-coding, source-reading]
+    created: 2026-07-10
+    metrics: {}
+  - id: 2026-07-10-002
+    title: "别再迷信 AI 编程榜单：5 个反直觉的 benchmark 真相"
+    alt_titles:
+      - "AI 编程 Agent 的 benchmark 你可能一直看错了"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.60
+    tier: A
+    scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 3, trigger: 4}
+    urgency: queue
+    reason: "祛魅/反直觉母题(本账号 spec-driven-development 16k播放已验证吃得开)+每次选模型都撞benchmark=触发高；Databricks 一手来源"
+    links:
+      - "https://www.databricks.com/blog/beyond-hype-5-counter-intuitive-lessons-benchmarking-ai-coding-agents"
+    tags: [ai-coding, benchmark, coding-agent, opinion, demystify]
+    created: 2026-07-10
+    metrics: {}
+  - id: 2026-07-10-003
+    title: "大模型的「思考过程」，是真在推理还是演给你看"
+    alt_titles:
+      - "思考链是认知成本还是表演性脚手架：一篇 PNAS 泼的冷水"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.50
+    tier: A
+    scores: {practical: 2, social: 4, emotion: 5, hook: 4, timeliness: 2, trigger: 3}
+    urgency: queue        # 论文常青；含 +0.2 立身(原理拆解)软加成
+    reason: "PNAS 论文强反常识(思考链真伪之辩)+争议易互动；ljg-paper 衔接立身原理科普，受众窄但精准"
+    links:
+      - "https://www.pnas.org/doi/10.1073/pnas.2604554123"
+    tags: [reasoning, thinking-trace, llm-cognition, paper, demystify]
+    created: 2026-07-10
+    metrics: {}
+
+  # ── 2026-07-13 调研批（治理线 ideate periodic:2d，report: research-2026-07-13.md；抓 07-10 之后增量）──
+  - id: 2026-07-13-001
+    title: "同一个模型，4 个 CLI coding agent 跑出来差 2 倍——脚手架才是分水岭"
+    alt_titles:
+      - "模型一样，Claude Code / Codex / Cursor 谁强？差距在 harness 不在模型"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.90
+    tier: A
+    scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 3, trigger: 4}
+    urgency: queue
+    reason: "反直觉母题(脚手架>模型)正中账号 harness 心智，与源码系列一脉；数字反差2x做钩子。★创作前必核实原帖(Reddit r/LLMDevs)具体数据、是哪4个agent——本轮 agent-reach 读取被 Reddit 403 挡、仅得标题，未坐实正文"
+    links:
+      - "https://www.reddit.com/r/LLMDevs/comments/1r2xf90/i_forked_4_cli_coding_agents_to_run_the_same/"
+    tags: [coding-agent, cli-agent, scaffolding, harness, benchmark]
+    created: 2026-07-13
+    metrics: {}
+  - id: 2026-07-13-002
+    title: "拦一刀看 Claude Code 到底给模型发了什么：claude-tap 实测"
+    alt_titles:
+      - "你的 coding agent 每次请求塞了多少 token？一个工具全给你抓出来"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.70
+    tier: A
+    scores: {practical: 4, social: 3, emotion: 3, hook: 4, timeliness: 3, trigger: 3}
+    urgency: queue        # 含 +0.15 立身(工具拆解/调试实操)软加成
+    reason: "实用(调试/理解 agent 真实请求)+惊奇(原来发这么多)；接源码解读心智、可边演边讲完播友好；GitHub 新工具、可自动做不踩实测红线"
+    links:
+      - "https://github.com/liaohch3/claude-tap"
+    tags: [claude-code, coding-agent, debugging, api-inspect, tool]
+    created: 2026-07-13
+    metrics: {}
+  - id: 2026-07-13-003
+    title: "给 AI agent 一套「防崩溃」的文件式计划，/clear 也丢不了进度"
+    alt_titles:
+      - "长任务总断片？planning-with-files 让 agent 的计划扛住上下文丢失"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.80
+    tier: A
+    scores: {practical: 5, social: 3, emotion: 3, hook: 3, timeliness: 3, trigger: 4}
+    urgency: queue        # 含 +0.15 立身(工作流实战)软加成
+    reason: "实用爆表(长任务/上下文丢失是每天痛点)+触发高；与已发 context-engineering 相邻但角度不同(文件式计划 vs 上下文压缩)、与 EP07 compaction 呼应可串'上下文工程'心智。★创作前核 repo 真实用法"
+    links:
+      - "https://github.com/OthmanAdi/planning-with-files"
+    tags: [agent, planning, context-engineering, workflow, github]
+    created: 2026-07-13
+    metrics: {}
+  - id: 2026-07-13-004
+    title: "SWE-1.7：用「RL 套 RL」把近前沿编码打到骨折价，还顺手挑战了 post-training 天花板"
+    alt_titles:
+      - "Cognition 新模型 SWE-1.7 拆解：self-compaction 让 agent 自己压缩记忆跨越上下文窗"
+    track: traffic
+    format: kouban
+    status: idea
+    score: 3.85
+    tier: A
+    scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
+    urgency: queue        # 07-08 发布、约 2 周内趁鲜；深度解读角度可 +立身，但按惊奇/时效驱动归 traffic
+    reason: "低价近前沿=惊奇+省钱；从 Kimi K2.7 base 再 RL 挑战 post-training 天花板、self-compaction 自压缩=真技术料(接账号上下文压缩心智)；官方博客带真基准表可溯源、不做自测不踩红线"
+    links:
+      - "https://cognition.ai/blog/swe-1-7"
+    tags: [swe-1.7, cognition, coding-model, rl, new-model, self-compaction]
+    created: 2026-07-13
+    metrics: {}
+  - id: 2026-07-13-005
+    title: "快手开源的国产 agentic 编码模型 KAT-Coder-Pro V2.5，敢说端到端跑完整个项目"
+    alt_titles:
+      - "国产 coding agent 新选手 KAT-Coder：不只补代码，能自己跑完一个项目"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 3.85
+    tier: A
+    scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
+    urgency: queue
+    reason: "国产开源+agentic 端到端=社交货币+惊奇+时效；速览图文成本低。★创作前核实'端到端跑完整个项目'的官方说法与实测边界(现仅 aibase 转述)、勿把厂商宣称当结论"
+    links:
+      - "https://news.aibase.com/news/29530"
+    tags: [kat-coder, kuaishou, agentic-coding, open-weights, new-model, china]
+    created: 2026-07-13
+    metrics: {}
+
+  # ── 2026-07-15 调研批（治理线 ideate periodic:2d，report: research-2026-07-15.md；抓 07-13 之后增量）──
+  - id: 2026-07-15-001
+    title: "AI 一条命令删了我整个 home 目录——给 coding agent 装个「安全网」拦住 rm -rf"
+    alt_titles:
+      - "CLAUDE.md 里写的规矩，AI 说删就删；cc-safety-net 用硬约束替代软规则"
+      - "cc-safety-net 实测：一个 PreToolUse hook 怎么在命令执行前拦下毁灭性操作"
+    track: depth
+    format: kouban
+    status: published
+    content_path: content/2026-07-16/cc-safety-net/
+    score: 4.35
+    tier: S
+    scores: {practical: 5, social: 4, emotion: 4, hook: 4, timeliness: 3, trigger: 4}
+    urgency: queue
+    reason: "实用爆表(即装即用防误删)+安全焦虑钩子(真实 rm -rf ~/ 删 home 事件)+机制可拆(解析命令语义防绕过、跨7个CLI:Claude Code/Codex/Gemini/Copilot/Kimi/OpenCode/Pi)；与已发 EP05 权限管线心智呼应但角度不同(第三方硬约束 hook vs Claude Code 内建权限)；含 +0.15 立身(源码/机制拆解)软加成。★创作前核实 hook 拦截原理与支持的 CLI 清单"
+    links:
+      - "https://github.com/kenryu42/cc-safety-net"
+    tags: [ai-coding-safety, coding-agent, hook, claude-code, security]
+    created: 2026-07-15
+    metrics: {}
+  - id: 2026-07-15-002
+    title: "Anthropic 在 Claude 脑子里发现一个「隐藏思维空间」——它作弊前，先冒出一个词：panic"
+    alt_titles:
+      - "大模型输出里没有、脑子里却在用的词：Anthropic 的 J-space 发现讲清楚"
+      - "AI 到底在想什么？Anthropic 撬开 Claude 内部，MIT 泼了盆冷水"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.85
+    tier: A
+    scores: {practical: 2, social: 5, emotion: 5, hook: 4, timeliness: 4, trigger: 3}
+    urgency: queue
+    reason: "惊奇满(LLM 内部隐藏词空间+panic 出现时 Claude 决定作弊=卧槽)+社交满(转发显懂前沿可解释性)；祛魅角度(MIT Tech Review 理性拆解'能说明和不能说明什么')正中账号已验证的祛魅母题；原理科普立身长尾，含 +0.2 软加成。可溯源(Anthropic 官方 research 07-09 + MIT TR 07-13 二源)。★相邻池内 07-10-003(思考链 PNAS)，角度/来源不同，可串'LLM 认知内幕'心智或择一——见人审"
+    links:
+      - "https://www.technologyreview.com/2026/07/13/1140343/what-anthropics-latest-ai-discovery-does-and-doesnt-show/"
+      - "https://www.technologyreview.com/2026/07/09/1140293/anthropic-found-a-hidden-space-where-claude-puzzles-over-concepts/"
+    tags: [interpretability, anthropic, llm-cognition, mechanistic-interpretability, demystify]
+    created: 2026-07-15
+    metrics: {}
+  - id: 2026-07-15-003
+    title: "评一个 coding agent 好不好，别只看 benchmark 分数——看它会不会正确开 worktree、触发 skill"
+    alt_titles:
+      - "Quorum/superpowers-evals：给 Claude/Codex/Gemini CLI 打「工作流合规」分的评测台"
+      - "同一个任务，你的 AI agent 会不会正确协调子 agent、有没有验证反射——这才该被评"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.55
+    tier: A
+    scores: {practical: 3, social: 4, emotion: 4, hook: 3, timeliness: 3, trigger: 4}
+    urgency: queue
+    reason: "反直觉 reframe(评 agent 该看 workflow 行为:skill 触发/worktree/子 agent 协调/验证反射/成本塑形，不是 benchmark 分)正中账号 harness 母题，与 EP06 并发/EP10 子 agent 呼应；含 +0.2 立身(agent 工程)软加成。★与池内 07-13-001(脚手架>模型)、07-10-002(benchmark 祛魅)同属'怎么评 coding agent'母题、已 3 条，精简/串题见人审(backlog-gardener 域)"
+    links:
+      - "https://github.com/prime-radiant-inc/superpowers-evals"
+    tags: [coding-agent, eval, workflow, harness, agent-testing]
+    created: 2026-07-15
+    metrics: {}
+  - id: 2026-07-15-004
+    title: "Grok 4.5 官方跑分我帮你翻译：哪些是真强、哪些是挑着 benchmark 说的话术"
+    alt_titles:
+      - "GPT-5.6 刚发几天，xAI 甩出 Grok 4.5——还是跟 Cursor 一起训练的"
+      - "Grok 4.5 速览：80 TPS、2x token 效率、SWE Marathon 第一，官方图表怎么读"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 3.55
+    tier: A
+    scores: {practical: 2, social: 4, emotion: 4, hook: 3, timeliness: 4, trigger: 3}
+    urgency: queue
+    reason: "旗舰周选型热(07-08 官方发，进'到底该不该切'决策期)+社交货币(与 Cursor 联合训练内幕)+祛魅差异化(官方说 SWE Marathon 第一，但多数 bench 仍 Fable5 领先=挑着说)；新模型速览红海，靠'官方数据怎么读+Cursor 内幕'立差异，与 -003 错开(-003 三家实测对打，本条 Grok 单品官方数据速览/祛魅)。可溯源(x.ai 官方页，不自测不踩红线)。★趁 2 周内旗舰周热度做"
+    links:
+      - "https://x.ai/news/grok-4-5"
+    tags: [grok-4.5, xai, new-model, benchmark, model-review]
+    created: 2026-07-15
+    metrics: {}
+  - id: 2026-07-15-005
+    title: "一个 9B 小模型，本地就能跑，编码却在 Opencode 里「SLAPS」——OmniCoder 速览"
+    alt_titles:
+      - "425K 条 agentic 轨迹微调出来的 9B 编码 agent，本地部署能省多少钱"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 3.40
+    tier: B
+    scores: {practical: 3, social: 4, emotion: 3, hook: 3, timeliness: 4, trigger: 3}
+    urgency: queue
+    reason: "本地小模型/开源/省钱差异化(区别于池内闭源旗舰新模型题)，r/LocalLLaMA 近期热帖(发布贴+'SLAPS in Opencode'两帖)是真信号；速览图文成本低。★硬伤:Reddit 正文被 403 挡，'425K 轨迹''SLAPS'仅得标题未坐实，创作前必核实 HF 模型卡+实测边界，标注'帖子宣称 vs 实测'，勿把宣称当结论"
+    links:
+      - "https://www.reddit.com/r/LocalLLaMA/comments/1rs6td4/omnicoder9b_9b_coding_agent_finetuned_on_425k"
+      - "https://www.reddit.com/r/LocalLLaMA/comments/1rsa8wd/omnicoder9b_slaps_in_opencode"
+    tags: [omnicoder, local-llm, coding-model, open-weights, new-model]
+    created: 2026-07-15
+    metrics: {}
+  - id: 2026-07-17-001
+    title: "Kimi K3 「击败 Fable 5」？我把官方那张表逐行读给你听"
+    alt_titles:
+      - "2.8T 的 Kimi K3 登顶前端代码榜，但官方自己都没说赢了 Fable 5"
+      - "K3 发布 24 小时：哪些是真第一、哪些是 X 上传歪的"
+    track: traffic
+    format: kouban
+    status: published       # 2026-07-17 21:04 已发布（飞书确认卡授权，sau 立即发，账号 main）。
+                            # 取题记录：2026-07-17 promote：next_up 为 null，本条为 status:idea 中 score 最高(4.15)；
+                            # 且近 7 条取题全 depth、traffic 已欠账，与 6:4 滚动配比同向。urgency=today 时效窗仅 2-3 天。
+    content_path: content/2026-07-17/kimi-k3-benchmark-check
+    score: 4.15
+    tier: S
+    scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 3}
+    urgency: today
+    reason: "07-16 发布=时效峰值；反转钩子强且全部可溯源：官方博客原话承认「overall 仍落后 Fable 5 与 GPT-5.6 Sol」，X 上「开源模型击败 Fable5」只在 Arena 前端代码榜单一榜成立；「开源」也是期票——权重承诺 07-27 才放，现在只有 API；价格 $3/$15 是国产最贵、较 K2.6($0.95/$4) 涨 3 倍多；仅一个 max 思考档，Simon Willison 一只鹈鹕烧 13,241 思考 token 花 0.25 美元。★可诚实自动做完：全程读公开材料+官方表，无需一手实测/不臆造数字"
+    links:
+      - "https://www.kimi.com/blog/kimi-k3"
+      - "https://simonwillison.net/2026/Jul/16/kimi-k3/"
+      - "https://venturebeat.com/technology/chinas-moonshot-ai-releases-kimi-k3-the-largest-open-source-model-ever-rivaling-top-u-s-systems"
+      - "https://www.axios.com/2026/07/16/moonshot-kimi-ai-china-model-openai-anthropic"
+    tags: [kimi-k3, moonshot, open-weights, new-model, benchmark, demystify]
+    created: 2026-07-17
+    metrics: {}
+  - id: 2026-07-17-002
+    title: "xAI 把 Grok Build 全部源码开了：一个旗舰 coding agent 的 agent loop 长什么样"
+    alt_titles:
+      - "官方开源的 Rust coding agent：从 context 装配到 tool-call 派发，逐层拆"
+      - "想知道 coding agent 怎么写的？xAI 这回把答案直接放 GitHub 了"
+    track: depth
+    format: kouban
+    status: published     # 2026-07-19 19:30 飞书确认卡授权后 douyin-publish 真发（sau 视频发布成功）。此前 2026-07-18 daily-run promote：next_up 空，status:idea 按 score 取最高=本条 4.00（唯一最高，无并列）；depth 赛道接上轮流量题 Kimi K3，合 6:4 滚动配比；★可诚实自动做完（读源码，不需跑 benchmark）
+    content_path: content/2026-07-18/grok-build-teardown/
+    score: 4.00
+    tier: S
+    scores: {practical: 4, social: 4, emotion: 3, hook: 4, timeliness: 4, trigger: 4}
+    urgency: queue
+    reason: "含 +0.15 立身(源码解读)软加成(3.85→4.00)。官方 x.ai 公告 + xai-org/grok-build 仓库双坐实：Rust 写的 TUI coding agent 全量开源，公告明说可读到 agent loop 怎么装配 context、怎么解析模型响应、怎么派发 tool call，以及 skills/plugins/hooks/MCP/subagents 扩展系统如何加载——正中账号源码解读立身位，且是大厂旗舰而非第三方玩具。★可诚实自动做完：读源码即可，不需跑 benchmark。⚠️审美疲劳风险：07-11 刚发 gemini-cli teardown、EP15 mini-agent，连拆 CLI harness 是本批最大隐忧，人挑题时请权衡是否隔几条再上"
+    links:
+      - "https://x.ai/news/grok-build-open-source"
+      - "https://github.com/xai-org/grok-build"
+      - "https://docs.x.ai/build/overview"
+    tags: [grok-build, xai, open-source, coding-agent, source-teardown, agent-loop, rust]
+    created: 2026-07-17
+    metrics: {}
+  - id: 2026-07-17-003
+    title: "Meta 新模型的跑分，被 HN 当场按着算了一遍资源上限"
+    alt_titles:
+      - "Muse Spark 1.1 的 Terminal-Bench 成绩为什么不在官方榜上"
+      - "跑分超了资源上限算不算作弊：一个具体到 task.toml 的案子"
+    track: traffic
+    format: kouban
+    status: idea
+    score: 3.85
+    tier: A
+    scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
+    urgency: queue
+    reason: "祛魅母题(账号已验证吃得开)+大厂被当场对账的惊奇。可溯源三件套：Meta 官方评测报告自述用 6 核/8GB 的 bash-only harness 跑 Terminal-Bench 2.1；HN 高赞指出 89 个任务里 CPU 上限最高才 4 核、只有 8 个允许 8GB，超限即取消资格；该模型确实不在 tbench 官方榜上。★可诚实自动做完：读报告+读 task.toml+看榜，不需自己跑分。★口径纪律：HN 网友的「disqualifies」是网友判定不是官方裁决，口播须明确归因、勿说成「Meta 被判作弊」。⚠️撞题：与池内 07-10-002(benchmark 祛魅清单)同域，可考虑并为「案例篇」，交 backlog-gardener/人裁"
+    links:
+      - "https://news.ycombinator.com/item?id=48846184"
+      - "https://ai.meta.com/static-resource/muse-spark-1-1-evaluation-report"
+      - "https://www.tbench.ai/leaderboard/terminal-bench/2.1"
+      - "https://github.com/harbor-framework/terminal-bench-2-1"
+    tags: [muse-spark, meta, benchmark, terminal-bench, demystify, new-model]
+    created: 2026-07-17
+    metrics: {}
+  - id: 2026-07-17-004
+    title: "脚手架不用人写了：让模型在 RL 里自己长出 harness 的 Ornith 1.0"
+    alt_titles:
+      - "都说脚手架是分水岭，这家把脚手架也丢进 RL 一起训"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.35
+    tier: B
+    scores: {practical: 3, social: 4, emotion: 4, hook: 3, timeliness: 2, trigger: 3}
+    urgency: queue
+    reason: "含 +0.15 立身(原理拆解)软加成(3.20→3.35)。理念是本批最新颖的一条：传统 coding agent 靠人设计的 harness(固定工具调用/纠错/任务分解流程)，Ornith 把 scaffold 当成可学习对象、在 RL 里与策略共同演化，模型自己生成计划、起工具、改失败步骤——正面回答池内 07-13-001「脚手架才是分水岭」的下一问。MIT 许可、9B~397B 四档、本地 vLLM/Ollama 可跑。★硬伤(压低到 B 的原因)：目前只见 ornith.site 一处宣传站，出处(DeepReinforce)与 82.4 SWE-Bench/77.5 Terminal-Bench 2.1 等数字均为自述、未见第三方复现；且 06-25 发布已 3 周非新闻。创作前必须核到 HuggingFace 模型卡/论文，核不到就弃；一切数字标注「官方自述」，红线：不臆造 benchmark。⚠️harness 主题池内已 3 条，防堆积"
+    links:
+      - "https://ornith.site/"
+    tags: [ornith, self-scaffolding, rl, open-weights, coding-model, harness]
+    created: 2026-07-17
+    metrics: {}
+
+  # ── 2026-07-19 调研批（治理线 ideate periodic:2d，report: research-2026-07-19.md；抓 07-17 之后增量）──
+  # 本批延续 07-17 口径：每条 reason 标「★可诚实自动做完」与否。3 条全为「读公开材料即可做完」型。
+  - id: 2026-07-19-001
+    title: "Claude Code 自家工具翻车：一个提问框，怎么悄悄变成挡住你半夜任务的安全闸口"
+    alt_titles:
+      - "AskUserQuestion「误功能」拆解：Claude Code 的权限模型只有『每步问』和『YOLO』两档，这是结构病"
+      - "Anthropic 工程师 HN 公开认错：这次翻车暴露了 coding agent 最难的那道题"
+    track: depth
+    format: kouban
+    status: idea
+    score: 4.15
+    tier: S
+    scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 4}
+    urgency: queue        # HN 热议正当时(时效窗约 1-2 周)，建议趁热做；非旗舰发布级峰值故不破例 today
+    reason: "含 +0.15 立身(源码/机制解读，接已发 EP05 权限管线)软加成(4.00→4.15)。真事件可多源坐实：Claude Code 团队 Thariq 改了 AskUserQuestion 工具，把它从『提问框』悄悄变成会阻断长任务的安全闸口，未 opt-in、未写 changelog，翻车后本人在 HN 公开担责并已回滚为 opt-in；anthropics/claude-code 多个 issue(#29690/#33511/#53249/#30026/#56170)佐证该工具确有一串真实缺陷。角度不吃瓜、拆机制：Claude Code 权限模型是 all-or-nothing(手动逐步确认 vs YOLO)，缺『run-until-complete + 细粒度边界(不碰仓库外/不删/不联网)』这一档，automode 用分类器兜底又引入 prompt-injection 面——正中账号源码解读立身位、与 EP05 呼应可串『半年后回看：权限这道题还是没解』。★可诚实自动做完：读 HN 帖+读 GitHub issue+对权限模型讲机制，不需一手实测/不臆造数字。★口径纪律：HN 网友对『系统性 vs 个人担责』的争论是网友观点，口播须归因清楚、不替 Anthropic 下组织结论"
+    links:
+      - "https://news.ycombinator.com/item?id=48947776"
+      - "https://github.com/anthropics/claude-code/issues/33511"
+      - "https://github.com/anthropics/claude-code/issues/29690"
+    tags: [claude-code, permission, askuserquestion, coding-agent, source-teardown, human-in-the-loop]
+    created: 2026-07-19
+    metrics: {}
+  - id: 2026-07-19-002
+    title: "Mira Murati 的新实验室不跟旗舰卷了：开源 Inkling，赌『你自己微调的模型能打赢闭源大厂』"
+    alt_titles:
+      - "Thinking Machines 首个开源模型 Inkling 速览：9 个月造出来，主打 Tinker 微调"
+      - "不做一个模型打天下：TML 的定制化路线，和旗舰军备竞赛有什么不一样"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 3.65
+    tier: A
+    scores: {practical: 2, social: 5, emotion: 4, hook: 3, timeliness: 4, trigger: 3}
+    urgency: queue        # 新模型趁 2 周内鲜；旗舰周焦点被 Kimi K3 抢，故非 today
+    reason: "社交货币满格(Mira Murati/Thinking Machines Lab 是 AI 圈顶级关注对象)+差异化叙事(不卷通用旗舰、赌『组织自己微调的开源模型 > 大厂通用闭源』的定制化路线)。惊奇点可溯源：官方称 Inkling 是微调起点而非成品、经 Tinker 平台定制、会主动标不确定性并允许调计算量;Bridgewater 案例称微调开源模型在金融推理测试上以更低成本胜过闭源;9 个月造出 vs 对手 3-5 年。图文速览成本低、承接旗舰周选型热。★可诚实自动做完：读官方/报道讲路线与卖点，不自测不臆造 benchmark。★创作前核实：以 TML 官方博客/模型卡为准，Bridgewater『胜过闭源』是厂商叙述须标注『官方自述』、勿当独立结论；实用低(要走 Tinker 微调、门槛高)已计入分数"
+    links:
+      - "https://theaiinsider.tech/2026/07/17/thinking-machines-lab-launches-open-weight-ai-model-inkling-betting-on-customizable-ai-over-one-size-fits-all/"
+    tags: [thinking-machines-lab, inkling, open-weights, new-model, mira-murati, fine-tuning, tinker]
+    created: 2026-07-19
+    metrics: {}
+  - id: 2026-07-19-003
+    title: "AI 写代码时，它其实已经『知道』这次会不会成功——一篇论文用探针读出了 coding agent 的隐藏状态"
+    alt_titles:
+      - "Latent Programming Horizons 拆解：模型的隐藏层能提前 25 步预测代码对不对"
+      - "为什么 coding agent 能在写完前就『感觉』要翻车：可解释性给了证据"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.50
+    tier: A
+    scores: {practical: 3, social: 4, emotion: 4, hook: 3, timeliness: 3, trigger: 3}
+    urgency: queue        # 论文常青(timeliness 3，不清扫)；含 +0.2 立身(原理/可解释性拆解)软加成
+    reason: "含 +0.2 立身(原理/机制可解释性，ljg-paper 衔接)软加成(3.30→3.50)。arxiv 2607.05188(KTH, 07-06 提交)可坐实:对 coding agent 底层模型的 residual stream 做 logistic 探针，能线性解码当前代码是否能解析/过测试/减少失败用例/引入回归(correctness AUC 达 0.83，跨 2 模型 2 benchmark)；更惊奇的是这些表征『跑在 agent 自己的编辑前面』——探针能提前约 25 步预测未来编辑的结果(作者称之为 latent programming horizon)，且跨 benchmark 免重训迁移。实践含义(可据此提前 backtrack/剪枝、省 token；有配套 repo ASSERT-KTH/program-probes 与 Codex CLI PostToolUse hook 应用)接账号 harness/agent 心智。★可诚实自动做完：读论文/HTML 讲原理，不需复现实验。⚠️撞题:与池内 07-15-002(Anthropic J-space 可解释性)、07-10-003(思考链 PNAS)同属『LLM 认知内幕』母题，但本条具体到 coding agent + 代码正确性、来源/角度均不同，可串『可解释性』心智或择一，交 backlog-gardener/人裁"
+    links:
+      - "https://arxiv.org/abs/2607.05188"
+      - "https://github.com/ASSERT-KTH/program-probes"
+    tags: [coding-agent, interpretability, paper, latent-horizon, mechanistic-interpretability, demystify]
+    created: 2026-07-19
+    metrics: {}

@@ -1,0 +1,19 @@
+slug: scheduled-missing-media
+title: "scheduled 状态下媒体文件已不在本地的样例"
+type: kouban
+pillar: depth
+status: scheduled
+source: 2026-08-07-001
+
+schedule: 2026-08-12 20:00
+publish_url:
+
+timestamps:
+  ideated: 2026-08-07
+  drafting: 2026-08-07
+  review: 2026-08-07
+  approved: 2026-08-07 20:00
+  published:
+  retro_done:
+
+blocker: {}

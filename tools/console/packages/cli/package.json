@@ -1,0 +1,16 @@
+{
+  "name": "@console/cli",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "media": "./dist/index.js"
+  },
+  "dependencies": {
+    "commander": "^15.0.0",
+    "@console/core": "*"
+  },
+  "devDependencies": {
+    "yaml": "^2.9.0"
+  }
+}

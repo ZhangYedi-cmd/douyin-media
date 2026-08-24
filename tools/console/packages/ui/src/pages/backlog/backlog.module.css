@@ -1,0 +1,52 @@
+/* 对照 docs/design/backlog.html 内联 <style>（六维分数展开区 + 超期行标灰）：
+   代码不搬只抄规格（03 §5），改用 CSS module 类名，取色仍走 var(--token)。 */
+
+.dim {
+  display: grid;
+  /* 同 theme.css .grid.cols-2 的根因修复，见那里注释：minmax(0, 1fr) 防止中间轨道被撑破。 */
+  grid-template-columns: 72px minmax(0, 1fr) 30px;
+  gap: var(--space-2);
+  align-items: center;
+  font: 500 11px/1 var(--font-mono);
+}
+
+.dim + .dim {
+  margin-top: 6px;
+}
+
+.dims {
+  max-width: 340px;
+}
+
+.rowStale td {
+  color: var(--muted);
+}
+
+/* A3：表格没做列宽分配时，最长的标题列会把窄列（id/created 这类定长短文本）挤到比内容还窄，
+   日期型 id「2026-07-13-004」逐字断成三行、CREATED 列断两行，行高翻倍。IdeaTable.tsx 给
+   id/created/tier/urgency 这几列配了固定 width，这里补上 nowrap 让它们不再断行——
+   伸缩权留给标题列（未设 width，自动吃掉剩余空间）。ellipsis 是极窄视口（1024）下 fixed
+   布局按比例压缩各列时的兜底：宁可裁短显示，也不让文字溢出格子压到邻列上。 */
+.nowrapCell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* tags/标记列：pill 标签 + 撞题/过期徽标改 flex-wrap，装不下换行而不是把列撑宽
+   （配合 IdeaTable.tsx 给该列的 width:230，详见那边 <Table scroll.x> 处的实现细节注释）。 */
+.tagsCell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+/* A2 在 theme.css 给 .badge 基类补了 white-space:nowrap + flex-shrink:0（修「待发」类短徽标
+   被挤成两行的问题），但本页「撞题 ↔ id1, id2」「已 N 天 · 过期口径 >30 天」这两种徽标文案
+   长度不固定、可能较长，不适合被焊死成一整行（会顶宽 tags 列甚至整张表）——局部撤回，
+   允许换行，呼应任务书「不要把本该换行的长文本也焊成 nowrap」的提醒。 */
+.wrapBadge {
+  white-space: normal;
+  flex-shrink: 1;
+}

@@ -1,0 +1,83 @@
+/* 常驻挂角面板（03 §2.2 布局图：JobPanel fixed 右下角，有任务才出现）。颜色/间距走 var(--token)。 */
+
+.panel {
+  position: fixed;
+  right: var(--space-6);
+  bottom: var(--space-6);
+  width: 360px;
+  max-height: 60vh;
+  overflow-y: auto;
+  z-index: 90;
+  display: grid;
+  gap: var(--space-2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elev-raised);
+  padding: var(--space-3);
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  /* 2026-08-19 增补 flex-wrap（看板「取消任务」能力，新增「全部取消」后头部按钮从两个变三个）：
+     .panel 宽度固定 360px，标题 + 状态文案 + 三个按钮硬挤一行在窄面板下容易溢出——允许换行，
+     溢出的部分（通常是 headActions 这组按钮）掉到第二行，不靠裁切/横向滚动来避让。 */
+  flex-wrap: wrap;
+}
+
+.headActions {
+  margin-left: auto;
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.history {
+  margin-top: var(--space-1);
+  border-top: 1px solid var(--border-soft);
+  padding-top: var(--space-1);
+}
+
+/* 最小化胶囊：面板收起后的落点，只占一角、不再盖住页面内容（P0 走查缺陷的核心修法）。 */
+.capsule {
+  position: fixed;
+  right: var(--space-6);
+  bottom: var(--space-6);
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--elev-raised);
+  cursor: pointer;
+  font: 500 var(--text-xs)/1 var(--font-mono);
+  color: var(--fg);
+}
+
+.capsule:hover {
+  border-color: var(--accent);
+}
+
+/* 胶囊角标：进行中面板收起时，若还有未读的历史任务，用小红点数字提醒（不单独占屏，只是角标）。 */
+.capsuleBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: var(--radius-pill);
+  background: var(--danger);
+  color: var(--surface);
+  font: 600 10px/1 var(--font-mono);
+}

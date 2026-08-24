@@ -1,0 +1,22 @@
+slug: review-sample
+title: "出审测试条目"
+type: kouban
+pillar: depth
+status: review
+source: 2030-01-02-001
+
+schedule:
+publish_url:
+
+timestamps:
+  ideated: 2030-01-02
+  drafting: 2030-01-06
+  review: 2030-01-07 09:00
+
+blocker: {}
+
+deliverables:
+  video:
+  cover:
+  script: 2-script.md
+  publish:

@@ -1,0 +1,41 @@
+/* C1（P0）修复：详情页加载失败的整页接管态。detail.module.css 归 A agent，别碰，这里新开一个
+   模块只服务 index.tsx 里的 DetailErrorState——复用全局 .card 做容器（theme.css），本文件只补
+   .card 之外、错误态特有的排版；颜色/间距一律走 var(--token)，不写死色值（AI 约定 3）。 */
+
+.card {
+  /* 用 --danger 给容器一圈淡淡的警示边框，和普通信息卡拉开区别，但不刺眼（不用 --tint-danger
+     整块铺底——那个强度留给下面「不可撤销」这类更严重的提示）。 */
+  border-color: color-mix(in oklab, var(--danger), var(--border) 55%);
+  max-width: 640px;
+}
+
+.heading {
+  margin: var(--space-2) 0 var(--space-3);
+  font: 600 var(--text-lg) / 1.3 var(--font-display);
+  color: var(--fg);
+}
+
+.list {
+  margin: 0 0 var(--space-4);
+  padding-left: 1.2em;
+  display: grid;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.stepsLabel {
+  margin: 0 0 var(--space-1);
+  font: 600 var(--text-xs) / 1 var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  text-decoration: none;
+  margin-top: var(--space-1);
+}

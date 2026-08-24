@@ -1,0 +1,19 @@
+slug: six-tags
+title: "话题标签超过 5 个的样例"
+type: kouban
+pillar: depth
+status: approved
+source: 2026-08-03-001
+
+schedule:
+publish_url:
+
+timestamps:
+  ideated: 2026-08-03
+  drafting: 2026-08-03
+  review: 2026-08-03
+  approved: 2026-08-03 20:00
+  published:
+  retro_done:
+
+blocker: {}

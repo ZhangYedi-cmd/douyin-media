@@ -20,8 +20,6 @@ __pycache__/
 # Claude Code 定时任务锁
 .claude/scheduled_tasks.lock
 
-# 看板工作台（独立 git 仓，见 docs/Iterative-spec/0818-看板工作台/）
-tools/console/
 # media CLI 咨询锁
 .media.lock
 

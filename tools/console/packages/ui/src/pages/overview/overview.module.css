@@ -1,0 +1,74 @@
+/* 对照 docs/design/overview.html 的 2fr:1fr 双列布局（原型用内联 style，这里改成模块类，
+   颜色/间距仍走 var(--token)）。 */
+
+.layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.col {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* E1：警报分组折叠（AlertSection.tsx）。全局 .alert/.alert + .alert 的相邻选择器只认「直接相邻的
+   .alert 兄弟」，混入 <details> 分组行后不再是直接相邻，改用本容器 gap 统一控制间距，
+   不复用 .alert + .alert 的 margin-top 规则。 */
+.alertList {
+  display: grid;
+  gap: var(--space-2);
+}
+
+/* 折叠外壳（<details>）本身不加边框/背景/类名——视觉权重全部交给里面复用的 AlertCard（.alert）
+   自身样式承担，details 只负责展开态，下面用元素选择器 details[open] 判定，不必单独占一个类。 */
+.alertGroupSummary {
+  cursor: pointer;
+  list-style: none; /* 去掉默认三角标记，改用下面的 ::before 自绘一个折叠箭头 */
+  position: relative;
+  padding-left: 18px; /* 给左侧自绘箭头留位置，不挤压里面 AlertCard 自身的排版 */
+}
+
+.alertGroupSummary::-webkit-details-marker {
+  display: none;
+}
+
+.alertGroupSummary::before {
+  content: '▸';
+  position: absolute;
+  left: 2px;
+  top: 14px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+details[open] > .alertGroupSummary::before {
+  content: '▾';
+}
+
+.alertGroupBody {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding-left: calc(var(--space-3) + 10px); /* 对齐父行 .alert 的 sev 圆点(10px) + 列间距(--space-3) */
+}
+
+/* R6（第三波修复，2026-08-19）：HeartbeatBars.tsx「治理线心跳」——theme.css 全局 .hb-row .name
+   固定 130px 宽却没设 white-space，`cover-style-normalizer`/`retro-debt-collector` 这类任务名
+   （对账用的原文，不能改名，见 harness/tasks.md 注册表）比列宽更长时会逐字挤断（如
+   「benchmark-\nrefresher」）。任务名长度没有上限，加宽列宽也治标不治本——改成单行 + 超宽省略号，
+   hover 悬停用 title 属性看全名，对照 HealthLights.module.css 「不允许中途断行」的同款取舍。 */
+.taskName {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

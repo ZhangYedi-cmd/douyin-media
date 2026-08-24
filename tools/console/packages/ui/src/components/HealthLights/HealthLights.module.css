@@ -1,0 +1,39 @@
+/* E3：健康灯数值排版 + 窄视口收起。原组件一直复用全局 .lights/.light（theme.css），未新增样式文件；
+   本次要把「数值」塞进每盏灯（如「快照 63ms」），且要求 1024px 窄视口不溢出——全局 .light 只按
+   两三个字的词设计间距，装不下数值还要求响应式收起，theme.css 又不在本次白名单内，只能新增本文件：
+   数值本身用局部类 `.value`（挂在新增的 <b> 上），其余对全局 .light/.light.warn/.light.bad 的调整
+   一律用 :global() 选择器原地叠加声明，不额外占用容器上的类名。 */
+
+.value {
+  margin-left: 4px;
+  font-weight: 600;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 数值默认继承 .light 的中性色（正常态不报警）；异常态（warn/bad）才让数值本身也变色——
+   呼应 P2 修法原文「异常时才用颜色报警」。全局 .light.warn/.light.bad 是字面 className（非 CSS
+   Module 局部类），需要用 :global() 才能在本模块文件里选中它们。 */
+:global(.light.warn) .value {
+  color: color-mix(in oklab, var(--warn), var(--fg) 35%);
+}
+
+:global(.light.bad) .value {
+  color: var(--danger);
+}
+
+/* 灯的词/数值都不允许中途断行——theme.css 的 .light 本身没设 white-space，容器一旦被挤压就会
+   逐字换行（比如「文件监听」拆成「文件/监听」），比直接收起数值更难看。这里用 :global() 给
+   .light 补一条 nowrap，不影响其它属性（theme.css 未对 .light 设过 white-space，不存在覆盖冲突）。 */
+:global(.light) {
+  white-space: nowrap;
+}
+
+/* 中间地带（760px 是 theme.css 既有的「整组 .lights 隐藏」阈值，1024px 是本次验收要求「带数值
+   且不溢出」的视口）：先收起数值，只留词 + 色点 + hover tip，让 nowrap 的标签本身有地方站，
+   不必逐字挤到换行。 */
+@media (max-width: 900px) {
+  .value {
+    display: none;
+  }
+}
