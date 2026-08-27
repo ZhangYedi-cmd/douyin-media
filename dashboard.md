@@ -16,42 +16,23 @@
 | open-weight-5 | scheduled | 2026-06-15 00:34 | 无 |
 | ep04-esc-abort-chain | scheduled | - | 无 |
 | hy3-moe-teardown | approved | 2026-08-19 10:18 | 无 |
-| 4-cli-coding-agent-2 | ideated | 2026-07-13 | 无 |
+| 4-cli-coding-agent-2 | drafting | 2026-08-26 13:02 | 无 |
 | anthropic-claude-panic | ideated | 2026-07-15 | 无 |
 | claude-code | ideated | 2026-07-19 | 无 |
 | nvidia-550b-mamba-moe-10 | ideated | 2026-06-14 | 无 |
 | opus-4-8-effort-fast-mode | drafting | 2026-08-19 17:31 | 无 |
+| claude | drafting | 2026-08-26 11:44 | 无 |
 <!-- auto:wip:end -->
 
 ## 待人确认 ⚠
 
 <!-- auto:alerts:begin -->
-**error**（23）：
-- [CHK-01] ep02-17mb-memory-explosion: meta.status=published 但 backlog 查无对应条目（source=2026-06-10-002）
-- [CHK-01] ep03-token-economics: meta.status=published 但 backlog 查无对应条目（source=2026-06-10-003）
-- [CHK-01] ep05-permission-pipeline: meta.status=published 但 backlog 查无对应条目（source=2026-06-10-005）
-- [CHK-01] ep06-concurrent-tools: meta.status=published 但 backlog 查无对应条目（source=2026-06-10-006）
-- [CHK-01] ep07-context-compaction: meta.status=published 但 backlog 查无对应条目（source=2026-06-10-007）
-- [CHK-01] ep08-lazy-tool-discovery: meta.status=published 但 backlog 查无对应条目（source=2026-06-10-008）
-- [CHK-01] ep09-multi-provider-adapter: meta.status=published 但 backlog 查无对应条目（source=2026-06-10-009）
-- [CHK-01] ep10-sub-agent-orchestration: meta.status=published 但 backlog 查无对应条目（source=2026-06-10-010）
-- [CHK-01] ep11-zero-ms-startup: meta.status=published 但 backlog 查无对应条目（source=2026-06-10-011）
-- [CHK-01] ep12-ffi-native: meta.status=published 但 backlog 查无对应条目（source=2026-06-10-012）
-- [CHK-01] ep13-defensive-engineering: meta.status=published 但 backlog 查无对应条目（source=2026-06-10-013）
-- [CHK-01] ep14-cache-break-detection: meta.status=published 但 backlog 查无对应条目（source=2026-06-10-014）
-- [CHK-01] ep15-200-lines-mini-agent: meta.status=published 但 backlog 查无对应条目（source=2026-06-10-015）
-- [CHK-01] spec-driven-development: meta.status=retro_done 但 backlog 查无对应条目（source=2026-07-08-001）
-- [CHK-01] context-engineering: meta.status=retro_done 但 backlog 查无对应条目（source=2026-06-14-004）
-- [CHK-01] karpathy-autoresearch: meta.status=retro_done 但 backlog 查无对应条目（source=2026-07-08-006）
-- [CHK-01] gemini-cli-teardown: meta.status=retro_done 但 backlog 查无对应条目（source=2026-07-08-007）
-- [CHK-01] ponytail-lazy-senior-dev: meta.status=published 但 backlog 查无对应条目（source=2026-07-08-008）
-- [CHK-01] cc-safety-net: meta.status=published 但 backlog 查无对应条目（source=2026-07-15-001）
-- [CHK-01] kimi-k3-benchmark-check: meta.status=published 但 backlog 查无对应条目（source=2026-07-17-001）
-- [CHK-01] grok-build-teardown: meta.status=published 但 backlog 查无对应条目（source=2026-07-17-002）
-- [CHK-03] open-weight-5: scheduled(2026-06-15 20:00) 超时 65 天未回填
-- [CHK-03] ep04-esc-abort-chain: scheduled(2026-06-19 20:00) 超时 61 天未回填
+**error**（3）：
+- [CHK-01] 2026-06-10-001: backlog.status=published 但对应内容 meta 未达 published（找不到对应 content 条目）
+- [CHK-03] open-weight-5: scheduled(2026-06-15 20:00) 超时 72 天未回填
+- [CHK-03] ep04-esc-abort-chain: scheduled(2026-06-19 20:00) 超时 68 天未回填
 
-**warn**（46）：
+**warn**（19）：
 - [CHK-05] ep02-17mb-memory-explosion: published 无作品链接
 - [CHK-05] ep03-token-economics: published 无作品链接
 - [CHK-05] ep05-permission-pipeline: published 无作品链接
@@ -69,35 +50,12 @@
 - [CHK-05] cc-safety-net: published 无作品链接
 - [CHK-05] kimi-k3-benchmark-check: published 无作品链接
 - [CHK-05] grok-build-teardown: published 无作品链接
-- [CHK-06] ep02-17mb-memory-explosion: meta.source=2026-06-10-002 在 backlog 中查无此 id
 - [CHK-06] open-weight-5: meta.source=mer.vin 开源模型周报 2026-06-08（backlog 2026-06-14-003） 在 backlog 中查无此 id
-- [CHK-06] ep03-token-economics: meta.source=2026-06-10-003 在 backlog 中查无此 id
-- [CHK-06] ep04-esc-abort-chain: meta.source=2026-06-10-004 在 backlog 中查无此 id
-- [CHK-06] ep05-permission-pipeline: meta.source=2026-06-10-005 在 backlog 中查无此 id
-- [CHK-06] ep06-concurrent-tools: meta.source=2026-06-10-006 在 backlog 中查无此 id
-- [CHK-06] ep07-context-compaction: meta.source=2026-06-10-007 在 backlog 中查无此 id
-- [CHK-06] ep08-lazy-tool-discovery: meta.source=2026-06-10-008 在 backlog 中查无此 id
-- [CHK-06] ep09-multi-provider-adapter: meta.source=2026-06-10-009 在 backlog 中查无此 id
-- [CHK-06] ep10-sub-agent-orchestration: meta.source=2026-06-10-010 在 backlog 中查无此 id
-- [CHK-06] ep11-zero-ms-startup: meta.source=2026-06-10-011 在 backlog 中查无此 id
-- [CHK-06] ep12-ffi-native: meta.source=2026-06-10-012 在 backlog 中查无此 id
-- [CHK-06] ep13-defensive-engineering: meta.source=2026-06-10-013 在 backlog 中查无此 id
-- [CHK-06] ep14-cache-break-detection: meta.source=2026-06-10-014 在 backlog 中查无此 id
-- [CHK-06] ep15-200-lines-mini-agent: meta.source=2026-06-10-015 在 backlog 中查无此 id
-- [CHK-06] spec-driven-development: meta.source=2026-07-08-001 在 backlog 中查无此 id
-- [CHK-06] context-engineering: meta.source=2026-06-14-004 在 backlog 中查无此 id
-- [CHK-06] karpathy-autoresearch: meta.source=2026-07-08-006 在 backlog 中查无此 id
-- [CHK-06] gemini-cli-teardown: meta.source=2026-07-08-007 在 backlog 中查无此 id
-- [CHK-06] ponytail-lazy-senior-dev: meta.source=2026-07-08-008 在 backlog 中查无此 id
-- [CHK-06] hy3-moe-teardown: meta.source=2026-07-10-001 在 backlog 中查无此 id
-- [CHK-06] cc-safety-net: meta.source=2026-07-15-001 在 backlog 中查无此 id
-- [CHK-06] kimi-k3-benchmark-check: meta.source=2026-07-17-001 在 backlog 中查无此 id
-- [CHK-06] grok-build-teardown: meta.source=2026-07-17-002 在 backlog 中查无此 id
-- [CHK-06] 4-cli-coding-agent-2: meta.source=2026-07-13-001 在 backlog 中查无此 id
-- [CHK-06] anthropic-claude-panic: meta.source=2026-07-15-002 在 backlog 中查无此 id
-- [CHK-06] claude-code: meta.source=2026-07-19-001 在 backlog 中查无此 id
-- [CHK-06] nvidia-550b-mamba-moe-10: meta.source=2026-06-14-010 在 backlog 中查无此 id
-- [CHK-06] opus-4-8-effort-fast-mode: meta.source=2026-06-14-006 在 backlog 中查无此 id
+- [CHK-08] 2026-08-26: 工作日 21:00 后仍无当日 content 目录，疑似空跑（未核飞书阻塞上报，见已知缺口）
+
+**info**（2）：
+- [CHK-07] 2026-08-26-001: 临近机械过期：today>2d，约 2 天内命中
+- [CHK-07] 2026-08-26-002: 临近机械过期：today>2d，约 2 天内命中
 <!-- auto:alerts:end -->
 
 **人工调查记录**（机器区对同一事项另生成精简告警属预期重复；本表机器不碰）：
@@ -121,14 +79,22 @@
 ## 选题池（backlog.yaml）
 
 <!-- auto:backlog:begin -->
-选题池：
+选题池：21 expired | 9 picked | 22 published | 21 idea
 next_up：空
 
 按分最高 idea（前 4）：
-- （无）
+- `2026-08-26-002` 一个连名字都没署的模型，1M 上下文 + 开发者破案式溯源，最后指向智谱（4.35）
+- `2026-08-26-001` Kimi K2.6 跑了 12 小时、4000 次工具调用没崩——长时 agent 到底靠什么（4.2）
+- `2026-08-26-003` Claude 的记忆打通 Chat 和 Cowork 了——这次更新到底记了啥、能不能关（3.9）
+- `2026-08-26-004` 用了一周 Codex 多过 Claude Code，我为什么还没删掉它——HN 热议的 AI 编程之争（3.85）
 
 临近过期：
-- （无）
+- `2026-08-26-002` 一个连名字都没署的模型，1M 上下文 + 开发者破案式溯源，最后指向智谱（today>2d，约 2 天）
+- `2026-08-26-001` Kimi K2.6 跑了 12 小时、4000 次工具调用没崩——长时 agent 到底靠什么（today>2d，约 2 天）
+- `2026-08-26-003` Claude 的记忆打通 Chat 和 Cowork 了——这次更新到底记了啥、能不能关（timeliness4>7d，约 7 天）
+- `2026-08-26-007` 阿里 Qwen 3.8 27B 开源：混合注意力把长上下文成本打下来（timeliness4>7d，约 7 天）
+- `2026-08-26-009` 只花 4000 万美元，汤森路透训出自家法律大模型——领域模型的经济账（timeliness4>7d，约 7 天）
+- `2026-08-26-008` Meta 又把一个 30B 开源了：Muse Glimmer 这次直接 Apache 2.0（timeliness4>7d，约 7 天）
 <!-- auto:backlog:end -->
 
 **人写区（运行记叙与人工观察，机器不碰）**：

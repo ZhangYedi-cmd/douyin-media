@@ -1045,7 +1045,8 @@ topics:
       - "AI 文本水印是怎么藏进措辞里的：一个抛硬币比喻讲清 Anthropic 新机制"
     track: depth
     format: kouban
-    status: idea
+    status: picked # 2026-08-23 promote (media)
+    content_path: content/2026-08-23/claude
     score: 4.5
     tier: S
     scores: {practical: 3, social: 5, emotion: 5, hook: 5, timeliness: 5, trigger: 4}
@@ -1066,7 +1067,7 @@ topics:
       - "旗舰打价格战了：GPT-5.6 Sol 降价 50% 速览"
     track: traffic
     format: tuwen
-    status: idea
+    status: expired # 2026-08-26 过期清扫(机械规则): today超2天
     score: 4.3
     tier: S
     scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 4}
@@ -1086,7 +1087,7 @@ topics:
       - "GitHub 挂掉的那天，Cursor 宣布替代它"
     track: traffic
     format: kouban
-    status: idea
+    status: expired # 2026-08-26 过期清扫(机械规则): today超2天
     score: 4.2
     tier: S
     scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 4}
@@ -1107,7 +1108,7 @@ topics:
       - "Copilot 说 all-clear、安全扫描也放行——这个 GitHub Actions 注入是怎么漏网的"
     track: depth
     format: kouban
-    status: idea
+    status: expired # 2026-08-26 过期清扫(机械规则): timeliness4超7天
     score: 4.25
     tier: S
     scores: {practical: 4, social: 4, emotion: 5, hook: 4, timeliness: 4, trigger: 3}
@@ -1127,7 +1128,7 @@ topics:
       - "Claude Code 限额促销倒计时：9 月起回到标准线，怎么规划用量"
     track: traffic
     format: tuwen
-    status: idea
+    status: expired # 2026-08-26 过期清扫(机械规则): timeliness4超7天
     score: 3.85
     tier: A
     scores: {practical: 5, social: 3, emotion: 3, hook: 3, timeliness: 5, trigger: 4}
@@ -1146,7 +1147,7 @@ topics:
       - "AI 写驱动这事成了：从抓 USB 协议到能打印，全程对话记录公开"
     track: traffic
     format: kouban
-    status: idea
+    status: expired # 2026-08-26 过期清扫(机械规则): timeliness4超7天
     score: 3.85
     tier: A
     scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 3}
@@ -1202,7 +1203,7 @@ topics:
       - "GLM-5.3 第三方跑分速览：Artificial Analysis 九项评测怎么读"
     track: traffic
     format: tuwen
-    status: idea
+    status: expired # 2026-08-26 过期清扫(机械规则): timeliness4超7天
     score: 3.4
     tier: B
     scores: {practical: 3, social: 4, emotion: 3, hook: 3, timeliness: 4, trigger: 3}
@@ -1213,4 +1214,171 @@ topics:
       - "https://news.ycombinator.com/item?id=49353407"
     tags: [glm-5.3, zhipu, new-model, benchmark]
     created: 2026-08-19
+    metrics: {}
+  - id: 2026-08-26-001
+    title: "Kimi K2.6 跑了 12 小时、4000 次工具调用没崩——长时 agent 到底靠什么"
+    alt_titles:
+      - "Moonshot 把 K2.6 全开：1T 参数 MoE、26 万上下文，专治长任务的 agentic 模型"
+      - "一口气跑 12 小时不崩，还能顺手给 Zig 推理提 20%：Kimi K2.6 实测"
+    track: depth
+    format: kouban
+    status: idea
+    score: 4.2
+    tier: S
+    scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 3}
+    urgency: today
+    reason: "Moonshot 08-24 把 K2.6 全开（无 waitlist，Kimi.com/App/API/Kimi Code 同步上）。据 labellerr 转述：1T 总参/32B 激活 MoE、26.2 万 token 上下文，核心卖点是『长时 stamina』——官方演示 12 小时、4000+ 工具调用、14 轮迭代在 Mac 上下载部署 Qwen3.5-0.8B 并用 Zig 优化推理（~15→193 tok/s，自称比 LM Studio 快约 20%）。正中账号『长任务断片/上下文』工程母题，机制可拆（MoE+MLA+长上下文怎么撑长时执行）。含 +0.15 立身（长时 agent/上下文机制拆解）软加成（4.05→4.20）。★可诚实自动做完：读 Moonshot 官方 release + labellerr 转述，数字全部标来源，勿把官方宣称当独立实测。★创作前核实：1T/32B/384 experts/262k 上下文与 12h 演示的具体口径，核 Moonshot 官方与权重仓库"
+    links:
+      - "https://www.labellerr.com/blog/kimi-k2-6-open-source-agentic-ai/"
+      - "https://www.moonshot.ai/"
+    tags: [kimi-k2.6, moonshot, agentic-execution, long-horizon, context-window, open-weights]
+    created: 2026-08-26
+    metrics: {}
+  - id: 2026-08-26-002
+    title: "一个连名字都没署的模型，1M 上下文 + 开发者破案式溯源，最后指向智谱"
+    alt_titles:
+      - "OpenRouter 上神秘的 stealth/ox-alpha：100 万 token 上下文，没人认领"
+      - "程序员靠服务基础设施，把一个匿名模型的老家给扒出来了"
+    track: traffic
+    format: kouban
+    status: idea
+    score: 4.35
+    tier: S
+    scores: {practical: 2, social: 5, emotion: 5, hook: 4, timeliness: 5, trigger: 2}
+    urgency: today
+    reason: "08-20 OpenRouter 上出现匿名编码模型 stealth/ox-alpha：无厂商无 logo 无 PR，上下文约 1,048,576 token，输入含文本/图像/视频，支持 function calling，吞吐约 29 tok/s；开发者按服务基础设施逐条溯源，至 08-22 证据指向智谱（Z.ai），官方未证实未否认。『匿名藏身份+破案』叙事自带社交货币与惊奇；1M 上下文本身可做能力讲解。★口径纪律（红线）：『指向智谱』是社区溯源推断、未证实，必须标『据开发者溯源，官方未确认』，勿当坐实。★时效硬约束：OpenCode 称免费窗口约至 08-27，蹭热需尽快"
+    links:
+      - "https://claypier.com/en/ox-alpha-stealth-model-zhipu/"
+      - "https://news.ycombinator.com/item?id=49422226"
+      - "https://openrouter.ai/stealth/ox-alpha"
+    tags: [ox-alpha, stealth-model, openrouter, context-window, coding-model, forensics]
+    created: 2026-08-26
+    metrics: {}
+  - id: 2026-08-26-003
+    title: "Claude 的记忆打通 Chat 和 Cowork 了——这次更新到底记了啥、能不能关"
+    alt_titles:
+      - "Anthropic 把 Claude 记忆统一：聊天里记住的，Cowork 干活的云上也能用"
+      - "Claude 记忆新增『敏感话题不入记忆』开关，怎么用好这个控制权"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.9
+    tier: A
+    scores: {practical: 5, social: 3, emotion: 3, hook: 3, timeliness: 4, trigger: 5}
+    urgency: queue
+    reason: "08-25 Anthropic 更新 Claude 记忆：模型现在跨 Chat 聊天与 Cowork（computer-use agent）共享记忆，云端跑任务时能带上你聊天里的上下文，少重复说明；并给用户更多控制（按主题查看/编辑记忆 + 新增『敏感话题不入记忆』默认关闭）。正中账号 context-engineering 母题（已发上下文工程 4k+ 播放），且是『用户自己的工具在变』的切身题，天然完播。含 +0.10 立身（memory/上下文机制）软加成（3.80→3.90）。★可诚实自动做完：读 Anthropic 官方 release notes + Engadget/SiliconANGLE 转述，讲清『记什么/存哪/怎么关』，不臆造内部存储实现。★口径纪律：memory 的具体技术实现 Anthropic 未完全公开，机制讲解标『据官方说明+合理推断』"
+    links:
+      - "https://www.engadget.com/2243753/claude-memory-now-works-across-both-chats-and-cowork-sessions/"
+      - "https://siliconangle.com/2026/08/25/anthropic-updates-claudes-memory-to-enhance-customization-and-protect-sensitive-topics/"
+      - "https://support.claude.com/en/articles/12138966-release-notes"
+    tags: [claude-memory, anthropic, cowork, computer-use, memory, context-engineering]
+    created: 2026-08-26
+    metrics: {}
+  - id: 2026-08-26-004
+    title: "用了一周 Codex 多过 Claude Code，我为什么还没删掉它——HN 热议的 AI 编程之争"
+    alt_titles:
+      - "Codex vs Claude Code 一周实测：HN 243 分热帖，工程师到底该留哪个"
+      - "AI 编程工具不是零和：Codex 抢走的活，和 Claude Code 守住的活"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.85
+    tier: A
+    scores: {practical: 4, social: 4, emotion: 3, hook: 4, timeliness: 3, trigger: 4}
+    urgency: queue
+    reason: "HN 243 分热帖『A week of using Codex more than Claude』：一线工程师真实一周横评，反映 AI 编程工具竞争进入白热。正中 benchmarks『宽口径工程提效横评破圈』打法（spec-driven 横评 7d 30438=基线 4.4x 全账号最高），跨厂商对比天然宽口径。含 +0.10 宽口径破圈软加成（3.75→3.85）。★可诚实自动做完：读原帖+评论区拆『真实使用场景差在哪』，落点给选型建议，不站队。★创作前核实：读 HN 原帖全文（objectID 49393051），提炼可复现的对比维度，勿只转述标题"
+    links:
+      - "https://news.ycombinator.com/item?id=49393051"
+    tags: [codex, claude-code, ai-coding, coding-agent, comparison, workflow]
+    created: 2026-08-26
+    metrics: {}
+  - id: 2026-08-26-005
+    title: "你的 LLM 可能正借推理引擎的漏洞，反手控制你的机器——这届安全问题不一样了"
+    alt_titles:
+      - "HN 188 分：LLM 通过 exploit 推理引擎，拿到宿主机的控制权"
+      - "不止提示注入：模型现在能顺着推理引擎往你机器里钻"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.8
+    tier: A
+    scores: {practical: 3, social: 4, emotion: 5, hook: 4, timeliness: 3, trigger: 3}
+    urgency: queue
+    reason: "HN 188 分讨论：LLM 可借推理引擎（inference engine）的漏洞控制宿主机——区别于已讲烂的 prompt 注入，是『模型执行层』的安全新向量。破案/威胁叙事 + 即学即用的防护落点（怎么限制模型运行时权限），接账号已发的 AI 安全题（cc-safety-net 5.8k、Wiz Snowflake 候选）。含 +0.10 立身（安全机制拆解）软加成（3.70→3.80）。★可诚实自动做完：读 HN 原帖+引用的技术细节，讲清攻击路径与防护。★口径纪律：按论文/讨论原文陈述漏洞边界，勿夸大成『所有模型都会劫持你』"
+    links:
+      - "https://news.ycombinator.com/item?id=49424387"
+    tags: [llm-security, inference-engine, prompt-injection, host-control, paper]
+    created: 2026-08-26
+    metrics: {}
+  - id: 2026-08-26-006
+    title: "带 AI 精读大型开源仓库，怎么让每个结论都追得到源码那一行"
+    alt_titles:
+      - "一个中文仓库讲透了『AI 源码精读方法论』：四阶段流程 + 28 条踩坑清单"
+      - "别让 AI 给你胡编源码：可回溯到具体行的读代码工作流"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.75
+    tier: A
+    scores: {practical: 5, social: 3, emotion: 3, hook: 3, timeliness: 2, trigger: 4}
+    urgency: queue
+    reason: "GitHub 仓库 itshen/source-reading-methodology（08-23，~123 star）：带 AI 精读大型开源仓库的四阶段方法论 + 可复用模板 + 28 条踩坑清单，核心是『每个技术论断可回溯到源码具体行』。直击账号『源码解读』立身支柱——把本账号自己在做的 source-teardown 显式化成可复用工作流，实用性拉满且可沉淀。含 +0.20 立身（源码解读方法论）软加成（3.55→3.75）。★可诚实自动做完：读 repo 全文，把方法论转成口播可复现的步骤。★口径纪律：这是个人开源方法论（非大厂标准），按『一家之言的实用工作流』定位，勿包装成权威"
+    links:
+      - "https://github.com/itshen/source-reading-methodology"
+    tags: [source-reading, code-reading, methodology, ai-assisted, open-source]
+    created: 2026-08-26
+    metrics: {}
+  - id: 2026-08-26-007
+    title: "阿里 Qwen 3.8 27B 开源：混合注意力把长上下文成本打下来"
+    alt_titles:
+      - "Qwen 3.8 27B 上评测：开源权重挑战闭源前沿，混合注意力是省算力的关键"
+      - "国产开源模型卷到长上下文：Qwen 3.8 的 hybrid attention 怎么读"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 3.4
+    tier: B
+    scores: {practical: 3, social: 4, emotion: 3, hook: 3, timeliness: 4, trigger: 3}
+    urgency: queue
+    reason: "08-23/24 阿里 Qwen 3.8 27B 开源（open-weight），主打 hybrid attention 实现高效长上下文，被评『挑战闭源前沿』。国产旗舰迭代对中文受众有天然关注度。B 级原因：本轮只坐实『已发布+混合注意力长上下文』，具体 benchmark 与架构细节未核全。★创作前必核：Qwen 官方博客 + 权重仓库的具体架构与跑分口径，核不到就弃；一切数字标来源（红线：不臆造 benchmark）"
+    links:
+      - "https://towardsai.com/p/machine-learning/qwen-3-8-27b-the-open-weight-titan-challenging-closed-frontier-models"
+      - "https://pulseaugur.com/cluster/217028-alibaba-s-qwen3-8-27b-debuts-with-hybrid-attention-for-efficient-long-context"
+    tags: [qwen, alibaba, hybrid-attention, long-context, open-weights, new-model]
+    created: 2026-08-26
+    metrics: {}
+  - id: 2026-08-26-008
+    title: "Meta 又把一个 30B 开源了：Muse Glimmer 这次直接 Apache 2.0"
+    alt_titles:
+      - "Muse Glimmer：Meta 的 Apache 2.0 30B 模型，这次商用零门槛"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 3.3
+    tier: B
+    scores: {practical: 3, social: 3, emotion: 3, hook: 3, timeliness: 4, trigger: 3}
+    urgency: queue
+    reason: "08-23 Meta 开源 Muse Glimmer 30B，Apache 2.0 许可（商用友好）。新开源模型速览，许可松是卖点。B 级：开源模型密集周里偏『再来一个』，差异化弱。★可诚实自动做完：读 Meta 官方 release，讲清许可与定位。★创作前核实：具体能力/跑分/与其他 Muse 系列关系，核官方页"
+    links:
+      - "https://digitalmatters.me/artificial-intelligence-ai/meta-muse-glimmer/"
+    tags: [muse-glimmer, meta, apache-2.0, open-weights, new-model]
+    created: 2026-08-26
+    metrics: {}
+  - id: 2026-08-26-009
+    title: "只花 4000 万美元，汤森路透训出自家法律大模型——领域模型的经济账"
+    alt_titles:
+      - "Thomson：不是砸几十亿，而是 40M 从开源底座出发的领域 LLM"
+      - "法律领域模型怎么『够用就好』：汤森路透的省钱打法拆解"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 3.4
+    tier: B
+    scores: {practical: 2, social: 3, emotion: 4, hook: 3, timeliness: 4, trigger: 2}
+    urgency: queue
+    reason: "08-24 汤森路透发布首款自研 LLM『Thomson』：从开源底座出发、仅投 4000 万美元，押注法律/税务垂直场景（首落 CoCounsel Legal 的表格分析），并放出小型 open-weight 版到 HuggingFace 供学术评估。反直觉的『40M 做出够用领域模型』经济账是钩子。B 级：法律垂直与本账号工程师受众距离较远，可作模型经济学系列补充。★可诚实自动做完：读 PRNewswire 官方稿。★口径纪律：『40M』是官方披露投入，勿与前沿实验室总投入直接类比成『便宜 X 倍』"
+    links:
+      - "https://www.prnewswire.com/news-releases/thomson-reuters-leverages-its-world-class-data-assets-to-launch-its-own-frontier-model-302857499.html"
+    tags: [thomson-reuters, domain-model, legal-llm, model-economics, open-weights]
+    created: 2026-08-26
     metrics: {}

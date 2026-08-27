@@ -1,0 +1,151 @@
+<mxfile host="app.diagrams.net" agent="Claude Code" version="24.7.17">
+  <diagram id="arch-panorama" name="技术架构全景">
+    <mxGraphModel dx="1560" dy="1180" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1560" pageHeight="1180" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ============ 前端层 ============ -->
+        <mxCell id="c_ui" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FD;strokeColor=#1A73E8;strokeWidth=2;verticalAlign=top;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1480" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="h_ui" value="前端 · packages/ui —— 看板工作台（React 19 · antd 6 · Vite）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=16;fontColor=#1A73E8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="54" width="1440" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="n_ui_pages" value="看板页面 P1–P6&#10;总览 / 内容列表 / 详情 / 选题池 / 治理 / 数据" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A73E8;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="60" y="110" width="400" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="n_ui_store" value="数据层 lib/store.tsx&#10;usePageData / useJob（仅此两个 hook）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A73E8;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="500" y="110" width="360" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="n_ui_api" value="lib/api.ts&#10;全站唯一 fetch 出口" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A73E8;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="900" y="110" width="280" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="n_ui_dist" value="dist/ 静态产物&#10;（进 git，clone 即跑）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A73E8;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="110" width="260" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- ============ 后端层 ============ -->
+        <mxCell id="c_server" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#188038;strokeWidth=2;verticalAlign=top;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="40" y="340" width="1480" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="h_server" value="后端 · packages/server —— Hono 单端口 5170（127.0.0.1 + token）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=16;fontColor=#188038;" vertex="1" parent="1">
+          <mxGeometry x="60" y="354" width="1440" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="n_srv_read" value="读路由&#10;GET /api/*&#10;（overview/contents/backlog/harness/metrics…）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#188038;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="60" y="410" width="280" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="n_srv_act" value="动作路由&#10;POST /api/actions/*&#10;（review/backlog-apply/promote/next-up 快写）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#188038;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="380" y="410" width="300" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="n_srv_job" value="Job 路由&#10;POST /api/jobs/*&#10;（publish/rework/apply-proposal…慢作业）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#188038;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="720" y="410" width="280" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="n_srv_sse" value="SSE /api/events&#10;SseHub 广播&#10;（refresh / job:* / ping）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#188038;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="410" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="n_srv_store" value="Store（revision 唯一产地）&#10;buildSnapshot + computeAlerts&#10;（去抖警报 / 10min tick）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#188038;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="60" y="540" width="460" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="n_srv_runner" value="JobRunner（慢作业）&#10;execCcJob：spawn claude -p&#10;→ 回放/取消" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#188038;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="560" y="540" width="280" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="n_srv_watch" value="watcher（chokidar）&#10;监视 repoRoot&#10;fs 事件 → rebuild → SSE refresh" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#188038;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="880" y="540" width="420" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ============ 领域核心 + CLI ============ -->
+        <mxCell id="c_core" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF7E0;strokeColor=#F9AB00;strokeWidth=2;verticalAlign=top;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="740" width="720" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="h_core" value="领域核心 · packages/core（纯函数，仅依赖 yaml）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=15;fontColor=#B06000;" vertex="1" parent="1">
+          <mxGeometry x="60" y="754" width="680" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="n_core_body" value="buildSnapshot / computeAlerts&#10;状态机 state.ts（合法状态值唯一定义）&#10;doctor / dashboard 渲染 / yaml-read" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F9AB00;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="60" y="796" width="680" height="104" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_cli" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FD;strokeColor=#9334E6;strokeWidth=2;verticalAlign=top;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="800" y="740" width="720" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="h_cli" value="记账 CLI · packages/cli —— `media` 命令（commander）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=15;fontColor=#6B1FA0;" vertex="1" parent="1">
+          <mxGeometry x="820" y="754" width="680" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="n_cli_body" value="唯一 import @console/core/writer 的包（状态写路径唯一入口）&#10;st / next / check / doctor / promote / publish-done / flip&#10;backlog / dashboard / metrics 命令组" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9334E6;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="820" y="796" width="680" height="104" as="geometry" />
+        </mxCell>
+
+        <!-- ============ 底层 ============ -->
+        <mxCell id="c_ccstream" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#D93025;strokeWidth=2;verticalAlign=top;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="960" width="720" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="h_cc" value="进程观察 · packages/cc-stream（零依赖叶子包）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=15;fontColor=#B3261E;" vertex="1" parent="1">
+          <mxGeometry x="60" y="974" width="680" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="n_cc_body" value="无头 CC 观察器（不认识业务词）&#10;runHeadlessCC(spawn) → parseStream(transport)&#10;→ createNormalizer(6 种归一事件) → createMilestoneEngine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D93025;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1016" width="680" height="104" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_runtime" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F3F4;strokeColor=#5F6368;strokeWidth=2;verticalAlign=top;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="800" y="960" width="720" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="h_rt" value="运行时 / 存储" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=15;fontColor=#3C4043;" vertex="1" parent="1">
+          <mxGeometry x="820" y="974" width="680" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="n_rt_claude" value="claude -p（Claude Code CLI 子进程）&#10;无头跑一次 CC，产出 JSONL 事件流" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5F6368;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="820" y="1016" width="680" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="n_rt_fs" value="repoRoot 文件系统（meta.yaml / backlog.yaml / dashboard.md）· logs/jobs/{id}.jsonl" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5F6368;verticalAlign=middle;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="820" y="1092" width="680" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- ============ 边 ============ -->
+        <mxCell id="e1" value="HTTP GET /api/*（JSON 信封）" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_ui_api" target="n_srv_read">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="SSE 订阅 /api/events（revision 驱动重拉）" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_ui_store" target="n_srv_sse">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="读快照" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_srv_read" target="n_srv_store">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="buildSnapshot + computeAlerts" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_srv_store" target="n_core_body">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="fs 事件 → rebuild" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_srv_watch" target="n_srv_store">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="refresh(revision) 广播" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_srv_store" target="n_srv_sse">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="execFile `media`（快写，不直接写文件）" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_srv_act" target="n_cli_body">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="唯一 import @console/core/writer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_cli_body" target="n_core_body">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" value="受理 → 202 + jobId" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_srv_job" target="n_srv_runner">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" value="runHeadlessCC（慢作业）" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_srv_runner" target="n_cc_body">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" value="spawn claude -p（JSONL 流）" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_cc_body" target="n_rt_claude">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" value="job:{id} / job-log:{id} 广播" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_srv_runner" target="n_srv_sse">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" value="写状态文件（唯一写路径）" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_cli_body" target="n_rt_fs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" value="写 {id}.jsonl 作业日志" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_srv_runner" target="n_rt_fs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" value="chokidar 监视（fs 事件）" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#5F6368;fontColor=#5F6368;fontSize=11;" edge="1" parent="1" source="n_rt_fs" target="n_srv_watch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
