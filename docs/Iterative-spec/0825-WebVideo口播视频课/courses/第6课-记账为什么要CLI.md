@@ -1,5 +1,8 @@
 # 第 6 课 记账为什么要 CLI，用 SDD 让 AI 造出 media 命令
 
+> 代码仓库：<https://git.aicodex.cc/devlist/douyin-media>
+> 对应分支：`06-media-cli`
+
 记账是确定性活，人写规格、AI 写实现、契约验收，人一行实现代码都不写。这是本课的全部结论，后面每一节给它补论据。
 
 第 5 课立好了账本结构，meta.yaml 管细账、backlog.yaml 管粗账、dashboard 是投影。但账本立好，账未必记得对。一次状态翻转牵扯三处，meta 的 status 要改、timestamps 要补，赶上发布还要同步 backlog 和 dashboard，全靠记性。
