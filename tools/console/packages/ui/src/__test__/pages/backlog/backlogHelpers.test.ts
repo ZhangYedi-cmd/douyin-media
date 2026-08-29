@@ -18,6 +18,7 @@ function topic(overrides: Partial<BacklogTopic> & Pick<BacklogTopic, 'id' | 'cre
     track: 'depth',
     format: 'kouban',
     status: 'idea',
+    plan_file: null,
     content_path: null,
     score: null,
     tier: null,
