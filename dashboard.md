@@ -27,35 +27,16 @@
 ## 待人确认 ⚠
 
 <!-- auto:alerts:begin -->
-**error**（3）：
-- [CHK-01] 2026-06-10-001: backlog.status=published 但对应内容 meta 未达 published（找不到对应 content 条目）
-- [CHK-03] open-weight-5: scheduled(2026-06-15 20:00) 超时 72 天未回填
-- [CHK-03] ep04-esc-abort-chain: scheduled(2026-06-19 20:00) 超时 68 天未回填
+**error**（2）：
+- [CHK-03] open-weight-5: scheduled(2026-06-15 20:00) 超时 78 天未回填
+- [CHK-03] ep04-esc-abort-chain: scheduled(2026-06-19 20:00) 超时 74 天未回填
 
-**warn**（19）：
-- [CHK-05] ep02-17mb-memory-explosion: published 无作品链接
-- [CHK-05] ep03-token-economics: published 无作品链接
-- [CHK-05] ep05-permission-pipeline: published 无作品链接
-- [CHK-05] ep06-concurrent-tools: published 无作品链接
-- [CHK-05] ep07-context-compaction: published 无作品链接
-- [CHK-05] ep08-lazy-tool-discovery: published 无作品链接
-- [CHK-05] ep09-multi-provider-adapter: published 无作品链接
-- [CHK-05] ep10-sub-agent-orchestration: published 无作品链接
-- [CHK-05] ep11-zero-ms-startup: published 无作品链接
-- [CHK-05] ep12-ffi-native: published 无作品链接
-- [CHK-05] ep13-defensive-engineering: published 无作品链接
-- [CHK-05] ep14-cache-break-detection: published 无作品链接
-- [CHK-05] ep15-200-lines-mini-agent: published 无作品链接
-- [CHK-05] ponytail-lazy-senior-dev: published 无作品链接
-- [CHK-05] cc-safety-net: published 无作品链接
-- [CHK-05] kimi-k3-benchmark-check: published 无作品链接
-- [CHK-05] grok-build-teardown: published 无作品链接
+**warn**（1）：
 - [CHK-06] open-weight-5: meta.source=mer.vin 开源模型周报 2026-06-08（backlog 2026-06-14-003） 在 backlog 中查无此 id
-- [CHK-08] 2026-08-26: 工作日 21:00 后仍无当日 content 目录，疑似空跑（未核飞书阻塞上报，见已知缺口）
 
 **info**（2）：
-- [CHK-07] 2026-08-26-001: 临近机械过期：today>2d，约 2 天内命中
-- [CHK-07] 2026-08-26-002: 临近机械过期：today>2d，约 2 天内命中
+- [CHK-07] 2026-09-02-001: 临近机械过期：today>2d，约 2 天内命中
+- [CHK-07] 2026-09-02-003: 临近机械过期：today>2d，约 2 天内命中
 <!-- auto:alerts:end -->
 
 **人工调查记录**（机器区对同一事项另生成精简告警属预期重复；本表机器不碰）：
@@ -79,22 +60,22 @@
 ## 选题池（backlog.yaml）
 
 <!-- auto:backlog:begin -->
-选题池：21 expired | 9 picked | 22 published | 21 idea
+选题池：27 expired | 9 picked | 22 published | 23 idea
 next_up：空
 
 按分最高 idea（前 4）：
-- `2026-08-26-002` 一个连名字都没署的模型，1M 上下文 + 开发者破案式溯源，最后指向智谱（4.35）
-- `2026-08-26-001` Kimi K2.6 跑了 12 小时、4000 次工具调用没崩——长时 agent 到底靠什么（4.2）
-- `2026-08-26-003` Claude 的记忆打通 Chat 和 Cowork 了——这次更新到底记了啥、能不能关（3.9）
-- `2026-08-26-004` 用了一周 Codex 多过 Claude Code，我为什么还没删掉它——HN 热议的 AI 编程之争（3.85）
+- `2026-09-02-001` OpenAI 掐断 Cursor 模型接口：马斯克收购 Anysphere 后的第一场 AI 诸侯割据（4.75）
+- `2026-09-02-002` Anthropic 开放 Agent Skills 行业标准：三层「渐进式加载」怎么把 Prompt 消耗降 10 倍（4.5）
+- `2026-09-02-003` DeepSeek-V4-Flash-Vision 开源：305B 专攻「看图操作软件」的多模态 Agent 架构拆解（4.4）
+- `2026-09-02-004` Claude Code 与 Chrome 正式打通：终端 Agent 怎么一键接管浏览器调试（4.25）
 
 临近过期：
-- `2026-08-26-002` 一个连名字都没署的模型，1M 上下文 + 开发者破案式溯源，最后指向智谱（today>2d，约 2 天）
-- `2026-08-26-001` Kimi K2.6 跑了 12 小时、4000 次工具调用没崩——长时 agent 到底靠什么（today>2d，约 2 天）
-- `2026-08-26-003` Claude 的记忆打通 Chat 和 Cowork 了——这次更新到底记了啥、能不能关（timeliness4>7d，约 7 天）
-- `2026-08-26-007` 阿里 Qwen 3.8 27B 开源：混合注意力把长上下文成本打下来（timeliness4>7d，约 7 天）
-- `2026-08-26-009` 只花 4000 万美元，汤森路透训出自家法律大模型——领域模型的经济账（timeliness4>7d，约 7 天）
-- `2026-08-26-008` Meta 又把一个 30B 开源了：Muse Glimmer 这次直接 Apache 2.0（timeliness4>7d，约 7 天）
+- `2026-09-02-001` OpenAI 掐断 Cursor 模型接口：马斯克收购 Anysphere 后的第一场 AI 诸侯割据（today>2d，约 2 天）
+- `2026-09-02-003` DeepSeek-V4-Flash-Vision 开源：305B 专攻「看图操作软件」的多模态 Agent 架构拆解（today>2d，约 2 天）
+- `2026-09-02-002` Anthropic 开放 Agent Skills 行业标准：三层「渐进式加载」怎么把 Prompt 消耗降 10 倍（timeliness4>7d，约 7 天）
+- `2026-09-02-004` Claude Code 与 Chrome 正式打通：终端 Agent 怎么一键接管浏览器调试（timeliness4>7d，约 7 天）
+- `2026-09-02-005` Claude Code 新周限额 9 月 14 日生效：促销期结束后，怎么用 fast mode 把额度省出来（timeliness4>7d，约 7 天）
+- `2026-09-02-007` 国产 Flash-tier 军备竞赛：Qwen3.8-Flash、GLM-5.3-Flash 与 DeepSeek-V4-Flash 同周较量（timeliness4>7d，约 7 天）
 <!-- auto:backlog:end -->
 
 **人写区（运行记叙与人工观察，机器不碰）**：

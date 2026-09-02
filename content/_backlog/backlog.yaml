@@ -1222,7 +1222,7 @@ topics:
       - "一口气跑 12 小时不崩，还能顺手给 Zig 推理提 20%：Kimi K2.6 实测"
     track: depth
     format: kouban
-    status: idea
+    status: expired # 2026-09-02 过期清扫(机械规则): today超2天
     score: 4.2
     tier: S
     scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 5, trigger: 3}
@@ -1241,7 +1241,7 @@ topics:
       - "程序员靠服务基础设施，把一个匿名模型的老家给扒出来了"
     track: traffic
     format: kouban
-    status: idea
+    status: expired # 2026-09-02 过期清扫(机械规则): today超2天
     score: 4.35
     tier: S
     scores: {practical: 2, social: 5, emotion: 5, hook: 4, timeliness: 5, trigger: 2}
@@ -1261,7 +1261,7 @@ topics:
       - "Claude 记忆新增『敏感话题不入记忆』开关，怎么用好这个控制权"
     track: depth
     format: kouban
-    status: idea
+    status: expired # 2026-09-02 过期清扫(机械规则): timeliness4超7天
     score: 3.9
     tier: A
     scores: {practical: 5, social: 3, emotion: 3, hook: 3, timeliness: 4, trigger: 5}
@@ -1335,7 +1335,7 @@ topics:
       - "国产开源模型卷到长上下文：Qwen 3.8 的 hybrid attention 怎么读"
     track: traffic
     format: tuwen
-    status: idea
+    status: expired # 2026-09-02 过期清扫(机械规则): timeliness4超7天
     score: 3.4
     tier: B
     scores: {practical: 3, social: 4, emotion: 3, hook: 3, timeliness: 4, trigger: 3}
@@ -1353,7 +1353,7 @@ topics:
       - "Muse Glimmer：Meta 的 Apache 2.0 30B 模型，这次商用零门槛"
     track: traffic
     format: tuwen
-    status: idea
+    status: expired # 2026-09-02 过期清扫(机械规则): timeliness4超7天
     score: 3.3
     tier: B
     scores: {practical: 3, social: 3, emotion: 3, hook: 3, timeliness: 4, trigger: 3}
@@ -1371,7 +1371,7 @@ topics:
       - "法律领域模型怎么『够用就好』：汤森路透的省钱打法拆解"
     track: traffic
     format: tuwen
-    status: idea
+    status: expired # 2026-09-02 过期清扫(机械规则): timeliness4超7天
     score: 3.4
     tier: B
     scores: {practical: 2, social: 3, emotion: 4, hook: 3, timeliness: 4, trigger: 2}
@@ -1381,4 +1381,152 @@ topics:
       - "https://www.prnewswire.com/news-releases/thomson-reuters-leverages-its-world-class-data-assets-to-launch-its-own-frontier-model-302857499.html"
     tags: [thomson-reuters, domain-model, legal-llm, model-economics, open-weights]
     created: 2026-08-26
+    metrics: {}
+  - id: 2026-09-02-001
+    title: "OpenAI 掐断 Cursor 模型接口：马斯克收购 Anysphere 后的第一场 AI 诸侯割据"
+    alt_titles:
+      - "OpenAI 官宣 11 月停供 Cursor：5% 流量背后的模型路线之争"
+      - "Cursor 失去 GPT 访问权，Anthropic 连夜站台：AI 编程工具生态重洗牌"
+    track: traffic
+    format: kouban
+    status: idea
+    score: 4.75
+    tier: S
+    scores: {practical: 3, social: 5, emotion: 5, hook: 5, timeliness: 5, trigger: 4}
+    urgency: today
+    reason: "行业顶级重磅事件（OpenAI 08-28 官宣 11-12 停供 Cursor，SpaceX $60B 收购后的连锁反应）。Anthropic 迅速站台加大算力支持，Cursor 称 OpenAI 仅占 5% 流量。切身影响一线开发者选型，观点+戏剧性满格。★可诚实自动做完：读各方官方声明+Forbes/TheNewStack 报道，不臆造传闻。"
+    links:
+      - "https://www.forbes.com/sites/digital-assets/2026/08/29/openai-terminates-cursor-api-access-following-spacex-acquisition/"
+      - "https://thenewstack.io/openai-blocks-cursor-access-anthropic-steps-in/"
+    tags: [cursor, openai, anthropic, spacex, ai-coding-market]
+    created: 2026-09-02
+    metrics: {}
+  - id: 2026-09-02-002
+    title: "Anthropic 开放 Agent Skills 行业标准：三层「渐进式加载」怎么把 Prompt 消耗降 10 倍"
+    alt_titles:
+      - "从 CLAUDE.md 到 SKILL.md：Anthropic 官方 Skills 标准全拆解"
+      - "别让 Agent 上下文直接爆炸：Agent Skills 的 Progressive Disclosure 架构实战"
+    track: depth
+    format: kouban
+    status: idea
+    score: 4.5
+    tier: S
+    scores: {practical: 5, social: 4, emotion: 4, hook: 4, timeliness: 4, trigger: 5}
+    urgency: queue
+    reason: "Anthropic 8 月底正式转正 Skills API 与 Agent Skills 开放标准（SKILL.md），三层渐进式披露（Level 1 发现 50-100 token、Level 2 激活 500 token、Level 3 执行脚本按需）彻底解决 Agent 工具膨胀导致的 Prompt 爆炸。正中账号工程提效与规范立身位，可直接带读者写一个标准 skill。★可诚实自动做完：读官方 docs/spec。"
+    links:
+      - "https://docs.anthropic.com/en/docs/agents-and-tools/agent-skills"
+      - "https://agentskills.io/specification"
+    tags: [agent-skills, skill-md, progressive-disclosure, context-management, prompt-engineering]
+    created: 2026-09-02
+    metrics: {}
+  - id: 2026-09-02-003
+    title: "DeepSeek-V4-Flash-Vision 开源：305B 专攻「看图操作软件」的多模态 Agent 架构拆解"
+    alt_titles:
+      - "不刷通用 VQA，专门看网页截屏和点按钮：DeepSeek 新开源的多模态模型"
+      - "DeepSeek-V4-Flash-Vision 源码拆解：DFlash Attention 怎么让 GUI Agent 提速 3 倍"
+    track: depth
+    format: kouban
+    status: idea
+    score: 4.4
+    tier: S
+    scores: {practical: 4, social: 5, emotion: 4, hook: 4, timeliness: 5, trigger: 4}
+    urgency: today
+    reason: "DeepSeek 8-31/09-01 刚在 Hugging Face 开源 305B 多模态实验模型（MIT 协议）。区别于通用看图问答，专门针对 GUI Agent、网页截屏解析、图表结构化与工具调用微调，配套 DFlash Attention。正中账号计算机控制/Agent 落地心智。★可诚实自动做完：读 HuggingFace 模型卡与官方说明，不自测不臆造数字。"
+    links:
+      - "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp"
+      - "https://github.com/deepseek-ai/DeepSeek-V4"
+    tags: [deepseek, deepseek-v4, vision-agent, gui-agent, open-weights, dflash-attention]
+    created: 2026-09-02
+    metrics: {}
+  - id: 2026-09-02-004
+    title: "Claude Code 与 Chrome 正式打通：终端 Agent 怎么一键接管浏览器调试"
+    alt_titles:
+      - "不用手写 Playwright：Claude in Chrome + Claude Code 联动实测"
+      - "终端到浏览器的最后 1 米：Claude Code 的 Chrome CDP 原生集成机制"
+    track: depth
+    format: kouban
+    status: idea
+    score: 4.25
+    tier: S
+    scores: {practical: 5, social: 4, emotion: 3, hook: 4, timeliness: 4, trigger: 4}
+    urgency: queue
+    reason: "Anthropic 8 月底更新打通 Claude Code 终端会话与 Chrome 浏览器扩展，实现无需配置代理与复杂脚本的无缝跨端调试与网页抓取。开发者每天都撞到的痛点，演示直观，完播性好。★可诚实自动做完：读官方 release 与文档演示。"
+    links:
+      - "https://docs.anthropic.com/en/docs/claude-code/chrome-integration"
+    tags: [chrome-devtools, browser-automation, cdp, developer-tools, browser-agent]
+    created: 2026-09-02
+    metrics: {}
+  - id: 2026-09-02-005
+    title: "Claude Code 新周限额 9 月 14 日生效：促销期结束后，怎么用 fast mode 把额度省出来"
+    alt_titles:
+      - "Claude Code 额度缩水倒计时：官方新分层政策与降本防超限指南"
+      - "你的 Claude Code 额度够用吗：新版周限额规则与 effort 调度技巧"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 3.8
+    tier: A
+    scores: {practical: 5, social: 3, emotion: 3, hook: 4, timeliness: 4, trigger: 5}
+    urgency: queue
+    reason: "Anthropic 官方公告 5-8 月促销额度于 8 月底结束后，新版每周用量分层体系将于 9 月 14 日硬性生效。切身利益相关（所有 Claude Code 付费用户），配合 fast mode 与 effort 调度给出立即可用的省额度方案，图文形态高信息密度。★可诚实自动做完：读官方 support 文档。"
+    links:
+      - "https://support.claude.com/en/articles/claude-code-usage-tiers-september-2026"
+    tags: [weekly-limits, tier-pricing, fast-mode, effort-control, quota-management]
+    created: 2026-09-02
+    metrics: {}
+  - id: 2026-09-02-006
+    title: "OpenAI Codex 自主交付闭环：从写代码到打包提交 App Store，它到底怎么做到的"
+    alt_titles:
+      - "AI Agent 已经能自己上架 iOS App 了：Codex 自动打包沙箱机制"
+      - "端到端交付的新阶段：Codex 云端沙箱与 AGENTS.md 规范拆解"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.95
+    tier: A
+    scores: {practical: 4, social: 4, emotion: 4, hook: 4, timeliness: 3, trigger: 3}
+    urgency: queue
+    reason: "OpenAI 近期展示 Codex 在云端沙箱自主完成 iOS 应用编译、签名与 App Store 提交流程，标志 Agent 边界从代码生成扩展到完整的发布工程管道。结合 AGENTS.md 与多 Agent 协作规范拆解其架构。★可诚实自动做完：读 OpenAI 官方博客与公开展示材料。"
+    links:
+      - "https://openai.com/index/codex-autonomous-app-delivery/"
+    tags: [openai, codex, autonomous-agent, app-store, ci-cd, cloud-sandbox]
+    created: 2026-09-02
+    metrics: {}
+  - id: 2026-09-02-007
+    title: "国产 Flash-tier 军备竞赛：Qwen3.8-Flash、GLM-5.3-Flash 与 DeepSeek-V4-Flash 同周较量"
+    alt_titles:
+      - "三家国产大厂同周推 Flash 极速模型：低延迟高吞吐怎么选"
+      - "Flash 模型白菜价：国内 API 厂商的高吞吐轻量模型横评"
+    track: traffic
+    format: tuwen
+    status: idea
+    score: 3.4
+    tier: B
+    scores: {practical: 3, social: 4, emotion: 3, hook: 3, timeliness: 4, trigger: 3}
+    urgency: queue
+    reason: "8 月下旬阿里 Qwen3.8-Flash、智谱 GLM-5.3-Flash、DeepSeek-V4-Flash 密集发布，集中主打混合注意力与极速推理，降低 Agent 调用成本。图文对比速览三者定位与价格。★可诚实自动做完：读三家官方发布页面与定价表。"
+    links:
+      - "https://qwenlm.github.io/blog/qwen3.8-flash/"
+      - "https://zhipuai.cn/glm-5.3-flash"
+    tags: [qwen, zhipu, deepseek, flash-model, model-comparison, cost-saving]
+    created: 2026-09-02
+    metrics: {}
+  - id: 2026-09-02-008
+    title: "Show HN 上的 Sawdust：当 MCP 协议插进物理工业与木工 CAD 仿真"
+    alt_titles:
+      - "Agent 走出浏览器：用 Model Context Protocol 控制实体设计与仿真"
+      - "MCP 真实工业落地：参数化建模中 AI Agent 是怎么自己跑工具的"
+    track: depth
+    format: kouban
+    status: idea
+    score: 3.7
+    tier: A
+    scores: {practical: 3, social: 4, emotion: 4, hook: 4, timeliness: 3, trigger: 3}
+    urgency: queue
+    reason: "Hacker News 8 月热议项目 Sawdust：展示了通过 MCP 协议将 Agent 接入复杂参数化物理建模与 CAD 仿真环境，Agent 能自主调用专业工具并反馈闭环。跳脱出常规 Web 编码，展示了协议化 Agent 的落地潜力。★可诚实自动做完：读 Show HN 讨论与 GitHub 仓库。"
+    links:
+      - "https://news.ycombinator.com/item?id=49382100"
+    tags: [mcp, model-context-protocol, cad-simulation, domain-agent, show-hn]
+    created: 2026-09-02
     metrics: {}
