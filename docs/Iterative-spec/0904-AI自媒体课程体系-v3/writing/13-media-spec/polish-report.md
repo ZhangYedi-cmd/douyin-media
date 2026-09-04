@@ -46,3 +46,12 @@
 4. 标题模板前缀检查：`## 1. 实施步骤` 模板块内原文"第一步…第 N 步"命中 check-lesson.sh 的标题前缀正则（脚本未跳过代码围栏内容），改成"第 1 步到第 N 步"（阿拉伯数字），语义不变，规避误判。
 5. 状态值核对：跑 `check-lesson.sh` 状态值核对通过，全文只用了 `tools/console/packages/core/src/state.ts` 里真实存在的 12 个状态值。
 6. 材料可溯核对：手工 grep 确认全部提到的 media 子命令名（promote / flip / publish-done / backlog add / backlog sweep / backlog apply / next-up / dashboard rebuild / metrics record / st / next / backlog ls / check / doctor）均能在 `tools/console/packages` 下找到出处；`docs/Iterative-spec/0818-看板工作台/01-CLI执行方案.md` 的"五百多行"这一说法核对为 549 行，属实。
+
+## 三、主回话验收后的修改
+
+验收通过，两处指出学员到第 13 课为止实际手上有什么材料的口径错误，均已改。
+
+1. 第 48 行（十四条命令来源那段）：原文把取题、出审、发布收尾、飞书审核回调、选题池入池清扫、复盘收口六类动作一并说成"都得手改"，没有区分学员到第 13 课实际做过哪些。改成前三类（取题、出审、发布收尾）是学员已经手改过 meta.yaml、backlog.yaml 记账的地方；飞书审核回调（17 到 19 课）、选题池入池清扫（23 课）、复盘收口（22 课）这三类学员现在还没碰到，是后面几课才会加进来的写点，命令清单现在就把这三类的位置留出来，理由是入口一次定完，比以后每加一课回头改一次执行方案省事。
+2. 第 94 行（状态迁移表引入那段）：原文把 ideated、drafting、review、approved、scheduled、published、rejected、retro_done 八档一并说成"学员从第 03 课到现在手改过"，但学员没有发布过内容，第 10 课成稿明写"合法的状态值到目前为止只有 ideated、drafting、review 这几档"。改成学员手改过的只有这三档，其余五档是参考流水线全套状态机里发布之后才会用到的名字，选题池那边同理只有 idea、picked 是学员用过的；执行方案要做的是趁这一课把迁移表画全，等第 20 课真正发布时不用回头再补。
+
+两处改完同步复制到 `courses/13-media写SPEC.md`，重跑 `check_style.py`（硬禁令清零，警告数不变，10 处，均为长句列举）和 `check-lesson.sh 实操`（RESULT: PASS，状态值核对与命令核对均通过）。`handoff-ledger.md` 第 13 行结尾未受影响，未改。
