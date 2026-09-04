@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>审核台 · Pipeline Console</title>
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  .queue-tabs { display: flex; gap: var(--space-1); padding: 3px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); }
+  .queue-tabs button { padding: 6px 10px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); font: 500 var(--text-xs)/1 var(--font-body); cursor: pointer; }
+  .queue-tabs button.on { background: var(--surface); color: var(--fg); box-shadow: var(--elev-ring); }
+  .preview-mini { aspect-ratio: 16 / 9; border-radius: var(--radius-md); background: color-mix(in oklab, var(--fg), black 15%); color: var(--surface); display: grid; place-items: center; text-align: center; padding: var(--space-5); margin-bottom: var(--space-4); }
+  .preview-mini strong { display: block; max-width: 15ch; font-size: var(--text-xl); line-height: 1.15; letter-spacing: -.02em; }
+  .review-note { width: 100%; min-height: 78px; resize: vertical; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--fg); background: var(--surface); font: 400 var(--text-sm)/1.5 var(--font-body); }
+  .review-note:focus { outline: none; border-color: var(--accent); box-shadow: var(--focus-ring); }
+  .inline-actions { display: flex; gap: var(--space-2); margin-top: var(--space-3); }
+  .inline-actions .btn { flex: 1; justify-content: center; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="side-brand">
+      <span class="logo">PL</span>
+      <div><b>Pipeline Console</b><small>抖音内容流水线 · 本地看板</small></div>
+    </div>
+    <nav class="side-nav">
+      <a href="overview.html">总览 <span class="en">Overview</span><span class="dot-warn" title="有警报"></span></a>
+      <a href="kanban.html">生产看板 <span class="en">Kanban</span><span class="cnt">5</span></a>
+      <a href="review.html" class="active">审核台 <span class="en">Review</span><span class="cnt" id="reviewNavCount">3</span></a>
+      <a href="backlog.html">选题池 <span class="en">Backlog</span><span class="cnt">8</span></a>
+      <a href="harness.html">治理线 <span class="en">Harness</span><span class="cnt" id="navUnread">3</span></a>
+      <a href="metrics.html">数据复盘 <span class="en">Metrics</span></a>
+    </nav>
+    <div class="side-foot">localhost:5170 · 审核发布闭环<br>V2 · 权限 L0/L1/L2<br>真相源：meta / logs / publish jobs</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="lights">
+        <span class="light ok" data-tip="飞书 server：进程运行中"><i></i>飞书</span>
+        <span class="light ok" data-tip="抖音 Cookie：有效，可执行发布前校验"><i></i>Cookie</span>
+        <span class="light bad" data-tip="TTS 余额不足，仅影响新内容生产"><i></i>TTS</span>
+        <span class="light warn" data-tip="1 个发布作业需要重试"><i></i>发布作业</span>
+      </div>
+      <div class="gsearch">
+        <input id="gsearch" class="gsearch-input" type="search" placeholder="搜 slug / 标题 / backlog id（⌘K）" autocomplete="off">
+        <div class="gsearch-pop" id="gsearchPop" hidden></div>
+      </div>
+      <div class="refresh-wrap">
+        <button class="btn btn-sm" id="refreshBtn"><span class="spin">⟳</span> 刷新</button>
+        <span class="refresh-time" id="refreshTime"></span>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="page-head">
+        <div>
+          <h1>审核台</h1>
+          <p class="sub" style="margin-top:4px;">集中处理质检完成后的人工决策，并衔接统一发布作业</p>
+        </div>
+        <div class="right queue-tabs" aria-label="审核队列筛选">
+          <button class="on" data-filter="all">全部 3</button>
+          <button data-filter="review">待我审核 1</button>
+          <button data-filter="approved">待发布 1</button>
+          <button data-filter="failed">发布失败 1</button>
+        </div>
+      </div>
+
+      <section class="card" style="margin-bottom: var(--space-4); padding-block: var(--space-4);" data-od-id="rv-stats">
+        <div class="stats">
+          <div class="stat"><div class="v" id="statReview">1</div><div class="l">待我审核 · 最长 72h</div></div>
+          <div class="stat"><div class="v">1</div><div class="l">已通过待发布</div></div>
+          <div class="stat"><div class="v" style="color:var(--danger);">1</div><div class="l">发布失败 · 可重试</div></div>
+          <div class="stat"><div class="v">18<small>h</small></div><div class="l">近 7 日平均审核耗时</div></div>
+          <div class="stat"><div class="v">6 / 7</div><div class="l">当前任务发布准备度</div></div>
+        </div>
+      </section>
+
+      <div class="review-shell">
+        <section class="card" data-od-id="rv-queue">
+          <header><h2>处理队列</h2><span class="right">按阻塞程度与等待时长排序</span></header>
+          <div class="review-list" id="reviewList">
+            <article class="review-item active" tabindex="0" data-status="review" data-id="EP18">
+              <div class="poster">AGENT<br>记忆系统</div>
+              <div>
+                <div class="title">EP18 Agent 记忆系统怎么搭</div>
+                <div class="sub">口播 · 深度 · Agent 实战 · 02:40</div>
+                <div class="flags"><span class="badge b-warn"><i></i>待审核 72h</span><span class="tag">终检 6 / 7</span><span class="tag">缺发布信息</span></div>
+              </div>
+              <div class="queue-action"><small>优先级 P1</small><a class="btn btn-sm" href="detail.html">开始审核</a></div>
+            </article>
+
+            <article class="review-item" tabindex="0" data-status="approved" data-id="EP16">
+              <div class="poster">自动化<br>流水线</div>
+              <div>
+                <div class="title">EP16 一条视频的自动化流水线</div>
+                <div class="sub">图文 · 流量 · 账号「AI 工具派」</div>
+                <div class="flags"><span class="badge b-success"><i></i>审核通过</span><span class="tag">终检 7 / 7</span><span class="tag">建议 20:00</span></div>
+              </div>
+              <div class="queue-action"><small>等待 18h</small><button class="btn btn-sm btn-primary" data-quick-publish>发布</button></div>
+            </article>
+
+            <article class="review-item" tabindex="0" data-status="failed" data-id="EP17">
+              <div class="poster">RAG<br>检索</div>
+              <div>
+                <div class="title">EP17 为什么你的 RAG 检索不准</div>
+                <div class="sub">口播 · 深度 · 上次执行 07-09 20:00</div>
+                <div class="flags"><span class="badge b-danger"><i></i>发布失败</span><span class="tag">提交发布超时</span><span class="tag">已通过审核</span></div>
+              </div>
+              <div class="queue-action"><small>失败 38h</small><button class="btn btn-sm" data-retry>重试发布</button></div>
+            </article>
+          </div>
+        </section>
+
+        <aside class="review-panel card" data-od-id="rv-decision">
+          <header><h2>当前任务</h2><span class="right mono" id="panelId">EP18</span></header>
+          <div class="preview-mini"><div><span class="eyebrow" style="color:color-mix(in oklab,var(--surface),transparent 35%);">02:40 · 1080P</span><strong id="panelTitle">Agent 为什么会失忆</strong></div></div>
+          <div class="readiness">
+            <div class="readiness-ring" id="readinessRing" data-score="6/7"></div>
+            <div><b id="readinessTitle">还差 1 项可发布</b><p class="muted" style="font-size:var(--text-xs);margin-top:3px;" id="readinessDesc">生成发布元信息后，可审核通过或直接发布。</p></div>
+          </div>
+          <div class="check-list" id="checkList">
+            <div class="check-row"><span class="mark">✓</span><span>文案、事实与配音</span><span class="state">通过</span></div>
+            <div class="check-row"><span class="mark">✓</span><span>画面、封面与合规</span><span class="state">通过</span></div>
+            <div class="check-row warn" id="metaCheck"><span class="mark">!</span><span>发布标题、话题与可见范围</span><span class="state">缺失</span></div>
+            <div class="check-row"><span class="mark">✓</span><span>Cookie 与账号连接</span><span class="state">有效</span></div>
+          </div>
+          <label class="eyebrow" for="reviewNote" style="display:block;margin:var(--space-4) 0 var(--space-2);">审核意见</label>
+          <textarea class="review-note" id="reviewNote" placeholder="通过时可选填；驳回时必须说明需要修改的内容"></textarea>
+          <div class="decision-actions">
+            <button class="btn btn-danger" id="rejectBtn">驳回修改</button>
+            <button class="btn" id="approveBtn" disabled>仅审核通过</button>
+            <button class="btn btn-primary" id="primaryDecision">生成发布信息</button>
+          </div>
+          <p class="muted" style="margin-top:var(--space-3);font-size:11px;line-height:1.6;">审核结论写入 review 记录；发布状态只由 douyin-publish 作业统一记账。</p>
+        </aside>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="publishModal" role="dialog" aria-modal="true" aria-labelledby="publishTitle">
+  <div class="modal">
+    <header><h2 id="publishTitle">确认发布</h2><button class="btn btn-sm btn-ghost modal-close" data-close>关闭</button></header>
+    <div class="modal-body">
+      <div class="publish-summary">
+        <div class="publish-cover" id="modalCover">自动化<br>流水线</div>
+        <div><b id="modalTask">EP16 一条视频的自动化流水线</b><p class="muted" id="modalMeta" style="font-size:var(--text-xs);margin-top:4px;">账号：AI 工具派 · 终检 7 / 7 · Cookie 有效</p></div>
+      </div>
+      <div class="form-stack" style="margin-top:var(--space-4);">
+        <label>发布时间<select id="publishMode"><option value="now">立即发布</option><option value="schedule">定时发布</option></select></label>
+        <label id="scheduleField" hidden>计划时间<input type="datetime-local" value="2026-07-12T20:00"></label>
+        <label>发布标题<input value="一条视频，如何从选题自动跑到发布？"></label>
+        <label>话题<input value="#AI工具 #内容自动化 #工作流"></label>
+      </div>
+    </div>
+    <footer><button class="btn" data-close>取消</button><button class="btn btn-primary" id="confirmPublish">确认并立即发布</button></footer>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const tabs = [...document.querySelectorAll(".queue-tabs button")];
+  const items = [...document.querySelectorAll(".review-item")];
+  const modal = document.getElementById("publishModal");
+  const mode = document.getElementById("publishMode");
+  const schedule = document.getElementById("scheduleField");
+  const confirm = document.getElementById("confirmPublish");
+  const primary = document.getElementById("primaryDecision");
+  const approve = document.getElementById("approveBtn");
+  const metaCheck = document.getElementById("metaCheck");
+  const ring = document.getElementById("readinessRing");
+
+  tabs.forEach((tab) => tab.addEventListener("click", () => {
+    tabs.forEach((x) => x.classList.toggle("on", x === tab));
+    items.forEach((item) => item.hidden = tab.dataset.filter !== "all" && item.dataset.status !== tab.dataset.filter);
+  }));
+
+  function setPanel(item) {
+    const status = item.dataset.status;
+    items.forEach((x) => x.classList.toggle("active", x === item));
+    document.getElementById("panelId").textContent = item.dataset.id;
+    document.getElementById("panelTitle").textContent = item.querySelector(".title").textContent.replace(/^EP\d+\s*/, "");
+    const isReview = status === "review";
+    const isReady = !isReview || item.dataset.ready === "1";
+    primary.dataset.ready = isReady ? "1" : "0";
+    primary.textContent = status === "failed" ? "重试发布" : status === "approved" ? "立即发布" : isReady ? "审核并发布" : "生成发布信息";
+    approve.disabled = !isReview || !isReady;
+    document.getElementById("rejectBtn").disabled = !isReview;
+    ring.dataset.score = isReady ? "7/7" : "6/7";
+    ring.style.setProperty("--pct", isReady ? "100%" : "86%");
+    metaCheck.classList.toggle("warn", !isReady);
+    metaCheck.querySelector(".mark").textContent = isReady ? "✓" : "!";
+    metaCheck.querySelector(".state").textContent = isReady ? "已生成" : "缺失";
+    document.getElementById("readinessTitle").textContent = status === "failed" ? "发布失败，可安全重试" : isReady ? "发布条件已满足" : "还差 1 项可发布";
+    document.getElementById("readinessDesc").textContent = status === "failed" ? "任务保持 approved，修复连接后重试即可。" : isReady ? "确认账号信息后可直接发布。" : "生成发布元信息后，可审核通过或直接发布。";
+  }
+
+  items.forEach((item) => item.addEventListener("click", (e) => {
+    if (e.target.closest("a,button")) return;
+    setPanel(item);
+  }));
+
+  function openPublish(e) {
+    const item = e && e.currentTarget ? e.currentTarget.closest(".review-item") : document.querySelector(".review-item.active");
+    if (item) {
+      setPanel(item);
+      const title = item.querySelector(".title").textContent;
+      document.getElementById("modalTask").textContent = title;
+      document.getElementById("modalCover").innerHTML = title.includes("RAG") ? "RAG<br>检索" : title.includes("Agent") ? "AGENT<br>记忆系统" : "自动化<br>流水线";
+      document.getElementById("modalMeta").textContent = `账号：AI 工具派 · 终检 7 / 7 · Cookie 有效${item.dataset.status === "failed" ? " · 本次为重试" : ""}`;
+    }
+    modal.classList.add("on");
+  }
+  function closePublish() { modal.classList.remove("on"); }
+  document.querySelectorAll("[data-quick-publish],[data-retry]").forEach((btn) => btn.addEventListener("click", openPublish));
+  document.querySelectorAll("[data-close]").forEach((btn) => btn.addEventListener("click", closePublish));
+  modal.addEventListener("click", (e) => { if (e.target === modal) closePublish(); });
+  mode.addEventListener("change", () => {
+    schedule.hidden = mode.value !== "schedule";
+    confirm.textContent = mode.value === "schedule" ? "确认排期至 7 月 12 日 20:00" : "确认并立即发布";
+  });
+
+  primary.addEventListener("click", () => {
+    if (primary.dataset.ready === "1") { openPublish(); return; }
+    primary.disabled = true;
+    primary.textContent = "正在生成发布信息…";
+    setTimeout(() => {
+      primary.disabled = false;
+      primary.dataset.ready = "1";
+      document.querySelector(".review-item.active").dataset.ready = "1";
+      primary.textContent = "审核并发布";
+      approve.disabled = false;
+      ring.dataset.score = "7/7";
+      ring.style.setProperty("--pct", "100%");
+      metaCheck.classList.remove("warn");
+      metaCheck.querySelector(".mark").textContent = "✓";
+      metaCheck.querySelector(".state").textContent = "已生成";
+      document.getElementById("readinessTitle").textContent = "发布条件已满足";
+      document.getElementById("readinessDesc").textContent = "可仅通过审核，或确认账号信息后直接发布。";
+      odToast("4-publish.md 已生成，终检 F 已通过");
+    }, 700);
+  });
+
+  approve.addEventListener("click", () => {
+    const active = document.querySelector(".review-item.active");
+    active.dataset.status = "approved";
+    const badge = active.querySelector(".flags .badge");
+    badge.className = "badge b-success";
+    badge.innerHTML = "<i></i>审核通过";
+    odToast("审核已通过，任务进入 approved 待发布");
+    setPanel(active);
+  });
+
+  document.getElementById("rejectBtn").addEventListener("click", () => {
+    const note = document.getElementById("reviewNote");
+    if (!note.value.trim()) { note.focus(); odToast("驳回前请填写具体修改意见"); return; }
+    const active = document.querySelector(".review-item.active");
+    active.dataset.status = "rejected";
+    const badge = active.querySelector(".flags .badge");
+    badge.className = "badge b-danger";
+    badge.innerHTML = "<i></i>已驳回";
+    active.style.opacity = ".6";
+    odToast("已驳回至 drafting，并记录审核意见");
+  });
+
+  confirm.addEventListener("click", () => {
+    const active = document.querySelector(".review-item.active");
+    active.dataset.status = "publishing";
+    const badge = active.querySelector(".flags .badge");
+    badge.className = "badge b-accent";
+    badge.innerHTML = "<i></i>发布中";
+    confirm.disabled = true;
+    confirm.textContent = "正在提交发布作业…";
+    setTimeout(() => {
+      closePublish();
+      confirm.disabled = false;
+      confirm.textContent = "确认并立即发布";
+      odToast("发布作业已启动：上传视频 → 封面 → 文案 → 提交 → 记账");
+    }, 850);
+  });
+
+  setPanel(items[0]);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>总览 · Pipeline Console</title>
+<link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="side-brand">
+      <span class="logo">PL</span>
+      <div><b>Pipeline Console</b><small>抖音内容流水线 · 本地看板</small></div>
+    </div>
+    <nav class="side-nav">
+      <a href="overview.html" class="active">总览 <span class="en">Overview</span><span class="dot-warn" title="有警报"></span></a>
+      <a href="kanban.html">生产看板 <span class="en">Kanban</span><span class="cnt">5</span></a>
+      <a href="review.html">审核台 <span class="en">Review</span><span class="cnt">3</span></a>
+      <a href="backlog.html">选题池 <span class="en">Backlog</span><span class="cnt">8</span></a>
+      <a href="harness.html">治理线 <span class="en">Harness</span><span class="cnt" id="navUnread">3</span></a>
+      <a href="metrics.html">数据复盘 <span class="en">Metrics</span></a>
+    </nav>
+    <div class="side-foot">localhost:5170 · 审核发布闭环<br>V2 · 权限 L0/L1/L2<br>真相源：meta / logs / publish jobs</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="lights">
+        <span class="light ok" data-tip="飞书 server：进程运行中（ps 检查 server.py）"><i></i>飞书</span>
+        <span class="light ok" data-tip="抖音 cookie：有效 · 读 07-10 sau check 缓存，不主动外呼"><i></i>Cookie</span>
+        <span class="light bad" data-tip="TTS 余额：今日 daily-run 日志出现 1008 余额不足"><i></i>TTS</span>
+        <span class="light warn" data-tip="git 工作区：2 个未提交变更"><i></i>git</span>
+      </div>
+      <div class="gsearch">
+        <input id="gsearch" class="gsearch-input" type="search" placeholder="搜 slug / 标题 / backlog id（⌘K）" autocomplete="off">
+        <div class="gsearch-pop" id="gsearchPop" hidden></div>
+      </div>
+      <div class="refresh-wrap">
+        <button class="btn btn-sm" id="refreshBtn"><span class="spin">⟳</span> 刷新</button>
+        <span class="refresh-time" id="refreshTime"></span>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="page-head">
+        <h1>总览</h1>
+        <span class="sub mono">2026-07-11 周六 · 10 秒回答：今天正常吗 / 有几条在制 / 有什么要我处理</span>
+      </div>
+
+      <div class="grid" style="grid-template-columns: 2fr 1fr;">
+
+        <!-- ══ 左列 ══ -->
+        <div class="grid" style="align-content: start;">
+
+          <!-- 1.1 今日运行卡 -->
+          <section class="card" data-od-id="ov-dailyrun">
+            <header>
+              <h2>今日运行</h2>
+              <span class="badge b-danger"><i></i>阻塞</span>
+              <span class="right mono">pipeline/logs/2026-07-11.md</span>
+            </header>
+            <p><b class="mono">2026-07-11 04:30 · daily-run</b>　EP19《MCP 三分钟讲明白》在配音阶段失败：火山 TTS 返回 <b>1008（余额不足）</b>，本次产出 0 条，后续步骤未执行。</p>
+            <details class="fold" style="margin-top: var(--space-2);">
+              <summary>点开看日志全文</summary>
+              <div class="logblock">04:30:02 [daily-run] 开始 · 队列 1 条：EP19 mcp-explained
+04:30:05 [step 2/6] 稿件检查 2-script.md v2 ✓
+04:31:47 [step 3/6] 配音 volcano-tts …… <span class="hl">✗ 失败：code=1008 余额不足</span>
+04:31:47 [daily-run] <span class="hl">阻塞退出</span> · 产出 0 · 建议：充值后重跑</div>
+            </details>
+          </section>
+
+          <!-- 1.3 警报区（核心） -->
+          <section class="card" data-od-id="ov-alerts">
+            <header>
+              <h2>警报</h2>
+              <span class="badge b-danger"><i></i>2 阻塞</span>
+              <span class="badge b-warn"><i></i>3 关注</span>
+              <span class="right">V1 内置 5 条规则 · 多源交叉校验</span>
+            </header>
+
+            <div class="alert a-danger">
+              <span class="sev"></span>
+              <div>
+                <b>日志报错 · TTS 余额阻塞全线配音</b>
+                <p class="why">最新 daily-run 日志命中关键词「1008」 · <code>pipeline/logs/2026-07-11.md</code> · 建议：火山引擎充值后重跑 daily-run</p>
+              </div>
+              <span class="act"><a href="#" onclick="odToast('原型内不执行 · 实际会在编辑器打开该日志'); return false;">看日志</a></span>
+            </div>
+
+            <div class="alert a-danger">
+              <span class="sev"></span>
+              <div>
+                <b>发布失败 · EP17 提交超时，保持 approved 可重试</b>
+                <p class="why">发布作业停在「提交发布」步骤，未写入 publish_url · <code>publish-jobs/EP17.json</code> · 建议：确认 Cookie 后重试，禁止直接翻 published</p>
+              </div>
+              <span class="act"><a href="review.html">重试发布</a></span>
+            </div>
+
+            <div class="alert a-warn">
+              <span class="sev"></span>
+              <div>
+                <b>待审积压 · EP18 在 review 停留 72h（&gt;48h）</b>
+                <p class="why">人审卡住，schedule 窗口在收窄 · <code>content/2026-07-04-agent-memory/</code> · 建议：今天出审</p>
+              </div>
+              <span class="act"><a href="review.html">去审核台</a></span>
+            </div>
+
+            <div class="alert a-warn">
+              <span class="sev"></span>
+              <div>
+                <b>双层不同步 · EP15 已发布但 backlog 仍是 picked</b>
+                <p class="why">meta=published，backlog T-031 未翻 · <code>content/_backlog/backlog.yaml</code> · 建议：按 Step 5 口径补翻选题层状态</p>
+              </div>
+              <span class="act"><a href="backlog.html">看条目</a></span>
+            </div>
+
+            <div class="alert a-warn">
+              <span class="sev"></span>
+              <div>
+                <b>治理逾期 · douyin-ideate 已 5 天未跑（周期 2 天 ×1.5）</b>
+                <p class="why">选题补给断供风险 · <code>harness/logs/index.jsonl</code> · 建议：手动跑一次 douyin-ideate</p>
+              </div>
+              <span class="act"><a href="harness.html">治理线</a></span>
+            </div>
+          </section>
+
+          <!-- 1.2 在制统计条 -->
+          <section class="card" data-od-id="ov-wip">
+            <header>
+              <h2>在制统计</h2>
+              <span class="right">扫描 16 个 meta.yaml · 口径与生产看板列计数一致</span>
+            </header>
+            <div class="stats">
+              <div class="stat"><div class="v">1</div><div class="l">ideated 已立项</div></div>
+              <div class="stat"><div class="v">1</div><div class="l">drafting 在写</div></div>
+              <div class="stat"><div class="v" style="color: color-mix(in oklab, var(--warn), var(--fg) 40%);">1</div><div class="l">review 待我审核</div></div>
+              <div class="stat"><div class="v">1</div><div class="l">approved 待发</div></div>
+              <div class="stat"><div class="v">0</div><div class="l">publishing 发布中</div></div>
+              <div class="stat"><div class="v">1</div><div class="l">scheduled 已排期</div></div>
+              <div class="stat" style="border-left: 1px solid var(--border); padding-left: var(--space-4);"><div class="v">5<small> 条</small></div><div class="l">在制合计（published 不计入）</div></div>
+            </div>
+            <p class="muted" style="margin-top: var(--space-3); font-size: var(--text-xs);">已发布累计 10 · rejected 1 · <a href="kanban.html">打开生产看板 →</a></p>
+          </section>
+        </div>
+
+        <!-- ══ 右列 ══ -->
+        <div class="grid" style="align-content: start;">
+
+          <!-- 1.4 待人处理清单 -->
+          <section class="card" data-od-id="ov-todo">
+            <header><h2>待我处理</h2><span class="right" id="todoCount">4 项</span></header>
+            <div class="todo-list">
+              <a href="review.html"><span class="badge b-warn"><i></i>待审</span> EP18 Agent 记忆系统怎么搭 <span class="go">review 3 天 → 开始审核</span></a>
+              <a href="review.html"><span class="badge b-success"><i></i>待发</span> EP16 一条视频的自动化流水线 <span class="go">approved → 发布</span></a>
+              <a href="review.html"><span class="badge b-danger"><i></i>失败</span> EP17 RAG 检索不准 <span class="go">提交超时 → 重试</span></a>
+              <a href="harness.html"><span class="badge b-accent"><i></i>未读</span> <span id="unreadLabel">治理报告 ×3</span> <span class="go">→ 治理线</span></a>
+            </div>
+          </section>
+
+          <!-- 1.5 治理线心跳 -->
+          <section class="card" data-od-id="ov-heartbeat">
+            <header><h2>治理线心跳</h2><span class="right">4 个 enabled 任务</span></header>
+            <div class="hb">
+              <div class="hb-row">
+                <div class="name">douyin-ideate<small>periodic · 2 天</small></div>
+                <div class="hb-bar over"><i style="width: 100%;"></i></div>
+                <div class="val" style="color: color-mix(in oklab, var(--warn), var(--fg) 40%);">距上次 5 天 ⚠ 逾期</div>
+              </div>
+              <div class="hb-row">
+                <div class="name">backlog-gardener<small>periodic · 7 天</small></div>
+                <div class="hb-bar"><i style="width: 57%;"></i></div>
+                <div class="val">距上次 4 天</div>
+              </div>
+              <div class="hb-row">
+                <div class="name">skill-auditor<small>periodic · 14 天</small></div>
+                <div class="hb-bar"><i style="width: 64%;"></i></div>
+                <div class="val">距上次 9 天</div>
+              </div>
+              <div class="hb-row">
+                <div class="name">douyin-retro<small>event · 发布后 24h/72h/7d</small></div>
+                <div class="muted" style="font-size: 11px;">事件触发 · 不判逾期</div>
+                <div class="val">最近 07-10 22:00</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 1.6 选题池水位 -->
+          <section class="card" data-od-id="ov-backlog">
+            <header><h2>选题池水位</h2><span class="right mono">backlog.yaml</span></header>
+            <div class="stats">
+              <div class="stat"><div class="v">8</div><div class="l">idea 存量（≥3 健康）</div></div>
+              <div class="stat"><div class="v">8.7</div><div class="l">最高分 · T-042</div></div>
+            </div>
+            <p style="margin-top: var(--space-3); font-size: var(--text-xs);" class="muted">距上次 ideate <b style="color: color-mix(in oklab, var(--warn), var(--fg) 40%);">5 天</b>（联动治理逾期警报） · <a href="backlog.html">打开选题池 →</a></p>
+          </section>
+
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+/* 未读治理报告数随本地已读标记联动（存 localStorage，不写仓库） */
+document.addEventListener("DOMContentLoaded", () => {
+  const ids = ["rpt-2026-07-10-retro-EP14", "rpt-2026-07-09-retro-EP15", "rpt-2026-07-07-backlog-gardener"];
+  const unread = ids.filter((id) => !odIsRead(id)).length;
+  const nav = document.getElementById("navUnread");
+  const label = document.getElementById("unreadLabel");
+  const count = document.getElementById("todoCount");
+  if (nav) nav.textContent = unread;
+  if (label) label.textContent = unread > 0 ? `治理报告 ×${unread}` : "治理报告已读完";
+  if (count) count.textContent = `${3 + unread} 项`;
+});
+</script>
+</body>
+</html>
