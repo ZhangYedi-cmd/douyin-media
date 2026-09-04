@@ -16,9 +16,9 @@ cjk=$(grep -o '[一-龥]' "$f" | wc -l | tr -d ' ')
 code=$(awk '/^```/{c=!c; next} c{n++} END{print n+0}' "$f")
 blocks=$(grep -c '^```' "$f"); blocks=$((blocks/2))
 fix=$(grep -c '多半是' "$f")
-if [ "$kind" = "实操" ]; then maxc=5850; maxcode=200; else maxc=5200; maxcode=30; fi  # 2026-09-04 参考值上调 30%，只报数不判
-echo "汉字 ${cjk} / 参考值 ${maxc}（只报数不判）；代码行 ${code} / 上限 ${maxcode}；围栏块 ${blocks}；排障句(多半是) ${fix}"
-[ "$cjk" -le "$maxc" ] || echo "[INFO] 汉字 ${cjk} 超出参考值 ${maxc}，字数不设限，不算失败"
+if [ "$kind" = "实操" ]; then maxcode=200; else maxcode=30; fi; maxc=10000  # 2026-09-04 篇幅按内容重要性定，唯一硬线 1 万汉字
+echo "汉字 ${cjk} / 上限 ${maxc}（按内容重要性定篇幅，只卡上限）；代码行 ${code} / 上限 ${maxcode}；围栏块 ${blocks}；排障句(多半是) ${fix}"
+[ "$cjk" -le "$maxc" ] || { echo "[FAIL] 汉字超过 1 万上限"; fail=1; }
 [ "$code" -le "$maxcode" ] || { echo "[FAIL] 代码行超限"; fail=1; }
 if [ "$kind" = "实操" ]; then
   [ "$blocks" -ge 3 ] || { echo "[FAIL] 实操篇 Prompt/命令块少于 3"; fail=1; }
