@@ -16,7 +16,7 @@ cjk=$(grep -o '[一-龥]' "$f" | wc -l | tr -d ' ')
 code=$(awk '/^```/{c=!c; next} c{n++} END{print n+0}' "$f")
 blocks=$(grep -c '^```' "$f"); blocks=$((blocks/2))
 fix=$(grep -c '多半是' "$f")
-if [ "$kind" = "实操" ]; then maxc=4500; maxcode=200; else maxc=4000; maxcode=30; fi
+if [ "$kind" = "实操" ]; then maxc=5850; maxcode=200; else maxc=5200; maxcode=30; fi  # 2026-09-04 参考值上调 30%，只报数不判
 echo "汉字 ${cjk} / 参考值 ${maxc}（只报数不判）；代码行 ${code} / 上限 ${maxcode}；围栏块 ${blocks}；排障句(多半是) ${fix}"
 [ "$cjk" -le "$maxc" ] || echo "[INFO] 汉字 ${cjk} 超出参考值 ${maxc}，字数不设限，不算失败"
 [ "$code" -le "$maxcode" ] || { echo "[FAIL] 代码行超限"; fail=1; }
