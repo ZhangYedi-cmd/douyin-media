@@ -49,7 +49,7 @@ grep -oE 'npm run [a-z:-]+|[a-zA-Z0-9_-]+\.(mjs|sh|ts|py)\b|media [a-z-]+' "$f" 
   if grep -rqF -- "$key" "$repo/.claude/skills" "$repo/pipeline" "$repo/tools/console/packages" "$repo"/content/*/*/build/package.json 2>/dev/null; then
     echo "  ok   $c"
   else
-    echo "  [WARN] 未在仓库找到: $c（人工确认）"
+    echo "  [WARN] 未在仓库找到: ${c}（人工确认）"
   fi
 done
 
