@@ -135,7 +135,7 @@ media backlog add content/_research/candidates-2026-09-04.yaml
 | 动作 | 触发命令 | 能不能自动 | 为什么 |
 |---|---|---|---|
 | 新候选入池去重 | `media backlog add` | 能 | 标签交集大于等于 2，或者标题子串加链接完全重合，直接拒收；阈值是人事先拍板的，跑的时候不产生新判断 |
-| 过期清扫 | `media backlog sweep --apply` | 能 | 参考流水线的两条窗口是 urgency 为 today 的候选超 2 天、时效分大于等于 4 的候选超 7 天，自动翻成 expired；你自己第 15 课 sweep 定的窗口按你的来，窗口数值同样是人事先定的 |
+| 过期清扫 | `media backlog sweep --apply` | 能 | 参考流水线的两条窗口是 urgency 为 today 的候选超 2 天、时效分大于等于 4 的候选超 7 天，自动翻成 expired；你自己的窗口这一课先定一个，让 AI 写进 sweep 的配置，数值同样是人事先定的，机器跑的时候不产生新判断 |
 | 撞题合并或剔除 | `media backlog apply` | 不能 | 先出一份变更提议报告，人审通过才落地，这条命令只作用于还是 idea 状态的条目 |
 
 清扫先看一遍再真落盘：
