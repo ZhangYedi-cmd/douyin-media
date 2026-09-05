@@ -99,7 +99,7 @@ tts.config.json 的 overrides，沉淀性规则回写 brain/ 里的账号级模�
 
 ### 3.2 overrides 落点：判完的结论记在哪
 
-语速和多音字这两项判完的结论要有地方落，落不下去就又回到了上一课那个流向没人管的格子。落点是 build 内那份 `tts.config.json` 的 `overrides` 字段，按段覆盖语速、音高和注音，全局那几个字段留空。学员第 04 课交付 `brain/tts.config.json` 时已经拿到这个字段的结构：逐段覆盖 speed、pitch、pronunciation、voice_id，键是 segment id。
+语速和多音字这两项判完的结论要有地方落，落不下去就又回到了上一课那个流向没人管的格子。落点是 build 内那份 `tts.config.json` 的 `overrides` 字段，按段覆盖语速、音高和注音，全局那几个字段留空。这个字段的结构第 04 课留了位置、第 05 课 tts-dub skill 定了形状：逐段覆盖 speed、pitch、pronunciation，键是 segment id。
 
 这份账号级模板会被复制进当条内容的 `build/`，配音脚本读的是那份副本。这一课判出来的语速和多音字问题，改动写进的正是这份 build 内的副本，只在这条内容里生效；只有沉淀性的读法规则，才回写账号级模板，供以后所有内容复用。
 

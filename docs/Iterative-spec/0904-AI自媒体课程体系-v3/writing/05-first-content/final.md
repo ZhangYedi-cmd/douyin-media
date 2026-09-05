@@ -15,7 +15,7 @@ mkdir -p content/<发布日>/<slug>
 cd content/<发布日>/<slug>
 ```
 
-开工前顺手确认两个开源 skill 还在位，第 02 课装的时候一个进了项目仓库、一个进了家目录：
+开工前顺手确认两个开源 skill 还在位，一个装在项目仓库里、一个装在家目录下：
 
 ```bash
 ls .claude/skills/web-video-presentation/SKILL.md
