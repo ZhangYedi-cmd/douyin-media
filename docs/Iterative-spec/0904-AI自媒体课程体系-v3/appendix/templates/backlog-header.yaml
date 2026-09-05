@@ -1,0 +1,33 @@
+# 选题池总账 —— 候选选题的唯一真相来源（粗粒度生命周期 + 去重 + 复盘留痕）
+# 由 douyin-ideate 技能追加与维护。
+#
+# 【状态分两层，别混】★ 单一真相源规则
+#   backlog(本文件) 管粗粒度三态 + 异常态，content 的 meta.yaml 管细粒度状态；backlog 不镜像细粒度状态。
+#   合法状态值与迁移规则唯一定义 = tools/console/packages/core/src/state.ts（活文档：`media flip --help` / `media st --help`）。
+#   backlog 只在两个时点翻动：promote(置 picked) 与 发布完成(置 published)，均经 `media` 命令记账。
+#   双向指针：backlog.content_path → 内容目录；content 的 meta.source → backlog id。
+#
+# 字段说明：
+#   id        唯一标识 YYYY-MM-DD-NNN
+#   title     建议标题
+#   alt_titles 备选标题
+#   track     depth(深度) | traffic(流量)
+#   format    kouban(口播) | tuwen(图文)
+#   status    见上（粗粒度三态 + 异常）
+#   content_path  promote 后回填，指向 content/<date>/<slug>/（picked/published 必填）
+#   score     总分（系列题免引擎打分，留空）
+#   tier      S/A/B/C/D
+#   scores    六维原始分 {practical,social,emotion,hook,timeliness,trigger}
+#   urgency   queue(可排队) | today(当天必发)
+#   reason    一句话推荐理由
+#   links     素材链接
+#   tags      归一化主题标签（30天去重比对用，如 [claude-code, agent]）
+#   created   入池日期
+#   metrics   发布后回填 {plays,完播率,likes,...}
+
+# ── 取题指针（daily-run 读）──
+# 人钦点下一条要做的选题：填 id，daily-run 最高优先取它，promote 后置回 null。
+# 为 null 时 daily-run 在 status:idea 中按 score 取最高（同分先 depth）。
+# 人挑题 = 只改这一个字段，不靠条目在文件里的物理位置。
+next_up: null
+
