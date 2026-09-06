@@ -13,7 +13,7 @@ python3 "$HOME/.claude/skills/ai-arch-tutorial-style/scripts/check_style.py" "$f
 
 echo; echo "== 篇幅 =="
 cjk=$(grep -o '[一-龥]' "$f" | wc -l | tr -d ' ')
-code=$(awk '/^```/{c=!c; next} c{n++} END{print n+0}' "$f")
+code=$(awk '/^```/{ if(!c){c=1; m=($0 ~ /mermaid/)} else {c=0; m=0}; next } c && !m {n++} END{print n+0}' "$f")
 blocks=$(grep -c '^```' "$f"); blocks=$((blocks/2))
 if [ "$kind" = "实操" ]; then maxcode=200; else maxcode=30; fi; maxc=10000  # 2026-09-04 篇幅按内容重要性定，唯一硬线 1 万汉字
 echo "汉字 ${cjk} / 上限 ${maxc}（按内容重要性定篇幅，只卡上限）；代码行 ${code} / 上限 ${maxcode}；围栏块 ${blocks}"
