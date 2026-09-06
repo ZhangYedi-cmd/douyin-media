@@ -8,7 +8,7 @@ description: 治理线的自审元层——读 harness/logs/index.jsonl 运行�
 > 审的是**治理线自己**，不碰 brain/、不碰内容、不碰生产线。
 > 自调边界、限幅表、调整规则的**唯一出处 = `harness/tasks.md` 本任务的任务卡**，本文件不复述数值。
 
-## 干活前必读
+## 开工前必读
 1. `harness/tasks.md` 本任务的任务卡（边界表 + 调整规则 + 采纳率口径）。
 2. `harness/logs/index.jsonl`（输入账本）；抽样读对应报告核对 findings 与 applied。
 

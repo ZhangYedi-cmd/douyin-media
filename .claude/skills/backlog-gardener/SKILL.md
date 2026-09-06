@@ -5,7 +5,7 @@ description: 治理线任务——理选题池的「撞题」维度：扫 conten
 
 # backlog-gardener · 理池（撞题与重复）
 
-> 属治理线（`harness/`），任务卡见 `harness/tasks.md`。铁律：**只产提议报告，不翻任何状态**——
+> 属治理线（`harness/`），任务卡见 `harness/tasks.md`。硬约束：**只产提议报告，不翻任何状态**——
 > 合并/剔除是判断性变更，人审通过后经 `media backlog apply` 落地（提议报告路径随之写进条目注释可溯源）。
 
 ## 职责边界

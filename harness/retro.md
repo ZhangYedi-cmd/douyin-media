@@ -19,7 +19,7 @@
 2. 归因:钩子？选题？封面？时段？形式？(见 `douyin-retro/references/funnel-attribution.md`)
 3. 看评论区抓真实反馈与新选题线索。
 
-## 沉淀(关键)——只产**变更提议**,人审后应用(治理线铁律)
+## 沉淀(关键)——只产**变更提议**,人审后应用(治理线硬约束)
 - 有效打法 → 建议改 `brain/benchmarks.md`。
 - 好选题源 → 建议标注 `brain/sources.md`。
 - 新选题线索 → 建议进 `content/_backlog/`。

@@ -26,7 +26,7 @@
 4. **出审**：`media flip <slug> review`（一条命令完成记账，dashboard 机器区自动刷新；`media` 不可见时兜底 `node tools/console/packages/cli/dist/index.js flip <slug> review`），经 **`feishu-notify`** 推审核卡（见 `pipeline/3-review.md`）。前提：`pipeline/2-create.md` 成片终检闸 A–G 全过（G = ★出审前必产 `4-publish.md`，规则细节以那里为准，教训 L5/L6）。
 5. **不发布**：到此停。等人在飞书点过/打回。
 
-## 阻塞即上报（铁律）
+## 阻塞即上报（硬约束）
 凡导致**当日无产出或流程挂起**的事件——取题空、TTS 余额 1008、录制失败超重试、审批通道故障等——
 一律经 `feishu-notify` 能力三推文本通知给人（写清：事件 / 根因 / 需要人做什么），同时写运行日志。
 **只写本地日志不算上报**（教训：2026-06-30~07-05 连续 6 天空跑，日志喊人 6 天没人看见）。

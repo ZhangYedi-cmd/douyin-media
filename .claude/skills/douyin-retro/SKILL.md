@@ -8,7 +8,7 @@ description: 抖音作品复盘引擎。复用 social-auto-upload 的 cookie 免
 > 用数据回答「这条为什么火/不火」,把结论沉淀回账号大脑。
 > 触发方式:**手动**(`/douyin-retro [slug|all]`)。定时 cron 待手动验稳后再加。
 
-## 干活前必读
+## 开工前必读
 1. `brain/benchmarks.md`(历史均值基线、已知有效打法)、`brain/positioning.md`(支柱定位)。
 2. `harness/retro.md`(治理任务约束)、`harness/README.md`(治理线宪法)。
 3. 本 skill 的 `references/funnel-attribution.md`(归因模型,核心)。
@@ -63,13 +63,13 @@ cd tools/social-auto-upload
 - `dashboard.md`:更新「数据汇总」表(人写区,仍手写,归因叙事不代 CLI 判断)。
 - 原始 xlsx 留 `content/_research/`(可追溯)。
 
-### 4. 产「大脑变更提议」给人审(治理线铁律:不自动改 brain)
+### 4. 产「大脑变更提议」给人审(治理线硬约束:不自动改 brain)
 按 `funnel-attribution.md` 第四节,把建议的大脑变更**列进执行记录报告**,每条注明"依据哪次复盘、哪条数据",**人审通过后才由人(或经授权的 AI)应用**:
 - 有效打法 + 刷新历史均值基线 → 建议改 `brain/benchmarks.md`。
 - 高表现信息源 → 建议给 `brain/sources.md` 打标。
 - 评论热词/衍生线索 → 建议进 `content/_backlog/`。
 - 画像/涨粉系统性异常 → 建议动 `positioning.md`/`persona.md`,附依据。
-> **铁律**:复盘只产报告与变更提议,**绝不自动改 `brain/` 或线上资产**——与治理线宪法、发布铁律一致(`harness/README.md`)。
+> **硬约束**:复盘只产报告与变更提议,**绝不自动改 `brain/` 或线上资产**——与治理线宪法、发布硬约束一致(`harness/README.md`)。
 
 ## 时机(对齐 harness/retro.md)
 发布后 **24h / 72h / 7d** 各跑一次,看衰减与长尾。手动随时可跑。

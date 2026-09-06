@@ -15,23 +15,24 @@ echo; echo "== 篇幅 =="
 cjk=$(grep -o '[一-龥]' "$f" | wc -l | tr -d ' ')
 code=$(awk '/^```/{c=!c; next} c{n++} END{print n+0}' "$f")
 blocks=$(grep -c '^```' "$f"); blocks=$((blocks/2))
-fix=$(grep -c '多半是' "$f")
 if [ "$kind" = "实操" ]; then maxcode=200; else maxcode=30; fi; maxc=10000  # 2026-09-04 篇幅按内容重要性定，唯一硬线 1 万汉字
-echo "汉字 ${cjk} / 上限 ${maxc}（按内容重要性定篇幅，只卡上限）；代码行 ${code} / 上限 ${maxcode}；围栏块 ${blocks}；排障句(多半是) ${fix}"
+echo "汉字 ${cjk} / 上限 ${maxc}（按内容重要性定篇幅，只卡上限）；代码行 ${code} / 上限 ${maxcode}；围栏块 ${blocks}"
 [ "$cjk" -le "$maxc" ] || { echo "[FAIL] 汉字超过 1 万上限"; fail=1; }
 [ "$code" -le "$maxcode" ] || { echo "[FAIL] 代码行超限"; fail=1; }
 if [ "$kind" = "实操" ]; then
   [ "$blocks" -ge 3 ] || { echo "[FAIL] 实操篇 Prompt/命令块少于 3"; fail=1; }
-  [ "$fix" -ge 2 ] || { echo "[FAIL] 排障句少于 2"; fail=1; }
 fi
 
 echo; echo "== 装腔词表（绝对优先级，命中即 FAIL；代码块内不查）=="
-hits=$(awk '/^```/{c=!c; next} !c' "$f" | grep -nE '显然|毫无疑问|不言而喻|其实很简单|这并不难|稍微想想|切记|务必|你必须明白|真正懂|很多人都(做错|不知道|以为)|市面上的教程|我当年|我也是.{0,12}才(明白|懂|发现)|这一句是(关键|全文|骨架)|赋能|抓手|颗粒度|心智|不是[^。！？]{1,30}而是|并非[^。！？]{1,30}而是|与其说|看似[^。！？]{1,20}实则' | cut -c1-120)
+hits=$(awk '/^```/{c=!c; next} !c' "$f" | grep -nE '显然|毫无疑问|不言而喻|其实很简单|这并不难|稍微想想|切记|务必|你必须明白|真正懂|很多人都(做错|不知道|以为)|市面上的教程|我当年|我也是.{0,12}才(明白|懂|发现)|这一句是(关键|全文|骨架)|赋能|抓手|颗粒度|心智|不是[^。！？]{1,30}而是|并非[^。！？]{1,30}而是|与其说|看似[^。！？]{1,20}实则|铁律|金科玉律|颠扑不破|毫无疑问|毋庸置疑|不容置疑|一劳永逸' | cut -c1-120)
 if [ -n "$hits" ]; then echo "$hits"; echo "[FAIL] 装腔词命中"; fail=1; else echo "通过"; fi
 
 echo; echo "== 过度自信词表（绝对优先级，命中即 FAIL；代码块内不查）=="
 hits=$(awk '/^```/{c=!c; next} !c' "$f" | grep -nE '一定能|一定会|必然|永远(不会|都)|绝对(不|能|可以)|100 ?%|万无一失|彻底解决|完美(解决|适配|运行)|只要[^。！？]{1,20}就(能|可以|不会)|保证(不|能|万)|包治|一劳永逸|从此(不再|告别)|再也不(会|用)' | cut -c1-120)
 if [ -n "$hits" ]; then echo "$hits"; echo "[FAIL] 过度自信词命中"; fail=1; else echo "通过"; fi
+
+echo; echo "== AI 味扫描器（ai-patterns 24 模式 + 口语词 + 标题体系）=="
+python3 "$(dirname "$0")/writing/scan-ai.py" "$f" || { echo "[FAIL] scan-ai 存在 ERROR"; fail=1; }
 
 echo; echo "== 标题模板前缀 =="
 grep -nE '^#{1,3} .*(第[一二三四五六七八九十]+步|WHAT|WHY|HOW|原理深挖|跟做)' "$f" && { echo "[FAIL] 标题含模板前缀"; fail=1; } || echo "通过"

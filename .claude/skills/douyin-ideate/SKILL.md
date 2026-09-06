@@ -12,7 +12,7 @@ description: >
 
 把"靠灵感找选题"变成"用系统产选题"。每次运行回答三问：AI 圈此刻什么有料(What)、为什么会火(Why)、缺口在哪(Gap)，再按账号定位排出可执行选题清单。
 
-## 干活前必读
+## 开工前必读
 1. `brain/positioning.md`（支柱、6:4 配比）、`brain/persona.md`、`brain/style-guide.md`
 2. `brain/sources.md`（抓哪些源、抖音搜哪些词、对标账号）
 3. `references/scoring.md`（抖音版双赛道 6 维权重 + 形式判断规则）

@@ -13,14 +13,14 @@
 > 四件套链路：**web-video-presentation（做网页+分段文案）→ tts-dub（配音）→ dubbing-check（体检）→ 录制（出 mp4）**。每个 step 都要有口播（无静音步），否则录制时间线会错位。
 
 1. 写口播稿 `2-script.md`——**这是口播稿唯一真相源**。钩子(3s) → 分点主体 → takeaway/互动。
-   - **冷开铁律**：第一句必须**自成立**，禁止依赖"上一集/上文/前面说过"——短视频第一次刷到的人没有上下文，开口就靠承接=劝退。系列承接放结尾钩，不放开头。
+   - **冷开硬约束**：第一句必须**自成立**，禁止依赖"上一集/上文/前面说过"——短视频第一次刷到的人没有上下文，开口就靠承接=劝退。系列承接放结尾钩，不放开头。
 2. **做网页**：用 **`web-video-presentation`** 把 `2-script.md` 做成点击驱动的网页演示（动态、电影感）。
    - 它有硬节点：会停下跟你对齐"稿子/outline/主题/素材/开发模式"5 件事。
    - **落位**：Vite 项目放 `build/`（工作目录，不进 assets）；内部 script.md 是 `2-script.md` 的派生件，**以 2-script.md 为准**。
    - 在 `build/` 里 `npm run extract-narrations` → 产出 `audio-segments.json`（分段文案）。**不要**用它自带的 `synthesize-audio`（走坏掉的 mmx CLI）。
 3. **配音**：用 **`tts-dub`** 合成——在 `build/` 里跑 `node <tts-dub>/scripts/synthesize.mjs --config tts.config.json --segments audio-segments.json`。config 用 **build 内的 `tts.config.json`**（从账号级模板 `brain/tts.config.json` 复制，克隆音色 `moss_audio_4dd8142e…`），输出落 `build/public/audio/<chapter>/<step>.mp3`。多音字/单段语速问题加 build 内 config 的 `overrides`；沉淀性读法规则回写 `brain/tts.config.json` 模板。
    - **余额探测**：批量合成前先单段试合成探余额；返 1008（余额尽）→ 停在「就差配音」`status=drafting`，推飞书报充值，不推审不硬跑（L9）。
-   - **真相源铁律**（防音画不符）：synthesize 读的是 `audio-segments.json`，不是 `narrations.ts`。**改过任何 narration 文案，必须先 `npm run extract-narrations` 重抽，再 `rm` 改动段 mp3（否则按文件名被 skip）再合成**。否则会"画面新文案、声音旧文案"。
+   - **真相源硬约束**（防音画不符）：synthesize 读的是 `audio-segments.json`，不是 `narrations.ts`。**改过任何 narration 文案，必须先 `npm run extract-narrations` 重抽，再 `rm` 改动段 mp3（否则按文件名被 skip）再合成**。否则会"画面新文案、声音旧文案"。
    - **死气检查**：合成后 `silencedetect` 扫各段，>0.45s 的内部死气（常因 `「」`引号 / `——` / 拟声词）用 `rec/depause.mjs` 去停顿（cap 0.25 / minact 0.45，切静音边界不切词）。
      - **不能原地写**（`in == out` 时 ffmpeg 截断输入、**静默失败、exit 0**）：写临时文件再 move；**跑完必 silencedetect 复扫验数为 0**，别信 exit code（L16）。
    - **多音字同段两读**：逐段注音只能解「同字在不同段不同读」；**同一段内同字两读**（如「就得打折 děi」+「诚实得多 轻声 de」）无解 → **改文案解冲突**，并同步 `2-script.md` / `narrations.ts` / 组件三处（L17）。

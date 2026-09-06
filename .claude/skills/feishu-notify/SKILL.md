@@ -10,7 +10,7 @@ description: 抖音流水线的「人审闸口」与通知通道——把待审�
 抖音生产线自动跑到「出审」，**只在两个闸口需要人点头**，本 skill 把两个闸口都收进飞书：
 
 1. **内容审核闸**：创作完 → 推口播稿+封面+审核卡 → 人点「通过 / 打回」
-2. **发布确认闸**（守发布铁律）：通过 → 自动拼最终 `sau` 命令+物料 → 推「确认发布」卡 → 人点「确认 / 取消」才真发
+2. **发布确认闸**（守发布硬约束）：通过 → 自动拼最终 `sau` 命令+物料 → 推「确认发布」卡 → 人点「确认 / 取消」才真发
 
 发布是不可逆外向动作，所以「通过」≠「直接发」：**通过只到 status=approved，发布前必有第二张卡让人看最终真实物料**。两次点击 = 两次人类授权。
 
@@ -100,7 +100,7 @@ FeishuClient().send_text(cfg['chat_id'], '✅ 已发布：<标题>')
 
 ## 能力四：保活入站通道（发审核卡前必做）
 
-**铁律：发审核卡前先确认 `server.py` 在跑。** server 没跑 = 按钮点了没人接 = 闸口死掉。
+**硬约束：发审核卡前先确认 `server.py` 在跑。** server 没跑 = 按钮点了没人接 = 闸口死掉。
 
 ```bash
 bash tools/feishu-bot/start.sh status   # running / stopped
@@ -198,7 +198,7 @@ server 起 `claude -p` 时**必须清掉 `ANTHROPIC_API_KEY` 环境变量**（`s
 ## 边界
 
 - **不自己实现发布 DOM 操作**——真发统一委托 `claude -p /douyin-publish` → `sau` CLI（与 `douyin-publish` 同一引擎）。
-- **守发布铁律**：通过 ≠ 真发；真发前必有「确认发布」卡展示最终 sau 命令+物料；`--publish` = 人已在确认卡授权。
+- **守发布硬约束**：通过 ≠ 真发；真发前必有「确认发布」卡展示最终 sau 命令+物料；`--publish` = 人已在确认卡授权。
 - **不假装成功**：以 `meta.status` 变化判成败，失败 status 不动并回报。
 - **改 prompt**：真相源随路径分叉——`console_api:true`(默认) 真发/重做的 prompt 改 `tools/console/packages/server/src/jobs/prompts.ts`（措辞承接本文件但独立维护，见 02 后端执行方案 §2.6）；`console_api:false` 回滚路径仍改本目录 `prompts.py`（单一真相源）。改哪条路径就动对应文件，不碰 server 逻辑。
 - **不**把 config.yaml 提交进 git（含 secret，已在 .gitignore）。

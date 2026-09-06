@@ -1,6 +1,6 @@
 ---
 name: benchmark-refresher
-description: 熵增治理线任务——定期重新抓料,验证账号大脑 brain/benchmarks.md 里的「对标账号 / 有效打法 / 爆款拆解」是否还成立(AI 圈变化快,旧打法/旧对标会悄悄过时)。用 agent-reach 抓当前证据,逐条判成立/存疑/失效/建议新增,产出「执行记录报告 + 变更提议」交人审,人审后才改 benchmarks.md。铁律:绝不自动改 brain。属治理线(harness/),非生产流水线。触发:刷新对标、验证打法、benchmarks 过时没、对标账号还活跃吗、benchmark-refresher。
+description: 熵增治理线任务——定期重新抓料,验证账号大脑 brain/benchmarks.md 里的「对标账号 / 有效打法 / 爆款拆解」是否还成立(AI 圈变化快,旧打法/旧对标会悄悄过时)。用 agent-reach 抓当前证据,逐条判成立/存疑/失效/建议新增,产出「执行记录报告 + 变更提议」交人审,人审后才改 benchmarks.md。硬约束:绝不自动改 brain。属治理线(harness/),非生产流水线。触发:刷新对标、验证打法、benchmarks 过时没、对标账号还活跃吗、benchmark-refresher。
 ---
 
 # benchmark-refresher · 对标/打法时效巡检
@@ -8,8 +8,8 @@ description: 熵增治理线任务——定期重新抓料,验证账号大脑 br
 > 治理线第 2 个任务(第 1 个是复盘 `douyin-retro`)。两个都"养大脑":复盘**沉淀**新打法,
 > 本任务**复核**旧打法/对标有没有过时。逆的是账号大脑的熵——放着不管,benchmarks.md 越来越不准。
 
-## 干活前必读
-1. `harness/README.md`(治理线宪法 + **铁律:只产报告,改大脑人审**)。
+## 开工前必读
+1. `harness/README.md`(治理线宪法 + **硬约束:只产报告,改大脑人审**)。
 2. `harness/report-template.md`(产物格式)。
 3. `brain/benchmarks.md`(要复核的对象)、`brain/positioning.md`(账号定位,判"还贴不贴"的尺子)。
 4. `brain/sources.md`(agent-reach 抓哪些源/关键词)。

@@ -3,7 +3,7 @@ name: douyin-publish
 description: >
   把一条已审核通过(status=approved)的内容发布到抖音。底层调用 social-auto-upload
   的 `sau` CLI（tools/social-auto-upload，已装好 uv+py3.12 环境），不再手搓浏览器 DOM。
-  支持视频(upload-video)/图文(upload-note)、立即/定时、多账号。铁律：先 dry-run 出
+  支持视频(upload-video)/图文(upload-note)、立即/定时、多账号。硬约束：先 dry-run 出
   最终命令+物料给人确认，人授权后才真发（发布不可逆）。当用户说"发布抖音""上传作品"
   "发这条""把 XX 发出去"，或发布阶段被调用时使用。
 ---
@@ -13,7 +13,7 @@ description: >
 发布引擎 = `tools/social-auto-upload` 的 `sau` CLI（已实测登录/校验/上传全通）。
 本技能只做**薄封装**：读 content 条目 → 映射字段 → 调 sau → 留痕。
 
-## 铁律（不可跳过）
+## 硬约束（不可跳过）
 1. **只发 `status==approved`**。其它状态一律拒绝。
 2. **dry-run / 真发由 `--publish` 这一个信号决定**：
    - **不带** `--publish` = dry-run：只拼**完整 sau 命令 + 物料摘要**给人看、**绝不执行**，然后停下等确认。

@@ -6,7 +6,7 @@
 - **大环**：发布→复盘拉数据→变更提议→人审→改 `brain/`→下轮选题打分。受众平台信号只有复盘这一条来路（选题端不爬抖音）。
 - **触发**：两条线各一个 CC 客户端定时任务——治理线每天先跑（含周末，喂 `/harness-dispatcher`），生产线工作日后跑（喂 `daily-run.md`）。
 
-## 干活前必读
+## 开工前必读
 每次选题/创作前，先读 `brain/` 全部文件（定位、人设、风格、对标、信息源），
 再读对应阶段的 `pipeline/<阶段>.md`。这些是硬约束，不是参考。
 
@@ -22,7 +22,7 @@ AI 方向的工程提效实战 + 源码解读（技术深度为主），辅以 A
 ## 流程纪律
 - 工作日全自动只跑到「出审」为止（`pipeline/3-review.md`），**发布必须人审通过**。
 - 每条内容的状态写在它的 `meta.yaml`，改状态同时更新 `dashboard.md`。
-- 复盘只产变更提议，**人审通过后**才回写 `brain/benchmarks.md`（治理线铁律：只产报告，不自动改）。
+- 复盘只产变更提议，**人审通过后**才回写 `brain/benchmarks.md`（治理线硬约束：只产报告，不自动改）。
 - 阻塞即上报：导致停产/挂起的事件必经 feishu-notify 推人，只写本地日志不算上报（`pipeline/daily-run.md`）。
 
 ## 文档架构约定（防漂移）
@@ -42,7 +42,7 @@ AI 方向的工程提效实战 + 源码解读（技术深度为主），辅以 A
 | 1 选题 | `1-ideate.md` | `douyin-ideate`（情报唯一来源 `agent-reach`，不爬抖音；调度归治理线，daily-run 留过渡兜底） |
 | 2 创作 | `2-create.md` | 口播四件套：`web-video-presentation`（网页+`npm run record` 无人录屏）→ `tts-dub`（配音）→ `dubbing-check`（体检；配音批次由 dubbing-reviewer agent 质检 ≤3 轮）；封面 `baoyu-image-gen`（竖版 9:16）；深度拆解骨架 `ljg-*`、图文 `baoyu-*` 按需 |
 | 3 出审 | `3-review.md` | `feishu-notify`（审核卡出站 + server 长连接收按钮闭环） |
-| 4 发布 | `4-publish.md` | `douyin-publish`（薄封装 sau CLI；**dry-run 铁律**；Step 5 = 唯一记账）+ `feishu-notify` 确认发布卡 |
+| 4 发布 | `4-publish.md` | `douyin-publish`（薄封装 sau CLI；**dry-run 硬约束**；Step 5 = 唯一记账）+ `feishu-notify` 确认发布卡 |
 
 ### 治理线（注册表+任务卡 = `harness/tasks.md`，此处只列名不复述）
 | 任务 | 核心 skill |
